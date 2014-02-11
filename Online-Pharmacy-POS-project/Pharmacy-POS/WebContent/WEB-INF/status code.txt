@@ -1,0 +1,7 @@
+Info: 100
+Wrong: 200
+Warning: 300
+Error: 400
+Server: 500
+Alert: 600
+Unknown: 700

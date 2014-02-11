@@ -1,0 +1,313 @@
+html, body
+{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+	background-color: #ecf0f1 !important;
+	height: 100% !important;
+}
+
+/* Wrapper for page content to push down footer */
+.wrap
+{
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+.footer
+{
+	height: 60px;
+  	width: 100%;
+   	background-color: #ecf0f1;
+   	/* border: 1px solid rgb(204, 204, 204) !important; */
+   	padding-top: 20px;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.wrap > .container
+{
+  padding: 60px 15px 0;
+}
+
+.footer > .container
+{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+/* Sticky footer CSS end! */
+
+.form-group
+{
+	margin-bottom: 0px !important;
+}
+
+.widget-body
+{
+	/* background-color: #F5F9FB !important; */
+}
+
+.ui-autocomplete
+{
+	max-height: 200px !important;
+	overflow-y: auto !important;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden !important;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px !important;
+} 
+
+.bh-login-body-bg-color
+{
+    background-color: rgb(247,247,247) !important;
+}
+
+.bh-login-margin-top
+{
+	margin-top: 6% !important;
+}
+
+.bh-login-border-bg-color
+{
+	background-color: rgb(41, 128, 185) !important;
+}
+
+.bh-main-content
+{
+	margin-left: 0px !important;
+}
+
+.bh-widget-box
+{
+	border-top: 1px solid rgb(204, 204, 204) !important;
+	border-bottom: none !important;
+	margin: 0px;
+}
+
+.bh-input-full-width
+{
+	width: 100% !important;
+}
+
+.bh-icon-size
+{
+	top: 2px !important;
+	font-weight: bold !important;
+}
+
+.bh-label-middle
+{
+	margin-top: 5px !important;
+}
+
+.bh-icon-size-11
+{
+	font-size: 11.5px !important;
+}
+
+.bh-main-table-height
+{
+	height: 430px !important;
+}
+
+.bh-no-padding
+{
+	padding: 0px !important;
+}
+
+.bh-no-top-border
+{
+	border-top: 0px !important;
+}
+
+.bh-no-bottom-border
+{
+	border-bottom: 0px !important;
+}
+
+.bh-no-bottom-padding
+{
+	padding-bottom: 0px;
+}
+
+.bh-right-border
+{
+	border-right: 1px solid rgb(204, 204, 204) !important;
+}
+
+.bh-no-right-border
+{
+	border-right: none !important;
+}
+
+.bh-padding-6
+{
+	padding: 6px 6px !important;
+}
+
+.bh-no-left-border
+{
+	border-left: none !important;
+}
+
+.bh-icon-size-15
+{
+	font-size: 15px !important;
+}
+
+.bh-icon-size-15-5
+{
+	font-size: 15.5px !important;
+}
+
+.bh-icon-size-13
+{
+	font-size: 13px !important;
+}
+
+.bh-icon-size-14
+{
+	font-size: 14px !important;
+}
+
+.bh-left-size-12
+{
+	right: 12px !important;
+}
+
+.bh-bg-color-yellow
+{
+	background-color: yellow !important;
+}
+
+.bh-print-view
+{
+	display: none;
+}
+@media print
+{
+	.bh-non-print
+	{
+       display: none;
+    }
+    
+    .bh-print-view
+    {
+       display: block;
+       font-size: 11px;
+    }
+}
+
+input[type="text"][disabled].bh-bg-color-yellow
+{
+	background-color: yellow !important;
+}
+
+input[type="text"][disabled].bh-font-size-18
+{
+	font-size: 18px !important;
+	color: black !important;
+}
+
+input[type="text"][disabled].bh-font-size-16
+{
+	font-size: 16px !important;
+	color: black !important;
+}
+
+input[type="text"].bh-font-size-16
+{
+	font-size: 16px !important;
+	color: black !important;
+}
+
+input[type="text"][disabled].bh-font-size-14
+{
+	font-size: 14px !important;
+	color: black !important;
+}
+
+input[type="text"].bh-input-skin-1
+{
+	border-color: #8C959E !important;
+	-webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2) inset !important;
+	-moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2) inset !important;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2) inset !important;
+}
+
+input[type="text"].bh-input-skin-1+.input-group-addon
+{
+	border-color: #8C959E !important;
+}
+
+input[type="text"].bh-input-skin-1:hover
+{
+	border-color: #2c3e50 !important;
+}
+
+input[type="text"].bh-input-skin-1:hover+.input-group-addon
+{
+	border-color: #2c3e50 !important;
+}
+
+input[type="text"].bh-input-skin-1:focus
+{
+	border-color: #3498db !important;
+	-webkit-box-shadow: -1px 1px 4px #7f8c8d !important;
+	-moz-box-shadow: -1px 1px 4px #7f8c8d !important;
+	box-shadow: -1px 1px 4px #7f8c8d !important;
+}
+
+input[type="text"].bh-input-skin-1:focus+.input-group-addon
+{
+	border-color: #3498db !important;
+	-webkit-box-shadow: 1px 1px 4px #7f8c8d !important;
+	-moz-box-shadow: 1px 1px 4px #7f8c8d !important;
+	box-shadow: 1px 1px 4px #7f8c8d !important;
+}
+
+input[type="text"].bh-input-skin-2
+{
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2) inset !important;
+}
+
+input[type="text"].bh-input-skin-2:hover
+{
+	border-color: #628051 !important;
+}
+
+input[type="text"].bh-input-skin-2:focus
+{
+	border: 2px #27ae60 solid !important;
+	-webkit-box-shadow: 1px 1px 5px 2px #7BA065 !important;
+	-moz-box-shadow: 1px 1px 5px 2px #7BA065 !important;
+	box-shadow: 1px 1px 5px 2px #7BA065 !important;
+}
+
+input[type="text"][disabled].bh-input-skin-1
+{
+	border-color: rgb(181, 181, 181) !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+input[type="text"][disabled].bh-input-skin-1+.input-group-addon
+{
+	border-color: rgb(181, 181, 181) !important;
+}
+
+input[type="text"][disabled].bh-input-bg-color-1
+{
+	background-color: #D9EDF7 !important;
+}
+
+input.ace.ace-switch[type="checkbox"] + .lbl
+{
+	margin: 0px !important;
+}
