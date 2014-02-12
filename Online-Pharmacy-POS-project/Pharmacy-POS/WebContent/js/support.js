@@ -83,12 +83,12 @@ function ajaxSetup()
 
 function initSearchDialog()
 {
-	$("#searchItemDialog").dialog(
+	$("#searchItemsDialog").dialog(
 	{
 		autoOpen: false,
 		modal: true,
-		width: 600,
-		height: 500
+		width: 550,
+		height: 400
 	});
 }
 
@@ -143,10 +143,10 @@ function initTableSlim()
 
 function addItem(event)
 {
-	var barcode = $("#barcode").val();
+	var barcode = $("#barcode").val().trim();
 	if (barcode != "")
   	{
-		var quantity = $("#quantity").val();
+		var quantity = $("#quantity").val().trim();
 	  	if (quantity != "")
 	  	{
 	  		if (!isNaN(quantity))
@@ -396,7 +396,7 @@ function initEventHandlers()
 		if (event.keyCode == 70 && event.ctrlKey)
 		{
 			event.preventDefault();
-			$("#searchItemDialog").dialog("open");
+			$("#searchItemsDialog").dialog("open");
 		}
 		
 		if (event.which == 113)
@@ -686,6 +686,31 @@ function initEventHandlers()
 	  		}
   		}
   		checkAll();
+  	});
+  	
+  	$("#searchItems").click(function(event)
+  	{
+  		event.preventDefault();
+  		if ($("#searchByName").val().trim() != "" || $("#searchByBarcode").val().trim() != "")
+  		{
+  			$.ajax(
+  			{
+  				url: "searchItems",
+  				data:
+  				{
+  					"itemName": $("#searchByName").val().trim(),
+  					"barcode": $("#searchByBarcode").val().trim()
+  				},
+  				success: function(result)
+  				{
+  					$("#searchResultBody").html(result);
+  				}
+  			});
+  		}
+  		else
+  		{
+  			alert("Хайх утгаа оруулна уу!");
+  		}
   	});
 }
 

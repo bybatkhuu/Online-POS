@@ -643,25 +643,41 @@
   		</div>
 	</div>
 	
-	<div id="searchItemDialog" title="Бараа хайх">
-		<br>
+	<div id="searchItemsDialog" title="Бараа хайх">
 		<div class="col-sm-12">
 			<div class="row">
-				<form action="#" class="form-inline" method="POST">
-						<div class="form-group">
-							<label for="searchByName" class="control-label">Нэр:</label>
+				<form action="#" method="POST">
+					<div class="row">
+						<div class="col-sm-5">
+							<label for="searchByName" class="control-label">
+								<b>Нэр:</b>
+							</label>
+						</div>
+						<div class="col-sm-5">
+							<label for="searchByBarcode" class="control-label">
+								<b>Баркод:</b>
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-5">
 							<input type="text" class="form-control" id="searchByName" />
 						</div>
-					<div class="form-group">
-						<label for="searchByBarcode" class="control-label">Баркод:</label>
-						<input type="text" class="form-control" id="searchByBarcode" />
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="searchByBarcode" />
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-sm btn-success pull-right" id="searchItems">
+								Хайх
+								<i class="icon-search"></i>
+							</button>
+						</div>
 					</div>
-					<button type="submit" class="btn btn-success" id="searchItem">Хайх</button>
 				</form>
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-12 no-padding">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -671,13 +687,7 @@
 								<th>Үнэ</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>Эм</td>
-								<td>12321</td>
-								<td>1</td>
-								<td>1500</td>
-							</tr>
+						<tbody id="searchResultBody">
 						</tbody>
 					</table>
 				</div>
