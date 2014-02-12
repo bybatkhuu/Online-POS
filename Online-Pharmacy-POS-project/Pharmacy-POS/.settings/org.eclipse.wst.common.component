@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Online-POS">
+    <wb-module deploy-name="Pharmacy-POS">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="Online-POS"/>
-        <property name="java-output-path" value="/Online-POS/build/classes"/>
+        <property name="java-output-path" value="/Pharmacy-POS/build/classes"/>
+        <property name="context-root" value="Pharmacy-POS"/>
     </wb-module>
 </project-modules>
