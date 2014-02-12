@@ -6,7 +6,6 @@
 		<title>Insert title here</title>
 	</head>
 	<body>
-		Accountasdsad
-		<div></div>
+		Account
 	</body>
 </html>
