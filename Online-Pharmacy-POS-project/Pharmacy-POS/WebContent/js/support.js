@@ -700,16 +700,12 @@ function initEventHandlers()
   				},
   				success: function(result)
   				{
-  					if (result != "")
-  					{
-	  					$("#searchResultBody").html(result);
-	  					$("#searchResultBody > tr").dblclick(function(event)
-	  					{
-	  						alert($(this).children().eq(1).text() + "" + $(this).children().eq(2).text());
-	  						addItem(event, $(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
-	  						$("#searchItemsDialog").dialog("close");
-	  					});
-  					}
+  					$("#searchResultBody").html(result);
+	  				$("#searchResultBody > tr").dblclick(function(event)
+	  				{
+	  					addItem(event, $(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
+	  					$("#searchItemsDialog").dialog("close");
+	  				});
   				}
   			});
   		}

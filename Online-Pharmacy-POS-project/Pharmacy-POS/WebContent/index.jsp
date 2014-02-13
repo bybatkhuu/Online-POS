@@ -621,7 +621,7 @@
       <div class="container">
         <div class="row center">
           <div class="col-xs-12 col-sm-4 text-muted center">
-            <small class="hidden">1.Тохиргоо=(Ctrl+N) 2.Талоны загвар=(Ctrl+M) 3.Барааны хайлт=(Ctrl+F)</small>
+            <small>1.Барааны хайлт=(Ctrl+F)</small> <small class="hidden">2.Тохиргоо=(Ctrl+N) 3.Талоны загвар=(Ctrl+M)</small>
           </div>
           <div class="col-xs-12 col-sm-4 center">
             &copy;2013  Infosystems LLC
