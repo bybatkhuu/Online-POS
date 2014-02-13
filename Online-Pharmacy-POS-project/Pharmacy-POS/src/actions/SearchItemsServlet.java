@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.User;
+
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -49,10 +51,11 @@ public class SearchItemsServlet extends HttpServlet
 	    List<Row> rowList = null;
 		if (!itemName.trim().equalsIgnoreCase("") || !barcode.trim().equalsIgnoreCase(""))
 		{
+			User user = (User) session.getAttribute("user");
 			PostgreSQLJDBC db = new PostgreSQLJDBC();
 			if (db.createConnection())
 			{
-				String[] params = { itemName, barcode };
+				String[] params = { String.valueOf(user.getBranchID()), itemName, barcode };
 				try
 				{
 					rowList = db.getRowList("bh_searchItems", params);
