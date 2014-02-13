@@ -616,11 +616,11 @@ public class PostgreSQLJDBC
     public List<Row> getRowList(String functionName, String[] parameters) throws SQLException
     {
     	List<Row> rowList = null;
-    	if (Utilities.isEmpty(functionName) || hasEmptyString(parameters))
+    	/*if (Utilities.isEmpty(functionName) || hasEmptyString(parameters))
     	{
     		System.out.println("Warning: Function name empty or parameters are empty!");
     		return rowList;
-    	}
+    	}*/
     	
     	if (openConnection())
     	{

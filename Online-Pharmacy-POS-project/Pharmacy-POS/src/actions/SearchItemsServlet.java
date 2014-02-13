@@ -78,32 +78,27 @@ public class SearchItemsServlet extends HttpServlet
 	    			out.println("<tr>");
 		    		for (Cell cell : row.getCellList())
 		    		{
-		    			String resultItemName = "";
-		    			String resultBarcode = "";
-		    			String resultSerialNumber = "";
-		    			String resultPrice = "";
 		    			switch (cell.getColumn())
 		    			{
 		    				case "name":
-		    					resultItemName = cell.getValue();
+		    					out.println("<td>" + cell.getValue() + "</td>");
 		    					break;
 		    				case "barcode":
-		    					resultBarcode = cell.getValue();
+		    					out.println("<td>" + cell.getValue() + "</td>");
 		    					break;
 		    				case "serial_number":
-		    					resultSerialNumber = cell.getValue();
+		    					out.println("<td>" + cell.getValue() + "</td>");
 		    					break;
 		    				case "price":
-		    					resultPrice = cell.getValue();
+		    					out.println("<td>" + cell.getValue() + "</td>");
+		    					break;
+		    				case "item_id":
+		    					out.println("<td class='hidden'>" + cell.getValue() + "</td>");
 		    					break;
 		    				default:
 		    					System.out.println("More unknown columns from bh_getSearchItems()!");
 		    					break;
 		    			}
-		    			out.println("<td>" + resultItemName + "</td>");
-		    			out.println("<td>" + resultBarcode + "</td>");
-		    			out.println("<td>" + resultSerialNumber + "</td>");
-		    			out.println("<td>" + resultPrice + "</td>");
 		    		}
 		    		out.println("</tr>");
 	    		}

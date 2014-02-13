@@ -141,12 +141,10 @@ function initTableSlim()
     });
 }
 
-function addItem(event)
+function addItem(event, barcode, quantity, serial)
 {
-	var barcode = $("#barcode").val().trim();
 	if (barcode != "")
   	{
-		var quantity = $("#quantity").val().trim();
 	  	if (quantity != "")
 	  	{
 	  		if (!isNaN(quantity))
@@ -177,7 +175,6 @@ function addItem(event)
 					  	});
 				  		if (barcodeHasItem == 1)
 				  		{
-				  			var serial = $("#serial").val();
 				  			var serialID = -1;
 				  			if (serial != "")
 				  			{
@@ -535,7 +532,7 @@ function initEventHandlers()
 		if(event.which == 13)
 		{
 			event.preventDefault();
-			addItem(event);
+			addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
 		}
 	});
 	$("#quantity").keypress(function(event)
@@ -545,7 +542,7 @@ function initEventHandlers()
   			event.preventDefault();
   			if ($("#barcode").val() != "")
   			{
-  				addItem(event);
+  				addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
   			}
   			else
   			{
@@ -596,7 +593,7 @@ function initEventHandlers()
   	});
   	$("#addItem").click(function(event)
   	{
-  		addItem(event);
+  		addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val().trim());
   	});
 
   	$("#serial").keypress(function(event)
@@ -703,7 +700,16 @@ function initEventHandlers()
   				},
   				success: function(result)
   				{
-  					$("#searchResultBody").html(result);
+  					if (result != "")
+  					{
+	  					$("#searchResultBody").html(result);
+	  					$("#searchResultBody > tr").dblclick(function(event)
+	  					{
+	  						alert($(this).children().eq(1).text() + "" + $(this).children().eq(2).text());
+	  						addItem(event, $(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
+	  						$("#searchItemsDialog").dialog("close");
+	  					});
+  					}
   				}
   			});
   		}
