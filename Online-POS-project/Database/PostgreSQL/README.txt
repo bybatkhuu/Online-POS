@@ -1,3 +1,3 @@
-Database: PharmacyPOS
+Database: OnlinePOS
 Username: postgres
 Password: root

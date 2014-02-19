@@ -1,0 +1,49 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('../font/icomoon.eot');
+	src:url('../font/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('../font/icomoon.ttf') format('truetype'),
+		url('../font/icomoon.woff') format('woff'),
+		url('../font/icomoon.svg#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.bhicon {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	font-size: 17px;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.bhicon-weight-unit:before {
+	content: "\e608";
+}
+.bhicon-quantity-unit:before {
+	content: "\e609";
+}
+.bhicon-volume-unit:before {
+	content: "\e60a";
+}
+.bhicon-length-unit:before {
+	content: "\e60b";
+}
+.bhicon-receipt:before {
+	content: "\e60c";
+}
+.bhicon-cash:before {
+	content: "\e60d";
+}
+.bhicon-product:before {
+	content: "\e60e";
+}
+.bhicon-cd-software:before {
+	content: "\e602";
+}
