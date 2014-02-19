@@ -73,7 +73,7 @@
         <div class="navbar-header pull-left">
           <a href="index.jsp" class="navbar-brand">
             <small>
-              <i class="icon-medkit"></i>
+              <i class="icon-shopping-cart"></i>
               Инфосистемс POS
             </small>
           </a><!-- /.brand -->
@@ -246,7 +246,7 @@
                               </div>
                             </div>
                             <div class="space-4"></div>
-                            <div class="row">
+                            <!-- <div class="row hidden">
 	                              <div class="form-group">
 	                                <label for="serial" class="col-xs-12 col-sm-4">
 	                                  <b>Серийн №:</b>
@@ -265,7 +265,7 @@
 	                                  </span>
 	                                </div>
 	                              </div>
-                            </div>
+                            </div> -->
 
                             <div class="space-4"></div>
                             
@@ -293,7 +293,7 @@
                             <div class="row">
                               <div class="form-group">
                                 <label for="unitPrice" class="col-xs-12 col-sm-5">
-                                	Үнэ:
+                                	Жиж.үнэ:
                                 </label>
                                 <div class="col-xs-12 col-sm-7">
                                   <input type="text" name="unitPrice" value="<%
@@ -320,7 +320,7 @@
                               </div>
                             </div>
                             
-                            <!-- <div class="row">
+                            <div class="row">
                               <div class="form-group">
                                 <label for="wholesalePrice" class="col-xs-12 col-sm-5">Бөөн.үнэ:</label>
                                 <div class="col-xs-12 col-sm-7">
@@ -336,7 +336,7 @@
                                   <input type="text" name="wholesaleQuantity" value="0" class="form-control input-sm dark text-right bh-input-skin-1" id="wholesaleQuantity" disabled />
                                 </div>
                               </div>
-                            </div> -->
+                            </div>
                             
                             <div class="space-8"></div>
 
@@ -347,25 +347,32 @@
                               	</button>
                               </div>
                               
-	                              <div class="col-xs-12 col-sm-12 col-md-8 pull-left">
-	                                <div class="checkbox no-padding hidden">
-	                                  <label>
-	                                    <input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="insuranceCheck" <%
+	                          <%-- <div class="col-xs-12 col-sm-12 col-md-8 pull-left">
+	                            <div class="checkbox no-padding hidden">
+	                              <label>
+	                                <input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="insuranceCheck" <%
 	                                    		if (session.getAttribute("hasInsurance") != null)
 	                                    		{
 	                                    			out.print("checked");
 	                                    		}
-	                                    %>/>
-	                                    <span class="lbl">
-	                                      <b>&nbsp; ЭМДС-ийн хөнгөлөлт</b>
-	                                    </span>
-	                                  </label>
-	                                </div>
-	                              </div>
-                            </div>
+	                                 %>/>
+	                                 <span class="lbl">
+	                                   <b>&nbsp; ЭМДС-ийн хөнгөлөлт</b>
+	                                 </span>
+	                               </label>
+	                             </div>
+	                           </div> --%>
+                             </div>
                             
 							<div class="space-4"></div>
-														
+							
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="">
+									</div>
+								</div>
+							</div>
+							
                           </form>
                         </div>
                       </div>
@@ -515,6 +522,16 @@
                   							}
                                       %>" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calTotal" disabled />
                                   </div>
+                                </div>
+                                <div>
+                                	<div class="form-group">
+                                		<label for="calSale" class="col-xs-12 col-sm-6 control-label no-padding-right">
+                                			<b>Хөнгөлөлт:</b>
+                                		</label>
+                                		<div class="col-xs-12 col-sm-6">
+                                			<input type="text" name="caleSale" value="0" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calSale" disabled />
+                                		</div>
+                                	</div>
                                 </div>
 	                                <div class="form-group hidden">
 	                                  <label for="calSaleEMDS" class="col-xs-12 col-sm-6 control-label no-padding-right">

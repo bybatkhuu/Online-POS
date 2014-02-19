@@ -141,7 +141,7 @@ function initTableSlim()
     });
 }
 
-function addItem(event, barcode, quantity, serial)
+function addItem(event, barcode, quantity)
 {
 	if (barcode != "")
   	{
@@ -175,52 +175,13 @@ function addItem(event, barcode, quantity, serial)
 					  	});
 				  		if (barcodeHasItem == 1)
 				  		{
-				  			var serialID = -1;
-				  			if (serial != "")
-				  			{
-				  				$.ajax(
-				  				{
-				  					url: "serial-has-item",
-				  					data:
-				  					{
-				  						"barcode" : barcode,
-				  						"serial" : serial
-				  					},
-									success: function(result)
-									{
-										if (result != 1)
-										{
-											alert(serial + " гэсэн серитэй бараа танай салбарт алга!");
-											$("#serial").val("");
-											serial = "";
-										}
-										else
-										{
-											serialID = 0;
-										}
-									}
-								});
-				  				if (serialID == 0)
-				  				{
-				  					$.ajax(
-							  		{
-							  			url: "get-serialID",
-							  			data: { "serial" : serial },
-										success: function(result)
-										{
-											serialID = result;
-										}
-							  		});
-				  				}
-				  			}
 				  			$.ajax(
 						  	{
 						  		url: "add-item",
 							  	data:
 							  	{
 							  		"barcode" : barcode,
-								  	"quantity" : quantity,
-								  	"serial" : serial
+								  	"quantity" : quantity
 						      	},
 						      	success: function(result)
 						      	{
@@ -248,14 +209,6 @@ function addItem(event, barcode, quantity, serial)
 						    	  	}
 						    	  	else
 						    	  	{
-						    	  		if (serial != "")
-						    	  		{
-							    	  		if (jsonData.serialID != serialID)
-							    	  		{
-							    	  			alert(jsonData.name + " гэсэн бараа өөр серитэй орсон байна!\nСерийг өөрчилж оруулна уу.");
-							    	  		}
-						    	  		}
-						    	  		
 						    	  		var response = 	"<td>" + jsonData.name + "</td>" +
 		    		 				 				   	"<td class='text-right'>" + jsonData.quantity + "</td>" +
 		    		 				 				   	"<td>" + jsonData.unit + "</td>" +
@@ -270,7 +223,6 @@ function addItem(event, barcode, quantity, serial)
 						    	  	checkAll();
 						    	  	$("#quantity").val("1");
 						    	  	$("#barcode").val("");
-						    	  	$("#serial").val("");
 						      	}
 						  	});
 				  		}
@@ -415,10 +367,6 @@ function initEventHandlers()
 			event.preventDefault();
 		  	$("#barcode").focus();
 	  	}
-	  	else if (event.which == 115)
-	  	{
-		  	$("#serial").focus();
-	  	}
 	  	else if (event.which == 116)
 	  	{
 	  		event.preventDefault();
@@ -532,7 +480,7 @@ function initEventHandlers()
 		if(event.which == 13)
 		{
 			event.preventDefault();
-			addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+			addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim());
 		}
 	});
 	$("#quantity").keypress(function(event)
@@ -542,7 +490,7 @@ function initEventHandlers()
   			event.preventDefault();
   			if ($("#barcode").val() != "")
   			{
-  				addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+  				addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim());
   			}
   			else
   			{
@@ -593,15 +541,7 @@ function initEventHandlers()
   	});
   	$("#addItem").click(function(event)
   	{
-  		addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val().trim());
-  	});
-
-  	$("#serial").keypress(function(event)
-  	{
-  		if(event.which == 13)
-	  	{
-  			
-	  	}
+  		addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim());
   	});
   	
   	$("#tableBody > tr").click(function()

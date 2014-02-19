@@ -86,7 +86,7 @@ public class AddItemServlet extends HttpServlet
 		    			{
 		    				serial = "";
 		    			}
-		    			item = new Item(barcode, user.getBranchID(), serial, quantity);
+		    			item = new Item(barcode, user.getBranchID(), quantity);
 					}
 		    		catch (SQLException e)
 		    		{
@@ -107,7 +107,6 @@ public class AddItemServlet extends HttpServlet
 	    		"name: '" + item.getName() + "'," +
 	    		"price: '" + format.format(item.getPrice()) + "'," +
 	    		"unit: '" + item.getUnit() + "'," +
-	    		"serialID: '" + item.getSerialID() + "'," +
 	    		"quantity: '" + format.format(item.getQuantity()) + "'," +
 	    		"total: '" + format.format(item.getTotal()) + "'," +
 	    		"calTotal: '" + format.format(item.getCalTotal()) + "'" +

@@ -86,7 +86,7 @@
             <div class="login-container">
               <div class="center">
                 <h1>
-                  <i class="icon-medkit green"></i>
+                  <i class="icon-shopping-cart green"></i>
                   <span class="red">Инфосистемс</span>
                   <span class="black">POS</span>
                 </h1>

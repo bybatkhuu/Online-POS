@@ -16,8 +16,6 @@ public class Item implements Serializable
 	private double calPrice;
 	private String description;
 	private String unit;
-	private int serialID;
-	private String serial;
 	private double insDiscountPrice;
 	private double quantity;
 	private double total;
@@ -27,7 +25,7 @@ public class Item implements Serializable
 	{
 	}
 	
-	public Item(String barcode, int branchID, String serial, double quantity) throws SQLException
+	public Item(String barcode, int branchID, double quantity) throws SQLException
 	{
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
 		Cell tmpCell = null;
@@ -68,20 +66,8 @@ public class Item implements Serializable
 							break;
 					}
 				}
-				if (serial.trim().equalsIgnoreCase(""))
-				{
-					String[] params = { String.valueOf(branchID), String.valueOf(this.id) };
-					tmpCell = db.getCell("bh_getLastSerialId", params);
-				}
-				else
-				{
-					String[] params = { serial };
-					tmpCell = db.getCell("bh_getSerialId", params);
-					this.serial = serial;
-				}
-				this.serialID = Integer.parseInt(tmpCell.getValue());
 				
-				String[] params = { String.valueOf(branchID), String.valueOf(this.id), String.valueOf(this.serialID) };
+				String[] params = { String.valueOf(branchID), String.valueOf(this.id) };
 				tmpCell = db.getCell("bh_getPrice", params);
 				this.price = Double.parseDouble(tmpCell.getValue());
 				
@@ -151,24 +137,6 @@ public class Item implements Serializable
 	public void setUnit(String unit)
 	{
 		this.unit = unit;
-	}
-	
-	public int getSerialID()
-	{
-		return serialID;
-	}
-	public void setSerialID(int serialID)
-	{
-		this.serialID = serialID;
-	}
-	
-	public String getSerial()
-	{
-		return serial;
-	}
-	public void setSerial(String serial)
-	{
-		this.serial = serial;
 	}
 
 	public double getInsDiscountPrice()

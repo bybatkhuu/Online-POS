@@ -73,8 +73,6 @@ public class PurchaseServlet extends HttpServlet
 		    					cellList.add(cell);
 		    					cell = new Cell("total", Double.toString(item.getTotal()));
 		    					cellList.add(cell);
-		    					cell = new Cell("serial_id", Integer.toString(item.getSerialID()));
-		    					cellList.add(cell);
 		    					db.insert("pos_transactions", cellList);
 		    				}
 		    				cell = null;
