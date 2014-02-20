@@ -7,7 +7,9 @@ import models.User;
 
 public class LoggedUser
 {
-	private LoggedUser(){ }
+	private LoggedUser()
+	{
+	}
 	
 	public static int checkLogin(HttpSession session)
 	{

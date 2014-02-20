@@ -376,6 +376,7 @@ function purchase()
 	$.ajax(
 	{
 		url: "purchase-items",
+		data: { "orderNum" : $("#talon").val() },
 	  	success: function(result)
 	  	{
 	  		$("#talon").val(result);

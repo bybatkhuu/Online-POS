@@ -1,8 +1,6 @@
 <%@ page import="utils.LoggedUser"%>
-<%@ page import="models.User"%>
 <%@ page import="models.Company"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <%
 	String message = "";
 	String msgClass = "";
@@ -33,16 +31,19 @@
 				break;
 		}
 	}
+	
+	if (session.getAttribute("company") == null)
+	{
+		session.setAttribute("company", Company.getInstance());
+	}
 %>
+<!DOCTYPE html>
 <html lang="mn">
-  <%
-  	Company com = new Company(session);
-  %>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="description" content="Infosystems LLC - Online POS: Main page">
-    <meta name="keywords" content="Infosystems POS, Online POS, POS, Infosystems LLC, Infosystems">
+    <meta name="description" content="Infosystems LLC - Online Pharmacy POS: Main page">
+    <meta name="keywords" content="Infosystems POS, Online Pharmacy POS, POS, Infosystems LLC, Infosystems">
     <meta name="author" content="Infosystems LLC">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -69,12 +70,40 @@
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function()
       {
+    	  $("#signin").validate(
+    	  {
+    		  rules:
+    		  {
+    			  userName:
+    			  {
+    				  required: true,
+    				  minlength: 2
+    			  },
+    			  password:
+    			  {
+    				  required: true,
+    				  minlength: 5
+    			  }
+    		  },
+    		  messages:
+    		  {
+    			  username: {
+    					required: "Please enter a username",
+    					minlength: "Your username must consist of at least 2 characters"
+    				},
+    				password: {
+    					required: "Please provide a password",
+    					minlength: "Your password must be at least 5 characters long"
+    				}
+    		  }
+    	  });
       });
     </script>
   </head>
@@ -99,7 +128,7 @@
                     <div class="widget-main">
                       <h4 class="header blue lighter bigger">Та өөрийн мэдээллээ оруулна уу</h4>
                       <div class="space-6"></div>
-                      <form action="login" method="POST">
+                      <form action="login" method="POST" id="signin">
                         <fieldset>
                           <div class="form-group <%= msgClass %>">
 	                        <div class="red"><%= message %></div>
