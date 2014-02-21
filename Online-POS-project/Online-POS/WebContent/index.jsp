@@ -293,7 +293,7 @@
                             <div class="row">
                               <div class="form-group">
                                 <label for="unitPrice" class="col-xs-12 col-sm-5">
-                                	Жиж.үнэ:
+                                	Үнэ:
                                 </label>
                                 <div class="col-xs-12 col-sm-7">
                                   <input type="text" name="unitPrice" value="<%
@@ -320,7 +320,7 @@
                               </div>
                             </div>
                             
-                            <div class="row">
+                            <div class="row hidden">
                               <div class="form-group">
                                 <label for="wholesalePrice" class="col-xs-12 col-sm-5">Бөөн.үнэ:</label>
                                 <div class="col-xs-12 col-sm-7">
@@ -329,7 +329,7 @@
                               </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row hidden">
                               <div class="form-group">
                                 <label for="wholesaleQuantity" class="col-xs-12 col-sm-5">Бөөн.тоо:</label>
                                 <div class="col-xs-12 col-sm-7">
@@ -533,44 +533,6 @@
                                 		</div>
                                 	</div>
                                 </div>
-	                                <div class="form-group hidden">
-	                                  <label for="calSaleEMDS" class="col-xs-12 col-sm-6 control-label no-padding-right">
-	                                    <b>Хөнгөлөлт (ЭМДС-аас):</b>
-	                                  </label>
-	                                  <div class="col-xs-12 col-sm-6">
-	                                      <input type="text" name="calSaleEMDS" value="<%
-	                                      		if (session.getAttribute("hasInsurance") != null)
-	                                      		{
-		                                      		if (session.getAttribute("itemList") != null)
-		                  		              		{
-		                  		              			@SuppressWarnings("unchecked")
-		                  		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-		                  		              			if (itemList != null && !itemList.isEmpty())
-		                  		            	    	{
-		                  		              				double all = 0;
-		                  		              				for (Item item : itemList)
-		                  		              				{
-		                  		              					all = all + item.getCalTotal();
-		                  		              				}
-		                  		              				out.print(format.format(all));
-		                  		            	    	}
-		                  		              			else
-		                  		    					{
-		                  		    						out.print("0");
-		                  		    					}
-		                  		              		}
-		                  							else
-		                  							{
-		                  								out.print("0");
-		                  							}
-	                                      		}
-	                                      		else
-	                                      		{
-	                                      			out.print("0");
-	                                      		}
-	                                      %>" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calSaleEMDS" disabled />
-	                                  </div>
-	                                </div>
                               </div>
 
                               <div class="col-xs-12 col-sm-6">
@@ -700,7 +662,6 @@
 							<tr>
 								<th>Нэр</th>
 								<th>Баркод</th>
-								<th>Сери</th>
 								<th>Үнэ</th>
 							</tr>
 						</thead>

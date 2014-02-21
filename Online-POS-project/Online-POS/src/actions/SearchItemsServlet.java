@@ -86,9 +86,6 @@ public class SearchItemsServlet extends HttpServlet
 		    				case "barcode":
 		    					out.println("<td>" + cell.getValue() + "</td>");
 		    					break;
-		    				case "serial_number":
-		    					out.println("<td>" + cell.getValue() + "</td>");
-		    					break;
 		    				case "price":
 		    					out.println("<td>" + cell.getValue() + "</td>");
 		    					break;
