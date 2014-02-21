@@ -108,8 +108,7 @@ public class AddItemServlet extends HttpServlet
 	    		"price: '" + format.format(item.getPrice()) + "'," +
 	    		"unit: '" + item.getUnit() + "'," +
 	    		"quantity: '" + format.format(item.getQuantity()) + "'," +
-	    		"total: '" + format.format(item.getTotal()) + "'," +
-	    		"calTotal: '" + format.format(item.getCalTotal()) + "'" +
+	    		"total: '" + format.format(item.getTotal()) + "'" +
 	    	"}";
 	    
 	    response.setContentType("text/html");

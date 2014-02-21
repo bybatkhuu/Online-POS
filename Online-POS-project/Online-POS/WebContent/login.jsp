@@ -1,8 +1,6 @@
 <%@ page import="utils.LoggedUser"%>
-<%@ page import="models.User"%>
 <%@ page import="models.Company"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <%
 	String message = "";
 	String msgClass = "";
@@ -33,11 +31,13 @@
 				break;
 		}
 	}
+	if (session.getAttribute("company") == null)
+	{
+		session.setAttribute("company", Company.getInstance());
+	}
 %>
+<!DOCTYPE html>
 <html lang="mn">
-  <%
-  	Company com = new Company(session);
-  %>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">

@@ -41,8 +41,7 @@ public class PurchaseServlet extends HttpServlet
 		}
 		
 		User user = (User) session.getAttribute("user");
-		response.setContentType("text/html");
-	    PrintWriter out = response.getWriter();
+		String orderNum = request.getParameter("orderNum");
 	    String result = "0";
 		synchronized(session)
 	    {
@@ -57,7 +56,7 @@ public class PurchaseServlet extends HttpServlet
 		    			try
 		    			{
 		    				
-		    				String[] parameter = { Integer.toString(user.getId()) };
+		    				String[] parameter = { Integer.toString(user.getId()), orderNum };
 		    				Cell orderId = db.getCell("bh_getOrderId", parameter);
 		    				Cell cell = null;
 		    				for (Item item : itemList)
@@ -76,7 +75,8 @@ public class PurchaseServlet extends HttpServlet
 		    					db.insert("pos_transactions", cellList);
 		    				}
 		    				cell = null;
-		    				cell = db.getCell("bh_purchase", parameter);
+		    				String[] param = { Integer.toString(user.getId()) };
+		    				cell = db.getCell("bh_getLastOrderNum", param);
 		    				result = cell.getValue();
 						}
 		    			catch (SQLException e)
@@ -88,6 +88,8 @@ public class PurchaseServlet extends HttpServlet
 		    	}
 	    	}
 	    }
+		response.setContentType("text/html");
+	    PrintWriter out = response.getWriter();
 		out.println(result);
 	}
 

@@ -13,13 +13,12 @@ public class Item implements Serializable
 	private int id;
 	private String name;
 	private double price;
-	private double calPrice;
+	private double salePrice;
 	private String description;
 	private String unit;
-	private double insDiscountPrice;
 	private double quantity;
+	private double saleQuantity;
 	private double total;
-	private double calTotal;
 	
 	public Item()
 	{
@@ -46,21 +45,14 @@ public class Item implements Serializable
 						case "name":
 							this.name = cell.getValue();
 							break;
+						case "price":
+							this.price = Double.parseDouble(cell.getValue());
+							break;
 						case "description":
 							this.description = cell.getValue();
 							break;
 						case "item_unit_id":
 							unitId = Integer.parseInt(cell.getValue());
-							break;
-						case "ins_discount_price":
-							if (cell.getValue() != null && !cell.getValue().trim().equalsIgnoreCase(""))
-							{
-								this.insDiscountPrice = Double.parseDouble(cell.getValue());
-							}
-							else
-							{
-								this.insDiscountPrice = 0;
-							}
 							break;
 						default:
 							break;
@@ -73,8 +65,6 @@ public class Item implements Serializable
 				
 				this.quantity = quantity;
 				this.total = this.quantity * this.price;
-				this.calPrice = this.price - this.insDiscountPrice;
-				this.calTotal = this.quantity * this.calPrice;
 			}
 			
 			tmpCell = null;
@@ -117,8 +107,6 @@ public class Item implements Serializable
 	{
 		this.price = price;
 		this.total = this.quantity * this.price;
-		this.calPrice = this.price - this.insDiscountPrice;
-		this.calTotal = this.quantity * this.calPrice;
 	}
 	
 	public String getDescription()
@@ -139,22 +127,6 @@ public class Item implements Serializable
 		this.unit = unit;
 	}
 
-	public double getInsDiscountPrice()
-	{
-		return insDiscountPrice;
-	}
-	public void setInsDiscountPrice(double insDiscountPrice)
-	{
-		this.insDiscountPrice = insDiscountPrice;
-		this.calPrice = this.price - this.insDiscountPrice;
-		this.calTotal = this.quantity * this.calPrice;
-	}
-	
-	public double getCalPrice()
-	{
-		return calPrice;
-	}
-
 	public double getQuantity()
 	{
 		return quantity;
@@ -163,23 +135,16 @@ public class Item implements Serializable
 	{
 		this.quantity = quantity;
 		this.total = this.quantity * this.price;
-		this.calTotal = this.quantity * this.calPrice;
 	}
 	
 	public void addQuantity(double quantity)
 	{
 		this.quantity = this.quantity + quantity;
 		this.total = this.quantity * this.price;
-		this.calTotal = this.quantity * this.calPrice;
 	}
 
 	public double getTotal()
 	{
 		return total;
-	}
-	
-	public double getCalTotal()
-	{
-		return calTotal;
 	}
 }

@@ -4,21 +4,25 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import utils.Cell;
 import utils.PostgreSQLJDBC;
 
 @SuppressWarnings("serial")
 public class Company implements Serializable
-{
-	private int id = 1;
+{	
+	private int id;
 	private String name;
 	private String type;
 	private String description;
 	
-	public Company(HttpSession session) throws SQLException
+	public Company()
 	{
+	}
+	
+	public static Company getInstance() throws SQLException
+	{
+		int id = 1;
+		Company company = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
 		if (db.createConnection())
 		{
@@ -26,34 +30,28 @@ public class Company implements Serializable
 			List<Cell> cellList = db.getCellList("bh_getCompany", parameter);
 			if (cellList != null && cellList.size() > 0)
 			{
+				company = new Company();
+				company.setId(id);
 				for (Cell cell : cellList)
 				{
 					switch (cell.getColumn())
 					{
 						case "name":
-							name = cell.getValue();
+							company.setName(cell.getValue());
 							break;
 						case "type":
-							type = cell.getValue();
+							company.setType(cell.getValue());
 							break;
 						case "description":
-							description = cell.getValue();
+							company.setDescription(cell.getValue());
 							break;
 						default:
 							break;
 					}
-					session.setAttribute("company", this);
 				}
 			}
-			else
-			{
-				name = "Company";
-			}
 		}
-		else
-		{
-			name = "Company";
-		}
+		return company;
 	}
 	
 	public int getId()
