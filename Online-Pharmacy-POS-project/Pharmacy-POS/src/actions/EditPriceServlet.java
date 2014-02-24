@@ -15,12 +15,12 @@ import models.Item;
 
 import utils.LoggedUser;
 
-@WebServlet("/update-item")
-public class UpdateItemServlet extends HttpServlet
+@WebServlet("/edit-price")
+public class EditPriceServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-    public UpdateItemServlet()
+    public EditPriceServlet()
     {
         super();
     }
@@ -35,21 +35,21 @@ public class UpdateItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-	    boolean isUpdated = false;
+		boolean isPriceEdited = false;
 		int id = 0;
-		double newQuantity = 0;
+		double price = 0;
 		try
 		{
 			id = Integer.parseInt(request.getParameter("id"));
-			newQuantity = Double.parseDouble(request.getParameter("newQuant"));
+			price = Double.parseDouble(request.getParameter("price"));
 		}
 		catch (Exception e)
 		{
 			id = 0;
-			newQuantity = 0;
+			price = 0;
 		}
 		
-		if (id != 0 && newQuantity > 0)
+		if (id > 0 && price > 0)
 		{
 			synchronized(session)
 		    {
@@ -62,20 +62,21 @@ public class UpdateItemServlet extends HttpServlet
 			    		{
 			    			if (itemList.get(i).getId() == id)
 			    			{
-			    				itemList.get(i).setQuantity(newQuantity);
+			    				itemList.get(i).setPrice(price);
 			    			}
 			    		}
 			    		session.setAttribute("itemList", itemList);
-			    		isUpdated = true;
+			    		isPriceEdited = true;
 			    	}
 		    	}
 		    }
 		}
+		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		out.println(isUpdated);
+		out.println(isPriceEdited);
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);

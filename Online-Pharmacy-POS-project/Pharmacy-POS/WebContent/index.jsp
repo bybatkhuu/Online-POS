@@ -611,6 +611,9 @@
               <div class="col-xs-4 col-sm-2 blue center hidden">
                 Тайлан <b class="dark">F8</b>
               </div>
+              <div class="col-xs-4 col-sm-2 red center">
+                Үнэ засах <b class="dark">F9</b>
+              </div>
             </div>
           </div>
         </div>

@@ -387,6 +387,71 @@ function purchase()
 	});
 }
 
+function isNumber(n)
+{
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function editPrice()
+{
+	if ($("#unitPrice").val() != "")
+	{
+		if (isNumber($("#unitPrice").val()))
+		{
+			$.ajax(
+			{
+				url: "edit-price",
+				data:
+				{
+					"id" : $("#tableBody > tr[class='success']").attr("id"),
+					"price" : $("#unitPrice").val()
+				},
+				success: function(result)
+				{
+					$("#tableBody > tr[class='success']").children().eq(thPrice).text($("#unitPrice").val());
+					var price = parseFloat($("#unitPrice").val());
+					var quantity = parseFloat($("#tableBody > tr[class='success']").children().eq(thQuant).text());
+					var total = price * quantity;
+					$("#tableBody > tr[class='success']").children().eq(thTotal).text(total);
+					checkAll();
+				}
+			});
+		}
+		else
+		{
+			alert("Үнэ засах хэсэгт зөвхөн тоо оруулна уу!");
+			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+		}
+	}
+	else
+	{
+		alert("Засах үнээ оруулна уу!");
+		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+	}
+	$("#unitPrice").prop("disabled", true);
+}
+
+function calculate()
+{
+	var str = "<table>";
+	for (var i = 0; i < $("#tableBody > tr").size(); i++)
+	{
+		str = str + "<tr>";
+			str = str + "<td class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
+			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
+			str = str + "<td class='col-xs-3 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
+			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
+		str = str + "</tr>";
+	}
+	str = str + "</table>";
+	$("#print-items").html(str);
+	$("#print-s").html($("#tableBody > tr").size());
+	
+	$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
+	$("#clearButton").prop("disabled", false);
+	
+}
+
 function initEventHandlers()
 {
 	$(document).keydown(function(event)
@@ -435,6 +500,12 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 		  	$("#paid").focus();
+	  	}
+	  	else if (event.which == 120)
+	  	{
+	  		event.preventDefault();
+	  		$("#unitPrice").prop("disabled", false);
+	  		$("#unitPrice").focus();
 	  	}
 	  	else if (event.which == 38)
 	  	{
@@ -500,6 +571,15 @@ function initEventHandlers()
 		  	checkAll();
 	  	}
   	});
+	
+	$("#unitPrice").keypress(function(event)
+	{
+		if (event.which == 13)
+	  	{
+			event.preventDefault();
+			editPrice();
+	  	}
+	});
 
 	$("#barcode").keyup(function(event)
 	{
@@ -715,27 +795,6 @@ function initEventHandlers()
   			alert("Хайх утгаа оруулна уу!");
   		}
   	});
-}
-
-function calculate()
-{
-	var str = "<table>";
-	for (var i = 0; i < $("#tableBody > tr").size(); i++)
-	{
-		str = str + "<tr>";
-			str = str + "<td class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
-			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-3 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
-		str = str + "</tr>";
-	}
-	str = str + "</table>";
-	$("#print-items").html(str);
-	$("#print-s").html($("#tableBody > tr").size());
-	
-	$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
-	$("#clearButton").prop("disabled", false);
-	
 }
 
 function checkAll()
