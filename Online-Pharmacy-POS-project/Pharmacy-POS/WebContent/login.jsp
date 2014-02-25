@@ -27,6 +27,22 @@
 				message = "Энэ салбарын POS-н хязгаар хэтэрсэн байна!";
 				msgClass = "has-error";
 				break;
+			case 600:
+				message = "Та хэрэглэгчийн нэр, нууц үгээ оруулна уу!";
+				msgClass = "has-error";
+				break;
+			case 601:
+				message = "Хэтэрхий урт нэр, нууц үг хэрэглэхийг хориглоно!";
+				msgClass = "has-error";
+				break;
+			case 602:
+				message = "Тусгай тэмдэгт хэрэглэхийг хориглоно!";
+				msgClass = "has-error";
+				break;
+			case 500:
+				message = "Уучлаарай, бааз сервертэй холбогдохгүй байна!";
+				msgClass = "has-error";
+				break;
 			default:
 				break;
 		}

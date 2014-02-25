@@ -4,7 +4,6 @@
 <%@ page import="utils.LoggedUser"%>
 <%@ page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)

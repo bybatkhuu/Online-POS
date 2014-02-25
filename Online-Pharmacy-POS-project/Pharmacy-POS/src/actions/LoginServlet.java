@@ -161,13 +161,9 @@ public class LoginServlet extends HttpServlet
 			{
 				response.sendRedirect("index.jsp");
 			}
-			else if (200 <= status && status < 300)
-			{
-				response.sendRedirect("login.jsp?message=" + status);
-			}
 			else
 			{
-				response.sendRedirect("login.jsp");
+				response.sendRedirect("login.jsp?message=" + status);
 			}
 		}
 	}
