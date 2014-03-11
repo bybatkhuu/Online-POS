@@ -40,7 +40,11 @@
 				msgClass = "has-error";
 				break;
 			case 500:
-				message = "Уучлаарай, бааз сервертэй холбогдохгүй байна!";
+				message = "Сервер: Бааз сервертэй холбогдохгүй байна!";
+				msgClass = "has-error";
+				break;
+			case 400:
+				message = "Алдаа: Нэвтрэхэд ямар нэгэн системийн алдаа гарлаа!";
 				msgClass = "has-error";
 				break;
 			default:
@@ -93,6 +97,12 @@
     <script type="text/javascript">
       $(document).ready(function()
       {
+    	  <%
+    	  	if (session.getAttribute("company") == null)
+    		{
+    	  		out.println("alert('Алдаа: Бааз сервертэй холбогдохгүй байна!')");
+    		}
+    	  %>
       });
     </script>
   </head>
@@ -123,7 +133,7 @@
 	                        <div class="red"><%= message %></div>
 	                        <label class="block clearfix">
 	                          <span class="block input-icon input-icon-right">
-	                            <input type="text" name="userName" class="form-control" placeholder="Нэвтрэх нэр" pattern="[A-Za-zA-Яа-яҮүӨөЁё0-9]{2,64}" autofocus required />
+	                            <input type="text" name="userName" class="form-control" placeholder="Нэвтрэх нэр" pattern="[A-Za-zA-Яа-яҮүӨөЁё0-9-]{2,64}" autofocus required />
 	                            <i class="icon-user"></i>
 	                          </span>
 	                        </label>

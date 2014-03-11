@@ -39,6 +39,7 @@ public class LoginServlet extends HttpServlet
 	{
 		HttpSession session = request.getSession();
 		int status = LoggedUser.checkLogin(session);
+		
 		synchronized(session)
 		{
 			if (status != 1)
