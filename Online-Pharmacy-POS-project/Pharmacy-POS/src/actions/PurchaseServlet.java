@@ -64,8 +64,8 @@ public class PurchaseServlet extends HttpServlet
 		    		{
 		    			try
 		    			{
-		    				String[] parameter = { Integer.toString(user.getId()), orderNum };
-		    				Cell orderId = db.getCell("bh_getOrderId", parameter);
+		    				String[] parameters = { Integer.toString(user.getId()), orderNum };
+		    				Cell orderId = db.getCell("bh_purchase", parameters);
 		    				Cell cell = null;
 		    				for (Item item : itemList)
 		    				{
@@ -85,7 +85,8 @@ public class PurchaseServlet extends HttpServlet
 		    					db.insert("pos_transactions", cellList);
 		    				}
 		    				cell = null;
-		    				cell = db.getCell("bh_purchase", parameter);
+		    				String[] parameter = { Integer.toString(user.getId()) };
+		    				cell = db.getCell("bh_getLastOrderNum", parameter);
 		    				result = cell.getValue();
 						}
 		    			catch (SQLException e)

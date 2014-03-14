@@ -102,6 +102,12 @@
                     Хувийн хэрэг
                   </a>
                 </li>
+                <li>
+                  <a href="report.jsp">
+                    <i class="icon-bar-chart"></i>
+                    Тайлан
+                  </a>
+                </li>
                 <li class="divider"></li>
                 <li>
                   <a href="logout">
