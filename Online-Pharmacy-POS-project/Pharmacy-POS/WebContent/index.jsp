@@ -632,7 +632,7 @@
             <small>1.Барааны хайлт=(Ctrl+F)</small> <small class="hidden">2.Тохиргоо=(Ctrl+N) 3.Талоны загвар=(Ctrl+M)</small>
           </div>
           <div class="col-xs-12 col-sm-4 center">
-            &copy;2013  Infosystems LLC
+            &copy;2014  Infosystems LLC
           </div>
           <div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
           </div>
