@@ -10,11 +10,13 @@ public class User implements Serializable
 	private String password;
 	private String status;
 	private int branchID;
-	private int roleID;
 	private String ipAddress;
-	private String pos;
+	private int pos;
+	private int roleID;
 	
-	public User(){ }
+	public User()
+	{
+	}
 	public User(User user)
 	{
 		this.id = user.getId();
@@ -22,9 +24,11 @@ public class User implements Serializable
 		this.password = user.getPassword();
 		this.status = user.getStatus();
 		this.branchID = user.getBranchID();
+		this.ipAddress = user.getIpAddress();
 		this.pos = user.getPos();
+		this.roleID = user.getRoleID();
 	}
-	public User(int id, String userName, String password, String status, int branchID, String pos)
+	public User(int id, String userName, String password, String status, int branchID, int pos, int roleID)
 	{
 		this.id = id;
 		this.userName = userName;
@@ -32,6 +36,7 @@ public class User implements Serializable
 		this.status = status;
 		this.branchID = branchID;
 		this.pos = pos;
+		this.roleID = roleID;
 	}
 	
 	public int getId()
@@ -79,15 +84,6 @@ public class User implements Serializable
 		this.branchID = branchID;
 	}
 	
-	public int getRoleID()
-	{
-		return roleID;
-	}
-	public void setRoleID(int roleID)
-	{
-		this.roleID = roleID;
-	}
-	
 	public String getIpAddress()
 	{
 		return ipAddress;
@@ -97,12 +93,21 @@ public class User implements Serializable
 		this.ipAddress = ipAddress;
 	}
 	
-	public String getPos()
+	public int getPos()
 	{
 		return pos;
 	}
-	public void setPos(String pos)
+	public void setPos(int pos)
 	{
 		this.pos = pos;
+	}
+	
+	public int getRoleID()
+	{
+		return roleID;
+	}
+	public void setRoleID(int roleID)
+	{
+		this.roleID = roleID;
 	}
 }

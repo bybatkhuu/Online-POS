@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.User;
+
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 import utils.Utilities;
@@ -36,27 +38,26 @@ public class CheckBarcode extends HttpServlet
 		
 	    int hasBarcode = 0;
 		String barcode = (String) request.getParameter("barcode");
-		if (barcode != null)
+		User user = (User) session.getAttribute("user");
+		if (barcode != null && user != null)
 		{
 			if (!Utilities.isEmpty(barcode))
 			{
-				if (!Utilities.hasSpecialChars(barcode))
+				PostgreSQLJDBC db = new PostgreSQLJDBC();
+				if (db.createConnection())
 				{
-					PostgreSQLJDBC db = new PostgreSQLJDBC();
-					if (db.createConnection())
+					String branchID = Integer.toString(user.getBranchID());
+					String[] parameters = { barcode, branchID};
+					try
 					{
-						String[] parameter = {barcode};
-						try
+						if (db.execute("bh_checkBarcode", parameters))
 						{
-							if (db.execute("bh_checkBarcode", parameter))
-							{
-								hasBarcode = 1;
-							}
+							hasBarcode = 1;
 						}
-						catch (SQLException e)
-						{
-							System.out.println("Error: Can't execute bh_checkBarcode() function!\nMessage: " + e.toString());
-						}
+					}
+					catch (SQLException e)
+					{
+						System.out.println("Error: Can't execute bh_checkBarcode() function!\nMessage: " + e.toString());
 					}
 				}
 			}

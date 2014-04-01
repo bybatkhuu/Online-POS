@@ -141,7 +141,7 @@ function initTableSlim()
     });
 }
 
-function addItem(event, barcode, quantity, serial)
+function addItem(barcode, quantity, serial)
 {
 	if (barcode != "")
   	{
@@ -151,7 +151,7 @@ function addItem(event, barcode, quantity, serial)
 		  	{
 		  		if (quantity > 0)
 			  	{
-			  		var isBarcode = 0;
+		  			var isBarcode = 0;
 				  	$.ajax(
 				  	{
 				  		url: "check-barcode",
@@ -163,18 +163,8 @@ function addItem(event, barcode, quantity, serial)
 				  	});
 				  	if (isBarcode == 1)
 				  	{
-				  		var barcodeHasItem = 0;
-					  	$.ajax(
-					  	{
-					  		url: "barcode-has-item",
-						  	data: { "barcode" : barcode },
-						  	success: function(result)
-						  	{
-						  		barcodeHasItem = result;
-						  	}
-					  	});
-				  		if (barcodeHasItem == 1)
-				  		{
+				  		
+				  		
 				  			var serialID = -1;
 				  			if (serial != "")
 				  			{
@@ -273,15 +263,10 @@ function addItem(event, barcode, quantity, serial)
 						    	  	$("#serial").val("");
 						      	}
 						  	});
-				  		}
-				  		else
-				  		{
-				  			alert(barcode + " гэсэн баркодтой бараа олдохгүй байна!");
-				  		}
     			  	}
 				  	else
 				  	{
-				  		alert(barcode + " гэсэн баркод байхгүй байна!");
+				  		alert("'" + barcode + "' гэсэн баркод танай салбарт олдохгүй байна!");
     			  	}
 			  	}
 			  	else
@@ -303,7 +288,6 @@ function addItem(event, barcode, quantity, serial)
   	{
 	  	alert("Баркод хоосон байна!");
   	}
-  	event.preventDefault();
 }
 
 function bindForm(element)
@@ -483,6 +467,7 @@ function initEventHandlers()
 	  	}
 	  	else if (event.which == 115)
 	  	{
+	  		event.preventDefault();
 		  	$("#serial").focus();
 	  	}
 	  	else if (event.which == 116)
@@ -583,8 +568,8 @@ function initEventHandlers()
 
 	$("#barcode").keyup(function(event)
 	{
-		var barcode = $("#barcode").val();
-		var quantity = $("#quantity").val();
+		var barcode = $("#barcode").val().trim();
+		var quantity = $("#quantity").val().trim();
 		if (barcode != "" && quantity != "")
 		{
 			$("#addItem").prop("disabled", false);
@@ -596,8 +581,8 @@ function initEventHandlers()
 	});
 	$("#quantity").keyup(function(event)
 	{
-		var barcode = $("#barcode").val();
-		var quantity = $("#quantity").val();
+		var barcode = $("#barcode").val().trim();
+		var quantity = $("#quantity").val().trim();
 		if (barcode != "" && quantity != "")
 		{
 			$("#addItem").prop("disabled", false);
@@ -613,7 +598,7 @@ function initEventHandlers()
 		if(event.which == 13)
 		{
 			event.preventDefault();
-			addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+			addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
 		}
 	});
 	$("#quantity").keypress(function(event)
@@ -623,7 +608,7 @@ function initEventHandlers()
   			event.preventDefault();
   			if ($("#barcode").val() != "")
   			{
-  				addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+  				addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
   			}
   			else
   			{
@@ -674,7 +659,8 @@ function initEventHandlers()
   	});
   	$("#addItem").click(function(event)
   	{
-  		addItem(event, $("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val().trim());
+  		event.preventDefault();
+  		addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val().trim());
   	});
 
   	$("#serial").keypress(function(event)
@@ -784,7 +770,8 @@ function initEventHandlers()
   					$("#searchResultBody").html(result);
 	  				$("#searchResultBody > tr").dblclick(function(event)
 	  				{
-	  					addItem(event, $(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
+	  					event.preventDefault();
+	  					addItem($(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
 	  					$("#searchItemsDialog").dialog("close");
 	  				});
   				}

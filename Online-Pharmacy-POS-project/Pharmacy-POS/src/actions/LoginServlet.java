@@ -17,6 +17,7 @@ import models.User;
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
+import utils.Row;
 import utils.Utilities;
 
 @WebServlet("/login")
@@ -60,12 +61,12 @@ public class LoginServlet extends HttpServlet
 								parameters.add(password);
 								try
 								{
-									List<Cell> cellList = new ArrayList<Cell>();
-									cellList = db.getCellList("bh_getUser", parameters);
-									if (cellList != null && cellList.size() > 1)
+									List<Row> rowList = new ArrayList<Row>();
+									rowList = db.getRowList("bh_getUser", parameters);
+									if (rowList != null && rowList.size() == 1)
 									{
 										parameters = new ArrayList<String>();
-										parameters.add(cellList.get(0).getValue());
+										parameters.add(rowList.get(0).getCellList().get(0).getValue());
 										if (db.execute("bh_isLogout", parameters))
 										{
 											if (db.execute("bh_checkBranchUsers", parameters))
@@ -75,7 +76,7 @@ public class LoginServlet extends HttpServlet
 												if (db.execute("bh_login", parameters))
 												{
 													User user = new User();
-													for (Cell cell : cellList)
+													for (Cell cell : rowList.get(0).getCellList())
 													{
 														switch (cell.getColumn())
 														{
@@ -94,8 +95,14 @@ public class LoginServlet extends HttpServlet
 															case "branch_id":
 																user.setBranchID(Integer.parseInt(cell.getValue()));
 																break;
+															case "ip_address":
+																user.setIpAddress(cell.getValue());
+																break;
 															case "pos":
-																user.setPos(cell.getValue());
+																user.setPos(Integer.parseInt(cell.getValue()));
+																break;
+															case "role_id":
+																user.setRoleID(Integer.parseInt(cell.getValue()));
 																break;
 															default:
 																break;
