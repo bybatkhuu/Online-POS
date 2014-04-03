@@ -163,106 +163,88 @@ function addItem(barcode, quantity, serial)
 				  	});
 				  	if (isBarcode == 1)
 				  	{
-				  		
-				  		
-				  			var serialID = -1;
-				  			if (serial != "")
-				  			{
-				  				$.ajax(
-				  				{
-				  					url: "serial-has-item",
-				  					data:
-				  					{
-				  						"barcode" : barcode,
-				  						"serial" : serial
-				  					},
-									success: function(result)
+			  			if (serial != "")
+			  			{
+			  				$.ajax(
+			  				{
+			  					url: "serial-has-item",
+			  					data:
+			  					{
+			  						"barcode" : barcode,
+			  						"serial" : serial
+			  					},
+								success: function(result)
+								{
+									if (result != 1)
 									{
-										if (result != 1)
-										{
-											alert(serial + " гэсэн серитэй бараа танай салбарт алга!");
-											$("#serial").val("");
-											serial = "";
-										}
-										else
-										{
-											serialID = 0;
-										}
+										alert("'" + serial + "' гэсэн сери тухайн баркодон дээр, танай салбарт олдохгүй байна!");
+										$("#serial").val("");
+										serial = "";
 									}
-								});
-				  				if (serialID == 0)
-				  				{
-				  					$.ajax(
-							  		{
-							  			url: "get-serialID",
-							  			data: { "serial" : serial },
-										success: function(result)
-										{
-											serialID = result;
-										}
-							  		});
-				  				}
-				  			}
-				  			$.ajax(
+								}
+							});
+			  			}
+			  			
+			  			$.ajax(
+					  	{
+					  		url: "add-item",
+						  	data:
 						  	{
-						  		url: "add-item",
-							  	data:
-							  	{
-							  		"barcode" : barcode,
-								  	"quantity" : quantity,
-								  	"serial" : serial
-						      	},
-						      	success: function(result)
-						      	{
-						      		var jsonData = eval("(" + result + ")");
-						    	  	if (jsonData.hasItem == "false")
-						    	  	{
-						    	  		var response = "<tr class='success' id='" + jsonData.ID + "'>" +
-						    		 				 		"<td>" + jsonData.name + "</td>" +
-						    		 				 		"<td class='text-right'>" + jsonData.quantity + "</td>" +
-						    		 				 		"<td>" + jsonData.unit + "</td>" +
-						    		 				 		"<td class='text-right'>" + jsonData.price + "</td>" +
-						    		 				 		"<td class='text-right'>" + jsonData.total + "</td>" +
-						    		 				 		"<td class='text-right hidden'>0</td>" +
-						    		  				 	"</tr>";
-						    	  		$("#tableBody > tr[class='success']").removeClass();
-						    		  	$("#tableBody").append(response);
-						    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("click", function()
-						    		  	{
-						    		  		clickedRow($(this));
-						    		  	});
-						    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("dblclick", function()
-						    		  	{
-						    		  		bindForm($(this));
-								    	});
-						    	  	}
-						    	  	else
-						    	  	{
-						    	  		if (serial != "")
+						  		"barcode" : barcode,
+							  	"quantity" : quantity,
+							  	"serial" : serial
+					      	},
+					      	success: function(result)
+					      	{
+					      		var jsonData = eval("(" + result + ")");
+					    	  	if (jsonData.hasItem == "false")
+					    	  	{
+					    	  		var response = "<tr class='success' id='" + jsonData.ID + "'>" +
+					    		 				 		"<td>" + jsonData.name + "</td>" +
+					    		 				 		"<td class='text-right'>" + jsonData.quantity + "</td>" +
+					    		 				 		"<td>" + jsonData.unit + "</td>" +
+					    		 				 		"<td class='text-right'>" + jsonData.price + "</td>" +
+					    		 				 		"<td class='text-right'>" + jsonData.total + "</td>" +
+					    		 				 		"<td class='text-right hidden'>0</td>" +
+					    		  				 	"</tr>";
+					    	  		$("#tableBody > tr[class='success']").removeClass();
+					    		  	$("#tableBody").append(response);
+					    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("click", function()
+					    		  	{
+					    		  		clickedRow($(this));
+					    		  	});
+					    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("dblclick", function()
+					    		  	{
+					    		  		bindForm($(this));
+							    	});
+					    	  	}
+					    	  	else
+					    	  	{
+					    	  		if (serial != "")
+					    	  		{
+						    	  		if (jsonData.serialID != serialID)
 						    	  		{
-							    	  		if (jsonData.serialID != serialID)
-							    	  		{
-							    	  			alert(jsonData.name + " гэсэн бараа өөр серитэй орсон байна!\nСерийг өөрчилж оруулна уу.");
-							    	  		}
+						    	  			alert(jsonData.name + " гэсэн бараа өөр серитэй орсон байна!\nСерийг өөрчилж оруулна уу.");
 						    	  		}
-						    	  		
-						    	  		var response = 	"<td>" + jsonData.name + "</td>" +
-		    		 				 				   	"<td class='text-right'>" + jsonData.quantity + "</td>" +
-		    		 				 				   	"<td>" + jsonData.unit + "</td>" +
-		    		 				 				   	"<td class='text-right'>" + jsonData.price + "</td>" +
-		    		 				 				   	"<td class='text-right'>" + jsonData.total + "</td>" +
-						    	  						"<td class='text-right hidden'>0</td>";
-						    		  	$("tr[id='" + jsonData.ID + "']").html(response);
-						    	  	}
-						    	  	$("#unitPrice").val(jsonData.price);
-						    	  	$("#itemName").val(jsonData.name);
-						    	  	$("#unit").text(jsonData.unit);
-						    	  	checkAll();
-						    	  	$("#quantity").val("1");
-						    	  	$("#barcode").val("");
-						    	  	$("#serial").val("");
-						      	}
-						  	});
+					    	  		}
+					    	  		
+					    	  		var response = 	"<td>" + jsonData.name + "</td>" +
+	    		 				 				   	"<td class='text-right'>" + jsonData.quantity + "</td>" +
+	    		 				 				   	"<td>" + jsonData.unit + "</td>" +
+	    		 				 				   	"<td class='text-right'>" + jsonData.price + "</td>" +
+	    		 				 				   	"<td class='text-right'>" + jsonData.total + "</td>" +
+					    	  						"<td class='text-right hidden'>0</td>";
+					    		  	$("tr[id='" + jsonData.ID + "']").html(response);
+					    	  	}
+					    	  	$("#unitPrice").val(jsonData.price);
+					    	  	$("#itemName").val(jsonData.name);
+					    	  	$("#unit").text(jsonData.unit);
+					    	  	checkAll();
+					    	  	$("#quantity").val("1");
+					    	  	$("#barcode").val("");
+					    	  	$("#serial").val("");
+					      	}
+					  	});
     			  	}
 				  	else
 				  	{
@@ -292,21 +274,53 @@ function addItem(barcode, quantity, serial)
 
 function bindForm(element)
 {
-	var oldQuant = $(element).children().eq(thQuant).text();
+	var oldQuant = parseFloat($(element).children().eq(thQuant).text());
 	var price = parseFloat($(element).children().eq(thPrice).text());
 	var id = $(element).attr("id");
 	$(element).children().first().next().html
 	(
-		"<input type='text' value='" + oldQuant + "' size='1' class='input-sm' id='newQuant' />"
+		"<input type='text' value='' size='1' class='input-sm' id='newQuant' />"
 	);
 	
 	$("#newQuant").focus();
+	
 	$("#newQuant").keypress(function(event)
 	{
 		if (event.which == 13)
 		{
 			var newQuant = parseFloat($("#newQuant").val());
 	  		$("#newQuant").remove();
+	  		if (oldQuant != newQuant && !isNaN(newQuant))
+	  		{
+		  		$.ajax(
+		  		{
+		  			url: "update-item",
+		  			data:
+		  			{
+		  				"id": id,
+		  				"newQuant": newQuant
+		  			},
+		  			success: function(result)
+		  			{
+		  				$(element).children().eq(thQuant).text(newQuant);
+		  				var total = price * newQuant;
+		  				$(element).children().eq(thTotal).text(total);
+		  		  		checkAll();
+		  			}
+		  		});
+	  		}
+	  		else
+	  		{
+	  			$(element).children().eq(thQuant).text(oldQuant);
+	  		}
+		}
+	});
+  	$("#newQuant").focusout(function()
+  	{
+  		var newQuant = parseFloat($("#newQuant").val());
+  		$("#newQuant").remove();
+  		if (oldQuant != newQuant && !isNaN(newQuant))
+  		{
 	  		$.ajax(
 	  		{
 	  			url: "update-item",
@@ -317,34 +331,17 @@ function bindForm(element)
 	  			},
 	  			success: function(result)
 	  			{
-	  				$(element).children().eq(thQuant).text(newQuant);
-	  				var total = price * newQuant;
-	  				$(element).children().eq(thTotal).text(total);
-	  		  		checkAll();
+		  				$(element).children().eq(thQuant).text(newQuant);
+		  				var total = price * newQuant;
+		  				$(element).children().eq(thTotal).text(total);
+		  				checkAll();
 	  			}
 	  		});
-		}
-	});
-  	$("#newQuant").focusout(function()
-  	{
-  		var newQuant = parseFloat($("#newQuant").val());
-  		$("#newQuant").remove();
-  		$.ajax(
+  		}
+  		else
   		{
-  			url: "update-item",
-  			data:
-  			{
-  				"id": id,
-  				"newQuant": newQuant
-  			},
-  			success: function(result)
-  			{
-	  				$(element).children().eq(thQuant).text(newQuant);
-	  				var total = price * newQuant;
-	  				$(element).children().eq(thTotal).text(total);
-	  				checkAll();
-  			}
-  		});
+  			$(element).children().eq(thQuant).text(oldQuant);
+  		}
   	});
 }
 function clickedRow(element)
@@ -484,6 +481,7 @@ function initEventHandlers()
 	  	else if (event.which == 118)
 	  	{
 	  		event.preventDefault();
+	  		$("#paid").val("");
 		  	$("#paid").focus();
 	  	}
 	  	else if (event.which == 120)

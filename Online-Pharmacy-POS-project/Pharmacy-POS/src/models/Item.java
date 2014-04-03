@@ -1,11 +1,6 @@
 package models;
 
 import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.List;
-
-import utils.Cell;
-import utils.PostgreSQLJDBC;
 
 @SuppressWarnings("serial")
 public class Item implements Serializable
@@ -15,6 +10,7 @@ public class Item implements Serializable
 	private double price;
 	private double calPrice;
 	private String description;
+	private int unitID;
 	private String unit;
 	private int serialID;
 	private String serial;
@@ -25,84 +21,6 @@ public class Item implements Serializable
 	
 	public Item()
 	{
-	}
-	
-	public Item(String barcode, int branchID, String serial, double quantity) throws SQLException
-	{
-		PostgreSQLJDBC db = new PostgreSQLJDBC();
-		Cell tmpCell = null;
-		if (db.createConnection())
-		{
-			int unitId = 0;
-			String[] barcodeParam = { barcode };
-			List<Cell> cellList = db.getCellList("bh_getItem", barcodeParam);
-			if (cellList != null)
-			{
-				for (Cell cell : cellList)
-				{
-					switch (cell.getColumn())
-					{
-						case "id":
-							this.id = Integer.parseInt(cell.getValue());
-							break;
-						case "name":
-							this.name = cell.getValue();
-							break;
-						case "description":
-							this.description = cell.getValue();
-							break;
-						case "item_unit_id":
-							unitId = Integer.parseInt(cell.getValue());
-							break;
-						case "ins_discount_price":
-							if (cell.getValue() != null && !cell.getValue().trim().equalsIgnoreCase(""))
-							{
-								this.insDiscountPrice = Double.parseDouble(cell.getValue());
-							}
-							else
-							{
-								this.insDiscountPrice = 0;
-							}
-							break;
-						default:
-							break;
-					}
-				}
-				if (serial.trim().equalsIgnoreCase(""))
-				{
-					String[] params = { String.valueOf(branchID), String.valueOf(this.id) };
-					tmpCell = db.getCell("bh_getLastSerialId", params);
-				}
-				else
-				{
-					String[] params = { serial };
-					tmpCell = db.getCell("bh_getSerialId", params);
-					this.serial = serial;
-				}
-				this.serialID = Integer.parseInt(tmpCell.getValue());
-				
-				String[] params = { String.valueOf(branchID), String.valueOf(this.id), String.valueOf(this.serialID) };
-				tmpCell = db.getCell("bh_getPrice", params);
-				this.price = Double.parseDouble(tmpCell.getValue());
-				
-				this.quantity = quantity;
-				this.total = this.quantity * this.price;
-				this.calPrice = this.price - this.insDiscountPrice;
-				this.calTotal = this.quantity * this.calPrice;
-			}
-			
-			tmpCell = null;
-			String[] unitIdParam = { Integer.toString(unitId) };
-			tmpCell = db.getCell("bh_getUnit", unitIdParam);
-			if (tmpCell != null)
-			{
-				this.unit = tmpCell.getValue();
-			}
-			else
-			{
-				this.unit = "ш";
-			}
-		}
 	}
 	
 	public int getId()
@@ -142,6 +60,15 @@ public class Item implements Serializable
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+	
+	public int getUnitID()
+	{
+		return unitID;
+	}
+	public void setUnitID(int unitID)
+	{
+		this.unitID = unitID;
 	}
 	
 	public String getUnit()

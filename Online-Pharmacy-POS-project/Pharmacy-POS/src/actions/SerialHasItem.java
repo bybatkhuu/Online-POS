@@ -44,23 +44,20 @@ public class SerialHasItem extends HttpServlet
 		{
 			if (!Utilities.isEmpty(barcode) && !Utilities.isEmpty(serial))
 			{
-				if (!Utilities.hasSpecialChars(barcode) && !Utilities.hasSpecialChars(serial))
+				PostgreSQLJDBC db = new PostgreSQLJDBC();
+				if (db.createConnection())
 				{
-					PostgreSQLJDBC db = new PostgreSQLJDBC();
-					if (db.createConnection())
+					String[] parameter = { serial, barcode, String.valueOf(user.getBranchID()) };
+					try
 					{
-						String[] parameter = { serial, barcode, String.valueOf(user.getBranchID()) };
-						try
+						if (db.execute("bh_serialHasItem", parameter))
 						{
-							if (db.execute("bh_serialHasItem", parameter))
-							{
-								hasSerial = 1;
-							}
+							hasSerial = 1;
 						}
-						catch (SQLException e)
-						{
-							System.out.println("Error: Can't execute bh_checkBarcode() function!\nMessage: " + e.toString());
-						}
+					}
+					catch (SQLException e)
+					{
+						System.out.println("Error: Can't execute bh_checkBarcode() function!\nMessage: " + e.toString());
 					}
 				}
 			}
