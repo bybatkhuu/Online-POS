@@ -206,6 +206,10 @@
     	                              					out.println((int)item.getQuantity());
     	                              				}
                                     	    	}
+                                      			else
+                                      			{
+                                      				out.print("1");
+                                      			}
                                     		}
                                     		else
                                     		{

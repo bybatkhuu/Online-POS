@@ -99,8 +99,15 @@ function initOrderNum()
     	url: "get-order-num",
   	  	success: function(result)
   	  	{
-  	  		$("#talon").val(result);
-  	  		$("#print-talon").val(result);
+  	  		if (result.trim() != "0")
+  	  		{
+  	  			$("#talon").val(result);
+  	  			$("#print-talon").val(result);
+  	  		}
+  	  		else
+  	  		{
+  	  			alert("Анхааруулга:\nСерверээс талоны мэдээлэл авч чадахгүй байна!\nВеб хуудсаа дахин дуудна уу!\nЭсвэл системийн админтай холбогдоно уу!");
+  	  		}
   	  	}
     });
 }
@@ -220,14 +227,6 @@ function addItem(barcode, quantity, serial)
 					    	  	}
 					    	  	else
 					    	  	{
-					    	  		if (serial != "")
-					    	  		{
-						    	  		if (jsonData.serialID != serialID)
-						    	  		{
-						    	  			alert(jsonData.name + " гэсэн бараа өөр серитэй орсон байна!\nСерийг өөрчилж оруулна уу.");
-						    	  		}
-					    	  		}
-					    	  		
 					    	  		var response = 	"<td>" + jsonData.name + "</td>" +
 	    		 				 				   	"<td class='text-right'>" + jsonData.quantity + "</td>" +
 	    		 				 				   	"<td>" + jsonData.unit + "</td>" +
@@ -239,10 +238,10 @@ function addItem(barcode, quantity, serial)
 					    	  	$("#unitPrice").val(jsonData.price);
 					    	  	$("#itemName").val(jsonData.name);
 					    	  	$("#unit").text(jsonData.unit);
-					    	  	checkAll();
 					    	  	$("#quantity").val("1");
 					    	  	$("#barcode").val("");
 					    	  	$("#serial").val("");
+					    	  	checkAll();
 					      	}
 					  	});
     			  	}
@@ -290,7 +289,7 @@ function bindForm(element)
 		{
 			var newQuant = parseFloat($("#newQuant").val());
 	  		$("#newQuant").remove();
-	  		if (oldQuant != newQuant && !isNaN(newQuant))
+	  		if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
 	  		{
 		  		$.ajax(
 		  		{
@@ -305,6 +304,7 @@ function bindForm(element)
 		  				$(element).children().eq(thQuant).text(newQuant);
 		  				var total = price * newQuant;
 		  				$(element).children().eq(thTotal).text(total);
+		  				$("#quantity").val(newQuant);
 		  		  		checkAll();
 		  			}
 		  		});
@@ -319,7 +319,7 @@ function bindForm(element)
   	{
   		var newQuant = parseFloat($("#newQuant").val());
   		$("#newQuant").remove();
-  		if (oldQuant != newQuant && !isNaN(newQuant))
+  		if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
   		{
 	  		$.ajax(
 	  		{
@@ -334,6 +334,7 @@ function bindForm(element)
 		  				$(element).children().eq(thQuant).text(newQuant);
 		  				var total = price * newQuant;
 		  				$(element).children().eq(thTotal).text(total);
+		  				$("#quantity").val(newQuant);
 		  				checkAll();
 	  			}
 	  		});
@@ -363,6 +364,10 @@ function purchase()
 	  		$("#talon").val(result);
 	  		$("#print-talon").val(result);
 	  		$("#tableBody").html("");
+	  		$("#quantity").val("1");
+	  		$("#unit").text("ш");
+	  		$("#unitPrice").val("");
+	  		$("#itemName").val("");
 	  		checkAll();
 	  	}
 	});
@@ -707,13 +712,24 @@ function initEventHandlers()
   			success: function(result)
   			{
   				$("#tableBody > tr[class='success']").remove();
-  				checkAll();
   			}
   		});
+  		
   		if ($("#tableBody > tr").size() > 0)
   		{
   			$("#tableBody > tr:eq(" + ($("#tableBody > tr").size() - 1) + ")").addClass("success");
+  			$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
+	  		$("#quantity").val($("#tableBody > tr[class='success']").children().eq(thQuant).text());
+	  		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
   		}
+	  	else
+	  	{
+	  		$("#quantity").val("1");
+	  		$("#itemName").val("");
+	  		$("#unitPrice").val("");
+	  		$("#unit").text("ш");
+	  	}
+  		checkAll();
   		event.preventDefault();
   	});
   	
@@ -725,6 +741,10 @@ function initEventHandlers()
   		  	success: function()
   		  	{
   		  		$("#tableBody").html("");
+  		  		$("#quantity").val("1");
+  		  		$("#itemName").val("");
+  		  		$("#unitPrice").val("");
+  		  		$("#unit").text("ш");
   		  		checkAll();
   		  	}
   		});

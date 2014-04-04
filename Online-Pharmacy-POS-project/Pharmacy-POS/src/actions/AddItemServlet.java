@@ -93,7 +93,7 @@ public class AddItemServlet extends HttpServlet
 		    			{
 		    				serial = "";
 		    			}
-		    			item = getItem(barcode, user.getBranchID(), serial, quantity);
+		    			item = getNewItem(barcode, user.getBranchID(), serial, quantity);
 		    			//item = new Item(barcode, user.getBranchID(), serial, quantity);
 					}
 		    		catch (SQLException e)
@@ -168,7 +168,7 @@ public class AddItemServlet extends HttpServlet
 		return(null);
 	}
 	
-	private Item getItem(String barcode, int branchID, String serial, double quantity) throws SQLException
+	private Item getNewItem(String barcode, int branchID, String serial, double quantity) throws SQLException
 	{
 		Item item = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
