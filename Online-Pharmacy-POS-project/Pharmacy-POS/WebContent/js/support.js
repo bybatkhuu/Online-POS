@@ -704,6 +704,7 @@ function initEventHandlers()
   	
   	$("#deleteButton").click(function(event)
   	{
+  		event.preventDefault();
   		var id = $("#tableBody > tr[class='success']").attr("id");
   		$.ajax(
   		{
@@ -730,7 +731,6 @@ function initEventHandlers()
 	  		$("#unit").text("ш");
 	  	}
   		checkAll();
-  		event.preventDefault();
   	});
   	
   	$("#clearButton").click(function(event)
