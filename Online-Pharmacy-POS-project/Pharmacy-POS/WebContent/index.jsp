@@ -660,29 +660,77 @@
 			<div class="row">
 				<form action="#" method="POST">
 					<div class="row">
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<label for="searchByName" class="control-label">
 								<b>Нэр:</b>
 							</label>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<label for="searchByBarcode" class="control-label">
 								<b>Баркод:</b>
 							</label>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-5">
-							<input type="text" class="form-control" id="searchByName" />
+						<div class="col-sm-6">
+							<input type="text" class="form-control input-sm" id="searchByName" />
 						</div>
-						<div class="col-sm-5">
-							<input type="text" class="form-control" id="searchByBarcode" />
+						<div class="col-sm-6">
+							<input type="text" class="form-control input-sm" id="searchByBarcode" />
 						</div>
-						<div class="col-sm-2">
+					</div>
+					<div class="space-8"></div>
+					<div class="row">
+						<div class="col-sm-1">
+							<label for="searchByPrice" class="control-label" style="padding-top: 5px;">
+								<b>Үнэ:</b>
+							</label>
+						</div>
+						<div class="col-sm-2 no-padding">
+							<input type="text" class="form-control text-center green" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
+						</div>
+						<div class="col-sm-1 no-padding">
+							<input type="text" class="form-control text-center green" value="-" style="border: 0px; font-weight:bold;" readonly disabled />
+						</div>
+						<div class="col-sm-2 no-padding">
+							<input type="text" class="form-control text-center green" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
+						</div>
+						<div class="col-sm-6">
 							<button type="submit" class="btn btn-sm btn-success pull-right" id="searchItems">
 								Хайх
 								<i class="icon-search"></i>
 							</button>
+						</div>
+					</div>
+					<script>
+						$(document).ready(function()
+						{
+							$("#searchByMinPrice").keyup(function(event)
+							{
+								if (isNumber($("#searchByMinPrice").val()) && $("#searchByMinPrice").val() >= 0)
+								{
+									if ($("#searchByMinPrice").val() > $("#searchByMaxPrice").val())
+									{
+										$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+									}
+								}
+								else
+								{
+									$("#searchByMinPrice").val("0");
+									$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+								}
+							});
+							$("#searchByMaxPrice").keyup(function(event)
+							{
+								$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+							});
+						});
+					</script>
+					<div class="row">
+						<div class="col-sm-6">
+							<div id="slider-range"></div>
+							<!-- <div id="searchByMinPrice" class="hidden"></div>
+							<div id="searchByMaxPrice" class="hidden"></div> -->
 						</div>
 					</div>
 				</form>

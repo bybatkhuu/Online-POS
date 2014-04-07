@@ -12,6 +12,7 @@ $(document).ready(function()
 	initSearchDialog();
 	initOrderNum();
 	initBarcode();
+	initSearchSlider();
 	initTableSlim();
 	
 	checkAll();
@@ -54,7 +55,7 @@ function checkTime(i)
 {
 	if (i < 10)
     {
-		  i = "0" + i;
+		i = "0" + i;
     }
     return i;
 }
@@ -88,7 +89,7 @@ function initSearchDialog()
 		autoOpen: false,
 		modal: true,
 		width: 550,
-		height: 400
+		height: 500
 	});
 }
 
@@ -146,6 +147,34 @@ function initTableSlim()
       	railVisible: true,
       	size: '12px'
     });
+}
+
+function initSearchSlider()
+{
+	var $slider = $("#slider-range").slider(
+	{
+		range: true,
+		min: 0,
+		max: 500,
+		step: 10,
+		slide: function(event, ui)
+		{
+			$("#searchByMinPrice").val(ui.values[0]);
+			$("#searchByMaxPrice").val(ui.values[1]);
+		}
+	});	
+	$.ajax(
+	{
+		url: "get-max-price",
+		success: function(result)
+		{
+			var maxPrice = parseFloat(result);
+			$slider.slider("option", "max", maxPrice);
+			$slider.slider("option", "values", [0, maxPrice]);
+		}
+	});
+	$("#searchByMinPrice").val($("#slider-range").slider("values", 0));
+	$("#searchByMaxPrice").val($("#slider-range").slider("values", 1));
 }
 
 function addItem(barcode, quantity, serial)
@@ -371,6 +400,7 @@ function purchase()
 	  		checkAll();
 	  	}
 	});
+	$("#barcode").focus();
 }
 
 function isNumber(n)
@@ -448,7 +478,15 @@ function initEventHandlers()
 			$("#searchItemsDialog").dialog("open");
 		}
 		
-		if (event.which == 113)
+		if (event.which == 9)
+		{
+			if ($("input:focus").attr("id") == "paid")
+			{
+				event.preventDefault();
+				$("#barcode").focus();
+			}
+		}
+		else if (event.which == 113)
 	  	{
 	  		event.preventDefault();
 		  	$("#insuranceCheck").trigger('click');
@@ -781,11 +819,20 @@ function initEventHandlers()
   				data:
   				{
   					"itemName": $("#searchByName").val().trim(),
-  					"barcode": $("#searchByBarcode").val().trim()
+  					"barcode": $("#searchByBarcode").val().trim(),
+  					"minPrice": $("#searchByMinPrice").val().trim(),
+  					"maxPrice": $("#searchByMaxPrice").val().trim()
   				},
   				success: function(result)
   				{
   					$("#searchResultBody").html(result);
+  					$("#searchResultBody > tr").click(function(event)
+  					{
+  						event.preventDefault();
+  						$("#searchResultBody > tr[class='success']").removeClass();
+  						$(this).addClass("success");
+  					});
+  					
 	  				$("#searchResultBody > tr").dblclick(function(event)
 	  				{
 	  					event.preventDefault();

@@ -352,7 +352,12 @@ function initEventHandlers()
 			$("#searchItemsDialog").dialog("open");
 		}
 		
-		if (event.which == 113)
+		if (event.which == 9)
+	  	{
+			event.preventDefault();
+			alert("Tab");
+	  	}
+		else if (event.which == 113)
 	  	{
 	  		event.preventDefault();
 		  	$("#insuranceCheck").trigger('click');
