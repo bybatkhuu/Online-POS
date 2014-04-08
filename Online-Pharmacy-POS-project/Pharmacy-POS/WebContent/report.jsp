@@ -36,6 +36,7 @@
 	    <link rel="stylesheet" href="css/bootstrap.min.css" />
 	    <link rel="stylesheet" href="css/font-awesome.min.css" />
 	    <link rel="stylesheet" href="css/jquery-ui-1.10.3.full.min.css" />
+	    <link rel="stylesheet" href="css/daterangepicker.css" />
 	    <link rel="stylesheet" href="css/ace-fonts.css" />
 	    <link rel="stylesheet" href="css/ace.min.css" />
 	    <link rel="stylesheet" href="css/ace-skins.min.css" />
@@ -49,13 +50,57 @@
 	    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 	    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 	    <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
+	    <script type="text/javascript" src="js/date-time/moment.min.js"></script>
+		<script type="text/javascript" src="js/date-time/daterangepicker.min.js"></script>
 	    <script type="text/javascript" src="js/ace-elements.min.js"></script>
 	    <script type="text/javascript" src="js/ace.min.js"></script>
 	    
 	    <script type="text/javascript">
 	      $(document).ready(function()
 	      {
-	    	  
+	    	  $('#dateRangePicker').daterangepicker
+	    		(
+	    			{
+	    				startDate: moment().startOf('month'),
+	    				endDate: moment(),
+	    				format: 'YYYY-MM-DD',
+	    				showDropdowns: true,
+	    				ranges:
+	    				{
+	    					'Өнөөдөр': [moment(), moment()],
+	    					/* 'Өчигдөр': [moment().subtract('days', 1), moment().subtract('days', 1)], */
+	    					'Сүүлийн 7 хоног': [moment().subtract('days', 6), moment()],
+	    					/* 'Сүүлийн 30 хоног': [moment().subtract('days', 29), moment()], */
+	    					'Энэ сар': [moment().startOf('month'), moment().endOf('month')],
+	    					'Сүүлийн сар': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+	    				},
+	    				locale:
+	    				{
+	    					applyLabel: 'Сонгох',
+	    					cancelLabel: 'Цуцлах',
+	    					fromLabel: 'Эхлэх',
+	    					toLabel: 'Дуусах',
+	    					customRangeLabel: 'Гараар сонгох',
+	    					daysOfWeek: ['Ня', 'Да', 'Мя', 'Лх', 'Пү', 'Ба','Бя'],
+	    					monthNames: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар']
+	    				}
+	    			},
+	    			function(start, end, label)
+	    			{
+	    				$('#firstDate').val(start.format('YYYY-MM-DD'));
+	    				$('#secondDate').val(end.format('YYYY-MM-DD'));
+	    			}
+	    		);
+	    		$('#firstDate').on('apply.daterangepicker', function(ev, picker)
+	    		{
+	    			$('#firstDate').val(picker.startDate.format('YYYY-MM-DD'));
+	    			$('#secondDate').val(picker.endDate.format('YYYY-MM-DD'));
+	    		});
+	    		$('#firstDate').on('cancel.daterangepicker', function(ev, picker)
+	    		{
+	    			$('#firstDate').val('');
+	    			$('#secondDate').val('');
+	    		});
 	      });
 	    </script>
 	</head>
@@ -119,13 +164,35 @@
       		<div class="main-container-inner">
         		<div class="main-content bh-main-content">
         			<div class="page-content">
+        				<div class="page-header">
+        					<h1>Тайлан</h1>
+        				</div>
+        				<div class="row">
+        					<div class="col-sm-12">
+        						<form class="form-horizontal">
+        							<div class="row">
+        								<div class="col-sm-12">
+        									<label class="control-label" for="dateRangePicker">
+        										Огноо:
+        									</label>
+        								</div>
+        							</div>
+        							<div class="row">
+        								<div class="col-sm-12">
+        									<input type="text" name="date" class="form-control" id="dateRangePicker" />
+        								</div>
+        							</div>
+        						</form>
+        					</div>
+        				</div>
+        				<div class="space-8"></div>
 			            <div class="row">
-			              	<div class="col-xs-12">
+			              	<div class="col-sm-12">
 			              		<div class="table-responsive">
 			              			<table class="table table-striped table-bordered table-hover">
 			              				<thead>
 			              					<tr>
-			              						<th></th>
+			              						<th>Date</th>
 			              						<th></th>
 			              					</tr>
 			              				</thead>
@@ -139,6 +206,7 @@
 			              		</div>
 			          		</div>
 			          	</div>
+			          	
 			        </div>
         		</div>
         	</div>
@@ -148,7 +216,7 @@
 	      <div class="container">
 	        <div class="row center">
 	          <div class="col-xs-12 col-sm-offset-4 col-sm-4 center">
-	            &copy;2013  Infosystems LLC
+	            &copy;2014  Infosystems LLC
 	          </div>
 	          <div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
 	          </div>

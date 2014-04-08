@@ -155,7 +155,7 @@ function initSearchSlider()
 	{
 		range: true,
 		min: 0,
-		max: 500,
+		max: 100000,
 		step: 10,
 		slide: function(event, ui)
 		{
@@ -165,16 +165,31 @@ function initSearchSlider()
 	});	
 	$.ajax(
 	{
-		url: "get-max-price",
+		url: "get-min-max-price",
 		success: function(result)
 		{
-			var maxPrice = parseFloat(result);
-			$slider.slider("option", "max", maxPrice);
-			$slider.slider("option", "values", [0, maxPrice]);
+			var jsonData = eval("(" + result + ")");
+			
+			if (jsonData.hasPrice == "true")
+			{
+				$slider.slider("option", "min", parseFloat(jsonData.minPrice));
+				$slider.slider("option", "max", parseFloat(jsonData.maxPrice));
+				$slider.slider("option", "values", [parseFloat(jsonData.minPrice), parseFloat(jsonData.maxPrice)]);
+			}
 		}
 	});
 	$("#searchByMinPrice").val($("#slider-range").slider("values", 0));
 	$("#searchByMaxPrice").val($("#slider-range").slider("values", 1));
+	
+	$("#searchByMinPrice").keyup(function(event)
+	{
+		$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+	});
+	
+	$("#searchByMaxPrice").keyup(function(event)
+	{
+		$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+	});
 }
 
 function addItem(barcode, quantity, serial)
@@ -813,6 +828,18 @@ function initEventHandlers()
   		event.preventDefault();
   		if ($("#searchByName").val().trim() != "" || $("#searchByBarcode").val().trim() != "")
   		{
+  			if (!isNumber($("#searchByMinPrice").val()))
+  			{
+  				$("#searchByMinPrice").val($("#slider-range").slider("option", "min"));
+  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+  			}
+  			
+  			if (!isNumber($("#searchByMaxPrice").val()))
+  			{
+  				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
+  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+  			}
+  			
   			$.ajax(
   			{
   				url: "searchItems",
@@ -837,6 +864,7 @@ function initEventHandlers()
 	  				{
 	  					event.preventDefault();
 	  					addItem($(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
+	  					$("#searchResultBody > tr[class='success']").removeClass();
 	  					$("#searchItemsDialog").dialog("close");
 	  				});
   				}

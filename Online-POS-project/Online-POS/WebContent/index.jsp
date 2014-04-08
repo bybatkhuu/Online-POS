@@ -347,8 +347,8 @@
                               	</button>
                               </div>
                               
-	                          <%-- <div class="col-xs-12 col-sm-12 col-md-8 pull-left">
-	                            <div class="checkbox no-padding hidden">
+	                          <div class="col-xs-12 col-sm-12 col-md-8 pull-left">
+	                            <div class="checkbox no-padding">
 	                              <label>
 	                                <input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="insuranceCheck" <%
 	                                    		if (session.getAttribute("hasInsurance") != null)
@@ -357,11 +357,21 @@
 	                                    		}
 	                                 %>/>
 	                                 <span class="lbl">
-	                                   <b>&nbsp; ЭМДС-ийн хөнгөлөлт</b>
+	                                   <b>&nbsp; Нэхэмжлэх</b>
 	                                 </span>
 	                               </label>
 	                             </div>
-	                           </div> --%>
+	                           </div>
+                             </div>
+                             
+                             <div class="row">
+                             	<div class="col-sm-12">
+                             		<select>
+                             			<option value="volvo">MUIS</option>
+                             			<option value="zuun">Zuun nast</option>
+                             			<option value="silver">Silver pen</option>
+                             		</select>
+                             	</div>
                              </div>
                             
 							<div class="space-4"></div>

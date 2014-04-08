@@ -3,6 +3,7 @@ package actions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,12 +18,12 @@ import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 
-@WebServlet("/get-max-price")
-public class GetMaxPriceServlet extends HttpServlet
+@WebServlet("/get-min-max-price")
+public class GetMinMaxPriceServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-    public GetMaxPriceServlet()
+    public GetMinMaxPriceServlet()
     {
         super();
     }
@@ -36,7 +37,7 @@ public class GetMaxPriceServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-		Cell cell = null;
+		List<Cell> cellList = null;
 		User user = (User) session.getAttribute("user");
 		if (user != null)
 		{
@@ -47,7 +48,7 @@ public class GetMaxPriceServlet extends HttpServlet
 				String[] parameter = { branchID };
 				try
 				{
-					cell = db.getCell("bh_getMaxPrice", parameter);
+					cellList = db.getCellList("bh_getMinMaxPrice", parameter);
 				}
 				catch (SQLException e)
 				{
@@ -56,16 +57,24 @@ public class GetMaxPriceServlet extends HttpServlet
 			}
 		}
 		
-		response.setContentType("text/html");
+		String jsonString = "";
+		if (cellList != null && cellList.size() > 0)
+		{
+		    jsonString =
+		    		"{" +
+		    			"hasPrice: '" + true + "'," +
+			    		"minPrice: '" + cellList.get(0).getValue() + "'," +
+			    		"maxPrice: '" + cellList.get(1).getValue() + "'" +
+			    	"}";
+		}
+		else
+		{
+			jsonString = "{ hasPrice: '" + false + "' }";
+		}
+	    
+	    response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-	    if (cell != null)
-	    {
-	    	out.print(cell.getValue());
-	    }
-	    else
-	    {
-	    	out.print("0");
-	    }
+	    out.print(jsonString);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

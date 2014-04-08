@@ -53,11 +53,10 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
-    <script type="text/javascript" src="js/jquery.jkey.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
 
-    <script type="text/javascript" src="js/support.js"></script>
+    <script type="text/javascript" src="js/page-js/cash.js"></script>
     <script type="text/javascript">
       $(document).ready(function()
       {
@@ -702,35 +701,9 @@
 							</button>
 						</div>
 					</div>
-					<script>
-						$(document).ready(function()
-						{
-							$("#searchByMinPrice").keyup(function(event)
-							{
-								if (isNumber($("#searchByMinPrice").val()) && $("#searchByMinPrice").val() >= 0)
-								{
-									if ($("#searchByMinPrice").val() > $("#searchByMaxPrice").val())
-									{
-										$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
-									}
-								}
-								else
-								{
-									$("#searchByMinPrice").val("0");
-									$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
-								}
-							});
-							$("#searchByMaxPrice").keyup(function(event)
-							{
-								$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
-							});
-						});
-					</script>
 					<div class="row">
 						<div class="col-sm-6">
 							<div id="slider-range"></div>
-							<!-- <div id="searchByMinPrice" class="hidden"></div>
-							<div id="searchByMaxPrice" class="hidden"></div> -->
 						</div>
 					</div>
 				</form>

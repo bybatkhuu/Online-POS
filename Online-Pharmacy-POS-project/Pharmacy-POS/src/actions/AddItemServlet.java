@@ -66,14 +66,7 @@ public class AddItemServlet extends HttpServlet
 		    {
 		    	try
 		    	{
-		    		if ((serial == null) || (serial.trim().equalsIgnoreCase("")))
-		    		{
-		    			item = findItem(barcode, itemList);
-		    		}
-		    		else
-		    		{
-		    			item = findItem(barcode, serial, itemList);
-		    		}
+		    		item = findItem(barcode, itemList);
 				}
 		    	catch (SQLException e)
 		    	{
@@ -94,7 +87,6 @@ public class AddItemServlet extends HttpServlet
 		    				serial = "";
 		    			}
 		    			item = getNewItem(barcode, user.getBranchID(), serial, quantity);
-		    			//item = new Item(barcode, user.getBranchID(), serial, quantity);
 					}
 		    		catch (SQLException e)
 		    		{
@@ -142,24 +134,6 @@ public class AddItemServlet extends HttpServlet
 			for (Item item : itemList)
 			{
 				if (item.getId() == id)
-				{
-					return(item);
-				}
-			}
-		}
-		return(null);
-	}
-	private Item findItem(String barcode, String serial, List<Item> itemList) throws SQLException
-	{
-		PostgreSQLJDBC db = new PostgreSQLJDBC();
-		String[] parameter = { barcode };
-		Cell cell = db.getCell("bh_getItemId", parameter);
-		if (cell != null)
-		{
-			int id = Integer.parseInt(cell.getValue());
-			for (Item item : itemList)
-			{
-				if ((item.getId() == id) && (item.getSerial().equalsIgnoreCase(serial)))
 				{
 					return(item);
 				}
