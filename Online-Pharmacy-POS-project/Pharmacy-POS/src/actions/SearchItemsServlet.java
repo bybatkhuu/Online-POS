@@ -106,7 +106,7 @@ public class SearchItemsServlet extends HttpServlet
 		    					out.println("<td class='hidden'>" + cell.getValue() + "</td>");
 		    					break;
 		    				default:
-		    					System.out.println("More unknown columns from bh_getSearchItems()!");
+		    					System.out.println("More unknown columns from bh_searchItems()!");
 		    					break;
 		    			}
 		    		}

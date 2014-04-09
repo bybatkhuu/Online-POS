@@ -62,7 +62,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="description" content="Infosystems LLC - Online Pharmacy POS: Main page">
+    <meta name="description" content="Infosystems LLC - Online Pharmacy POS: Login page">
     <meta name="keywords" content="Infosystems POS, Online Pharmacy POS, POS, Infosystems LLC, Infosystems">
     <meta name="author" content="Infosystems LLC">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
@@ -87,7 +87,7 @@
 	
     </style>
     
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script type="text/javascript" src="js/jquery.validate.min.js"></script>

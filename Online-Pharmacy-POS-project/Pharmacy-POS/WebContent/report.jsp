@@ -20,7 +20,7 @@
 	<head>
 		<meta charset="utf-8" />
 	    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	    <meta name="description" content="Infosystems LLC - Online POS: Main page">
+	    <meta name="description" content="Infosystems LLC - Online POS: Report page">
 	    <meta name="keywords" content="Infosystems POS, Online POS, POS, Infosystems LLC, Infosystems">
 	    <meta name="author" content="Infosystems LLC">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
@@ -36,7 +36,7 @@
 	    <link rel="stylesheet" href="css/bootstrap.min.css" />
 	    <link rel="stylesheet" href="css/font-awesome.min.css" />
 	    <link rel="stylesheet" href="css/jquery-ui-1.10.3.full.min.css" />
-	    <link rel="stylesheet" href="css/daterangepicker.css" />
+	    <link rel="stylesheet" href="css/daterangepicker-bs3.css" />
 	    <link rel="stylesheet" href="css/ace-fonts.css" />
 	    <link rel="stylesheet" href="css/ace.min.css" />
 	    <link rel="stylesheet" href="css/ace-skins.min.css" />
@@ -44,120 +44,82 @@
 	    <link rel="stylesheet" href="css/custom-icons.css" />
 	    <link rel="stylesheet" href="css/style.css" />
 	    <style type="text/css">
-	    
+	    	
 	    </style>
 	    
-	    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+	    <script type="text/javascript" src="js/ace-extra.min.js"></script>
+	    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 	    <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
+	    <script type="text/javascript" src="js/jquery.ui.datepicker-mn.js"></script>
+	    <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="js/jquery.dataTables.bootstrap.js"></script>
+		<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
 	    <script type="text/javascript" src="js/date-time/moment.min.js"></script>
-		<script type="text/javascript" src="js/date-time/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="js/date-time/daterangepicker.js"></script>
 	    <script type="text/javascript" src="js/ace-elements.min.js"></script>
 	    <script type="text/javascript" src="js/ace.min.js"></script>
 	    
+	    <script type="text/javascript" src="js/page-js/report.js"></script>
 	    <script type="text/javascript">
-	      $(document).ready(function()
-	      {
-	    	  $('#dateRangePicker').daterangepicker
-	    		(
-	    			{
-	    				startDate: moment().startOf('month'),
-	    				endDate: moment(),
-	    				format: 'YYYY-MM-DD',
-	    				showDropdowns: true,
-	    				ranges:
-	    				{
-	    					'Өнөөдөр': [moment(), moment()],
-	    					/* 'Өчигдөр': [moment().subtract('days', 1), moment().subtract('days', 1)], */
-	    					'Сүүлийн 7 хоног': [moment().subtract('days', 6), moment()],
-	    					/* 'Сүүлийн 30 хоног': [moment().subtract('days', 29), moment()], */
-	    					'Энэ сар': [moment().startOf('month'), moment().endOf('month')],
-	    					'Сүүлийн сар': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-	    				},
-	    				locale:
-	    				{
-	    					applyLabel: 'Сонгох',
-	    					cancelLabel: 'Цуцлах',
-	    					fromLabel: 'Эхлэх',
-	    					toLabel: 'Дуусах',
-	    					customRangeLabel: 'Гараар сонгох',
-	    					daysOfWeek: ['Ня', 'Да', 'Мя', 'Лх', 'Пү', 'Ба','Бя'],
-	    					monthNames: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар']
-	    				}
-	    			},
-	    			function(start, end, label)
-	    			{
-	    				$('#firstDate').val(start.format('YYYY-MM-DD'));
-	    				$('#secondDate').val(end.format('YYYY-MM-DD'));
-	    			}
-	    		);
-	    		$('#firstDate').on('apply.daterangepicker', function(ev, picker)
-	    		{
-	    			$('#firstDate').val(picker.startDate.format('YYYY-MM-DD'));
-	    			$('#secondDate').val(picker.endDate.format('YYYY-MM-DD'));
-	    		});
-	    		$('#firstDate').on('cancel.daterangepicker', function(ev, picker)
-	    		{
-	    			$('#firstDate').val('');
-	    			$('#secondDate').val('');
-	    		});
-	      });
+	    	$(document).ready(function()
+	    	{
+	    		
+	      	});
 	    </script>
 	</head>
 	<body>
 		<header class="navbar navbar-default" id="navbar">
-	      <div class="navbar-container container" id="navbar-container">
-	        <div class="navbar-header pull-left">
-	          <a href="index.jsp" class="navbar-brand">
-	            <small>
-	              <i class="icon-medkit"></i>
-	              Инфосистемс POS
-	            </small>
-	          </a><!-- /.brand -->
-	        </div><!-- /.navbar-header -->
-	
-	        <div class="navbar-header pull-right">
-	          <ul class="nav ace-nav">
-	            <li class="light-blue2">
-	              <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-	                <span class="user-info">
-	                  <small>Тавтай морилно уу,</small>
-	                  ${user.userName}
-	                </span>
-	                <i class="icon-caret-down"></i>
-	              </a>
-	              
-	              <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-	                <li class="hidden">
-	                  <a href="#">
-	                    <i class="icon-cog"></i>
-	                    Тохиргоо
-	                  </a>
-	                </li>
-	                <li class="hidden">
-	                  <a href="#">
-	                    <i class="icon-user"></i>
-	                    Хувийн хэрэг
-	                  </a>
-	                </li>
-	                <li>
-	                  <a href="index.jsp">
-	                    <i class="bhicon bhicon-cash"></i>
-	                    Касс
-	                  </a>
-	                </li>
-	                <li class="divider"></li>
-	                <li>
-	                  <a href="logout">
-	                    <i class="icon-off"></i>
-	                    Гарах
-	                  </a>
-	                </li>
-	              </ul>
-	            </li>
-	          </ul><!-- /.ace-nav -->
-	        </div><!-- /.navbar-header -->
-	      </div><!-- /.container -->
+			<div class="navbar-container container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="index.jsp" class="navbar-brand">
+	            		<small>
+	              			<i class="icon-medkit"></i>
+	              			Инфосистемс POS ${test}
+	            		</small>
+	          		</a><!-- /.brand -->
+	        	</div><!-- /.navbar-header -->
+	        	<div class="navbar-header pull-right">
+	          		<ul class="nav ace-nav">
+	            		<li class="light-blue2">
+	              			<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+	                			<span class="user-info">
+	                  				<small>Тавтай морилно уу,</small>
+	                  				${user.userName}
+	                			</span>
+	                			<i class="icon-caret-down"></i>
+	              			</a>
+	              			<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+	                			<li class="hidden">
+	                  				<a href="#">
+	                    				<i class="icon-cog"></i>
+	                    				Тохиргоо
+	                  				</a>
+	                			</li>
+	                			<li class="hidden">
+	                				<a href="#">
+				                    	<i class="icon-user"></i>
+				                    	Хувийн хэрэг
+				                  	</a>
+				                </li>
+				                <li>
+				                  	<a href="index.jsp">
+				                    	<i class="bhicon bhicon-cash"></i>
+				                    	Касс
+				                  	</a>
+				                </li>
+				                <li class="divider"></li>
+				                <li>
+				                  	<a href="logout">
+				                    	<i class="icon-off"></i>
+				                    	Гарах
+				                  	</a>
+				                </li>
+	              			</ul>
+	            		</li>
+	          		</ul><!-- /.ace-nav -->
+	        	</div><!-- /.navbar-header -->
+	      	</div><!-- /.container -->
 	    </header>
 	    
 	    <div class="main-container container" id="main-container">
@@ -169,17 +131,59 @@
         				</div>
         				<div class="row">
         					<div class="col-sm-12">
-        						<form class="form-horizontal">
+        						<form action="search-sales" class="form-horizontal" method="POST">
         							<div class="row">
-        								<div class="col-sm-12">
-        									<label class="control-label" for="dateRangePicker">
-        										Огноо:
+        								<div class="col-sm-offset-1 col-sm-3">
+        									<label class="control-label" for="startDate">
+        										ЭХЛЭХ:
+        									</label>
+        								</div>
+        								<div class="col-sm-3">
+        									<label class="control-label" for="endDate">
+        										ДУУСАХ:
+        									</label>
+        								</div>
+        								<div class="col-sm-offset-1 col-sm-2">
+        									<label class="control-label" for="type">
+        										<b>Төлбөр:</b>
         									</label>
         								</div>
         							</div>
         							<div class="row">
-        								<div class="col-sm-12">
-        									<input type="text" name="date" class="form-control" id="dateRangePicker" />
+        								<div class="col-sm-1 text-right">
+        									<label class="control-label" for="startDate">
+        										<b>Огноо:</b>
+        									</label>
+        								</div>
+        								<div class="col-sm-3">
+        									<div class="input-group">
+        										<span class="input-group-addon">
+        											<i class="icon-calendar bigger-110"></i>
+												</span>
+        										<input type="text" name="startDate" value="${param.startDate}" class="form-control" id="startDate" />
+        									</div>
+        								</div>
+        								<div class="col-sm-3">
+        									<div class="input-group">
+        										<span class="input-group-addon">
+        											<i class="icon-calendar bigger-110"></i>
+												</span>
+        										<input type="text" name="endDate" value="${param.endDate}" class="form-control" id="endDate" />
+        									</div>
+        								</div>
+        								<div class="col-sm-offset-1 col-sm-2">
+        									<select name="type" class="form-control" id="type">
+        										<option value="all">Бүгд</option>
+        										<option value="cash">Бэлнээр</option>
+										  		<option value="card">Картаар</option>
+											  	<option value="invoice">Нэхэмжлэлээр</option>
+											</select> 
+        								</div>
+        								<div class="col-sm-2">
+        									<button type="submit" class="btn btn-sm btn-success btn-block" id="searchBtn">
+        										<i class="icon-search"></i>&nbsp;
+        										Хайх
+        									</button>
         								</div>
         							</div>
         						</form>
@@ -189,39 +193,40 @@
 			            <div class="row">
 			              	<div class="col-sm-12">
 			              		<div class="table-responsive">
-			              			<table class="table table-striped table-bordered table-hover">
+			              			<table class="table table-striped table-bordered table-hover" id="mainTable">
 			              				<thead>
 			              					<tr>
-			              						<th>Date</th>
-			              						<th></th>
+			              						<th>Огноо</th>
+			              						<th>Талон №</th>
+			              						<th>Барааны нэр</th>
+			              						<th>Cери</th>
+			              						<th>Тоо</th>
+			              						<th>Нэгж үнэ</th>
+			              						<th>Нийт дүн</th>
+			              						<th>Төлбөр</th>
 			              					</tr>
 			              				</thead>
-			              				<tbody>
-			              					<tr>
-			              						<td></td>
-			              						<td></td>
-			              					</tr>
-			              				</tbody>
+			              				<tbody>${tableBody}</tbody>
 			              			</table>
 			              		</div>
 			          		</div>
 			          	</div>
-			          	
+
 			        </div>
         		</div>
         	</div>
         </div>
         
         <footer class="footer">
-	      <div class="container">
-	        <div class="row center">
-	          <div class="col-xs-12 col-sm-offset-4 col-sm-4 center">
-	            &copy;2014  Infosystems LLC
-	          </div>
-	          <div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
-	          </div>
-	        </div>
-	      </div>
+        	<div class="container">
+	        	<div class="row center">
+	          		<div class="col-xs-12 col-sm-offset-4 col-sm-4 center">
+	            		&copy;2014  Infosystems LLC
+	          		</div>
+	          		<div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
+	          		</div>
+	        	</div>
+	      	</div>
 	    </footer>
 	</body>
 </html>

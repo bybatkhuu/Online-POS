@@ -311,3 +311,13 @@ input.ace.ace-switch[type="checkbox"] + .lbl
 {
 	margin: 0px !important;
 }
+
+.applyBtn
+{
+	margin-left: 5px !important;
+}
+
+.cancelBtn
+{
+ 	margin-left: 8px !important;
+}
