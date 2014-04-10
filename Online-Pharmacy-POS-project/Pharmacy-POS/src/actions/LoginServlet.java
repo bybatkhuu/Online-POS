@@ -98,9 +98,6 @@ public class LoginServlet extends HttpServlet
 															case "ip_address":
 																user.setIpAddress(cell.getValue());
 																break;
-															case "pos":
-																user.setPos(Integer.parseInt(cell.getValue()));
-																break;
 															case "role_id":
 																user.setRoleID(Integer.parseInt(cell.getValue()));
 																break;

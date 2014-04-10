@@ -1,0 +1,1 @@
+﻿CREATE TYPE type_item_search AS ("name" VARCHAR, "barcode" VARCHAR, "serial_number" VARCHAR, "price" float8, "item_id" INT);

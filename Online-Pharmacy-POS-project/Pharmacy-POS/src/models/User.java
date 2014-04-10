@@ -11,7 +11,6 @@ public class User implements Serializable
 	private String status;
 	private int branchID;
 	private String ipAddress;
-	private int pos;
 	private int roleID;
 	
 	public User()
@@ -25,17 +24,15 @@ public class User implements Serializable
 		this.status = user.getStatus();
 		this.branchID = user.getBranchID();
 		this.ipAddress = user.getIpAddress();
-		this.pos = user.getPos();
 		this.roleID = user.getRoleID();
 	}
-	public User(int id, String userName, String password, String status, int branchID, int pos, int roleID)
+	public User(int id, String userName, String password, String status, int branchID, int roleID)
 	{
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
 		this.status = status;
 		this.branchID = branchID;
-		this.pos = pos;
 		this.roleID = roleID;
 	}
 	
@@ -91,15 +88,6 @@ public class User implements Serializable
 	public void setIpAddress(String ipAddress)
 	{
 		this.ipAddress = ipAddress;
-	}
-	
-	public int getPos()
-	{
-		return pos;
-	}
-	public void setPos(int pos)
-	{
-		this.pos = pos;
 	}
 	
 	public int getRoleID()

@@ -1,1 +1,0 @@
-create type type_min_max as (min float4, max float4);

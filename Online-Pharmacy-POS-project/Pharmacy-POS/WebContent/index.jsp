@@ -161,7 +161,7 @@
                               <label for="pos" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">POS №:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="pos" value="${user.pos}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="pos" pattern="[0-9]{1,3}" disabled />
+                                  <input type="text" name="pos" value="${user.branchID}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="pos" pattern="[0-9]{1,3}" disabled />
                                   <span class="input-group-addon input-sm">
                                       <i class="bhicon bhicon-cd-software bh-icon-size-11"></i>
                                   </span>
