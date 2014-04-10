@@ -177,7 +177,7 @@
         										<option value="cash">Бэлнээр</option>
 										  		<option value="card">Картаар</option>
 											  	<option value="invoice">Нэхэмжлэлээр</option>
-											</select> 
+											</select>
         								</div>
         								<div class="col-sm-2">
         									<button type="submit" class="btn btn-sm btn-success btn-block" id="searchBtn">
