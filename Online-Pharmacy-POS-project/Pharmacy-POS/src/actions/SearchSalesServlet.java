@@ -91,7 +91,7 @@ public class SearchSalesServlet extends HttpServlet
 		if (rowList != null && rowList.size() > 0)
 		{
 			String tableBody = "";
-			DecimalFormat format = new DecimalFormat("###############.##");
+			DecimalFormat format = new DecimalFormat("###############.###");
 			for (Row row : rowList)
 	    	{
 				if (row.getCellList() != null && row.getCellList().size() > 0)
