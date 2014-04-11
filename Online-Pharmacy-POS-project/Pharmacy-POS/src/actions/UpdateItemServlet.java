@@ -2,6 +2,7 @@ package actions;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -35,7 +36,6 @@ public class UpdateItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-	    boolean isUpdated = false;
 		int id = 0;
 		double newQuantity = 0;
 		try
@@ -66,14 +66,38 @@ public class UpdateItemServlet extends HttpServlet
 			    			}
 			    		}
 			    		session.setAttribute("itemList", itemList);
-			    		isUpdated = true;
 			    	}
 		    	}
 		    }
 		}
+		
+		List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+		String str = "";
+	    if (itemList != null && itemList.size() > 0)
+	    {
+	    	DecimalFormat format = new DecimalFormat("###############.##");
+	    	for (int i = 0; itemList.size() > i ; i++)
+	    	{
+	    		if (itemList.get(i).getId() == id)
+		    	{
+		    		str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
+		    	}
+		    	else
+		    	{
+		    		str = str + "<tr id='" + itemList.get(i).getId() + "'>";
+		    	}
+	    		str = str + "<td>" + itemList.get(i).getName() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getQuantity()) + "</td>";
+	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "</tr>";
+	    	}
+	    }
+		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		out.println(isUpdated);
+		out.print(str);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

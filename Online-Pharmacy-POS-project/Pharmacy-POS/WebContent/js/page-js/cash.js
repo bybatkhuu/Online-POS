@@ -247,41 +247,18 @@ function addItem(barcode, quantity, serial)
 					      	},
 					      	success: function(result)
 					      	{
-					      		var jsonData = eval("(" + result + ")");
-					    	  	if (jsonData.hasItem == "false")
-					    	  	{
-					    	  		var response = "<tr class='success' id='" + jsonData.ID + "'>" +
-					    		 				 		"<td>" + jsonData.name + "</td>" +
-					    		 				 		"<td class='text-right'>" + jsonData.quantity + "</td>" +
-					    		 				 		"<td>" + jsonData.unit + "</td>" +
-					    		 				 		"<td class='text-right'>" + jsonData.price + "</td>" +
-					    		 				 		"<td class='text-right'>" + jsonData.total + "</td>" +
-					    		 				 		"<td class='text-right hidden'>0</td>" +
-					    		  				 	"</tr>";
-					    	  		$("#tableBody > tr[class='success']").removeClass();
-					    		  	$("#tableBody").append(response);
-					    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("click", function()
-					    		  	{
-					    		  		clickedRow($(this));
-					    		  	});
-					    		  	$("#tableBody > tr[id='" + jsonData.ID + "']").bind("dblclick", function()
-					    		  	{
-					    		  		bindForm($(this));
-							    	});
-					    	  	}
-					    	  	else
-					    	  	{
-					    	  		var response = 	"<td>" + jsonData.name + "</td>" +
-	    		 				 				   	"<td class='text-right'>" + jsonData.quantity + "</td>" +
-	    		 				 				   	"<td>" + jsonData.unit + "</td>" +
-	    		 				 				   	"<td class='text-right'>" + jsonData.price + "</td>" +
-	    		 				 				   	"<td class='text-right'>" + jsonData.total + "</td>" +
-					    	  						"<td class='text-right hidden'>0</td>";
-					    		  	$("tr[id='" + jsonData.ID + "']").html(response);
-					    	  	}
-					    	  	$("#unitPrice").val(jsonData.price);
-					    	  	$("#itemName").val(jsonData.name);
-					    	  	$("#unit").text(jsonData.unit);
+					      		$("#tableBody").html(result);
+					      		$("#tableBody > tr").bind("click", function()
+						    	{
+					      			clickedRow($(this));
+						    	});
+					      		$("#tableBody > tr").bind("dblclick", function()
+						    	{
+					      			bindForm($(this));
+								});
+					    	  	$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+					    	  	$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
+					    	  	$("#unit").text($("#tableBody > tr[class='success']").children().eq(thUnit).text());
 					    	  	$("#quantity").val("1");
 					    	  	$("#barcode").val("");
 					    	  	$("#serial").val("");
@@ -331,69 +308,49 @@ function bindForm(element)
 	{
 		if (event.which == 13)
 		{
-			var newQuant = parseFloat($("#newQuant").val());
-	  		$("#newQuant").remove();
-	  		if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
-	  		{
-		  		$.ajax(
-		  		{
-		  			url: "update-item",
-		  			data:
-		  			{
-		  				"id": id,
-		  				"newQuant": newQuant
-		  			},
-		  			success: function(result)
-		  			{
-		  				$(element).children().eq(thQuant).text(newQuant);
-		  				var total = price * newQuant;
-		  				$(element).children().eq(thTotal).text(total);
-		  				$("#quantity").val(newQuant);
-		  		  		checkAll();
-		  			}
-		  		});
-	  		}
-	  		else
-	  		{
-	  			$(element).children().eq(thQuant).text(oldQuant);
-	  		}
+			updateFromTable(element, id, price, oldQuant);
 		}
 	});
   	$("#newQuant").focusout(function()
   	{
-  		var newQuant = parseFloat($("#newQuant").val());
-  		$("#newQuant").remove();
-  		if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
-  		{
-	  		$.ajax(
-	  		{
-	  			url: "update-item",
-	  			data:
-	  			{
-	  				"id": id,
-	  				"newQuant": newQuant
-	  			},
-	  			success: function(result)
-	  			{
-		  				$(element).children().eq(thQuant).text(newQuant);
-		  				var total = price * newQuant;
-		  				$(element).children().eq(thTotal).text(total);
-		  				$("#quantity").val(newQuant);
-		  				checkAll();
-	  			}
-	  		});
-  		}
-  		else
-  		{
-  			$(element).children().eq(thQuant).text(oldQuant);
-  		}
+  		updateFromTable(element, id, price, oldQuant);
   	});
+}
+function updateFromTable(element, id, price, oldQuant)
+{
+	var newQuant = parseFloat($("#newQuant").val());
+	$("#newQuant").remove();
+	if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
+	{
+		update(id, newQuant);
+	}
+	else
+	{
+		$(element).children().eq(thQuant).text(oldQuant);
+	}
 }
 function clickedRow(element)
 {
 	$("#tableBody > tr[class='success']").removeClass();
 	$(element).addClass("success");
 	checkAll();
+}
+function update(id, newQuant)
+{
+	$.ajax(
+	{
+		url: "update-item",
+		data:
+		{
+			"id": id,
+			"newQuant": newQuant
+		},
+		success: function(result)
+		{
+			$("#tableBody").html(result);
+			checkAll();
+		}
+	});
 }
 
 function purchase()
@@ -405,14 +362,22 @@ function purchase()
 		data: { "orderNum" : $("#talon").val() },
 	  	success: function(result)
 	  	{
-	  		$("#talon").val(result);
-	  		$("#print-talon").val(result);
-	  		$("#tableBody").html("");
-	  		$("#quantity").val("1");
-	  		$("#unit").text("ш");
-	  		$("#unitPrice").val("");
-	  		$("#itemName").val("");
-	  		checkAll();
+	  		var jsonData = eval("(" + result + ")");
+	  		if (jsonData.isPurchased != "true")
+	  		{
+	  			alert("Алдаа: Гүйлгээ амжилтгүй боллоо!\nТа хуудсаа дахин дуудаж гүйлгээгээ хийнэ үү!");
+	  		}
+	  		else
+	  		{
+	  			$("#talon").val(jsonData.talon);
+		  		$("#print-talon").val(jsonData.talon);
+		  		$("#tableBody").html("");
+		  		$("#quantity").val("1");
+		  		$("#unit").text("ш");
+		  		$("#unitPrice").val("");
+		  		$("#itemName").val("");
+		  		checkAll();
+	  		}
 	  	}
 	});
 	$("#barcode").focus();
@@ -674,27 +639,7 @@ function initEventHandlers()
   				  	{
   				  		if ($(this).val() > 0)
   					  	{
-			  				$.ajax(
-			  				{
-			  					url: "update-item",
-			  					data:
-			  					{
-			  						"id": $("#tableBody > tr[class='success']").attr("id"),
-			  						"newQuant" : $(this).val()
-			  					},
-			  					success: function(result)
-			  					{
-			  						var res = eval(result);
-			  						if (res == true)
-			  						{
-				  						var i = $("#tableBody > tr[class='success']").index();
-				  						$("#tableBody > tr").eq(i).children().eq(thQuant).text($("#quantity").val());
-				  			  			var total = (($("#tableBody > tr").eq(i).children().eq(thPrice).text() * 10) * ($("#quantity").val() * 10)) / 100;
-				  			  			$("#tableBody > tr").eq(i).children().eq(thTotal).text(total);
-				  			  			checkAll();
-			  						}
-			  					}
-			  				});
+  				  			update($("#tableBody > tr[class='success']").attr("id"), $(this).val());
   					  	}
   				  		else
   				  		{

@@ -1,7 +1,9 @@
 package actions;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,7 +76,7 @@ public class SearchSalesServlet extends HttpServlet
 			PostgreSQLJDBC db = new PostgreSQLJDBC();
 			if (db.createConnection())
 			{
-				String[] params = { Integer.toString(user.getId()), startDateStr, endDateStr };
+				String[] params = { Integer.toString(user.getId()), startDateStr + " 00:00:00", endDateStr + " 23:59:59" };
 				try
 				{
 					rowList = db.getRowList("bh_searchSales", params);
@@ -89,6 +91,7 @@ public class SearchSalesServlet extends HttpServlet
 		if (rowList != null && rowList.size() > 0)
 		{
 			String tableBody = "";
+			DecimalFormat format = new DecimalFormat("###############.##");
 			for (Row row : rowList)
 	    	{
 				if (row.getCellList() != null && row.getCellList().size() > 0)
@@ -111,7 +114,7 @@ public class SearchSalesServlet extends HttpServlet
 		    					tableBody = tableBody + "<td>" + cell.getValue() + "</td>";
 		    					break;
 		    				case "quantity":
-		    					tableBody = tableBody + "<td>" + cell.getValue() + "</td>";
+		    					tableBody = tableBody + "<td>" + format.format(BigDecimal.valueOf(Double.parseDouble(cell.getValue()))) + "</td>";
 		    					break;
 		    				case "price":
 		    					tableBody = tableBody + "<td>" + cell.getValue() + "</td>";

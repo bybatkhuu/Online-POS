@@ -40,8 +40,9 @@ public class AddItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
+		boolean itemIncrement = false;
+		int itemID = 0;
 	    Item item = null;
-	    boolean hasItem = false;
 	    synchronized(session)
 	    {
 	    	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
@@ -76,7 +77,8 @@ public class AddItemServlet extends HttpServlet
 		    	if (item != null)
 		    	{
 		    		item.addQuantity(quantity);
-		    		hasItem = true;
+		    		itemIncrement = true;
+		    		itemID = item.getId();
 		    	}
 		    	else
 		    	{
@@ -98,24 +100,47 @@ public class AddItemServlet extends HttpServlet
 		    session.setAttribute("itemList", itemList);
 	    }
 	    
-	    DecimalFormat format = new DecimalFormat("###############.##");
-	    String jsonString = "";
-	    jsonString =
-	    	"{" +
-	    		"hasItem: '" + hasItem + "'," +
-	    		"ID: '" + item.getId() + "'," +
-	    		"name: '" + item.getName() + "'," +
-	    		"price: '" + format.format(item.getPrice()) + "'," +
-	    		"unit: '" + item.getUnit() + "'," +
-	    		"serialID: '" + item.getSerialID() + "'," +
-	    		"quantity: '" + format.format(item.getQuantity()) + "'," +
-	    		"total: '" + format.format(item.getTotal()) + "'," +
-	    		"calTotal: '" + format.format(item.getCalTotal()) + "'" +
-	    	"}";
+	    List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+	    String str = "";
+	    if (itemList != null && itemList.size() > 0)
+	    {
+	    	DecimalFormat format = new DecimalFormat("###############.##");
+	    	for (int i = 0; itemList.size() > i ; i++)
+	    	{
+	    		if (!itemIncrement)
+	    		{
+		    		if (itemList.size() == i + 1)
+		    		{
+		    			str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
+		    		}
+		    		else
+		    		{
+		    			str = str + "<tr id='" + itemList.get(i).getId() + "'>";
+		    		}
+	    		}
+	    		else
+	    		{
+	    			if (itemList.get(i).getId() == itemID)
+		    		{
+		    			str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
+		    		}
+		    		else
+		    		{
+		    			str = str + "<tr id='" + itemList.get(i).getId() + "'>";
+		    		}
+	    		}
+	    		str = str + "<td>" + itemList.get(i).getName() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getQuantity()) + "</td>";
+	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "</tr>";
+	    	}
+	    }
 	    
 	    response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-	    out.print(jsonString);
+	    out.print(str);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

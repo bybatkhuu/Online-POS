@@ -736,7 +736,7 @@
 			<div class="col-sm-6 col-xs-12">
 				<div class="row">
 					<div class="col-xs-3">№:</div>
-					<div class="col-xs-5" id="print-talon">1</div>
+					<div class="col-xs-5" id="print-talon"></div>
 					<div class="col-xs-2">POS:</div>
 					<div class="col-xs-2 center" id="print-pos">${user.branchID}</div>
 				</div>

@@ -40,6 +40,9 @@ public class PurchaseServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
+		boolean isPurchased = false;
+		String resultOrderNum = "0";
+		
 		User user = (User) session.getAttribute("user");
 		String orderNum = request.getParameter("orderNum");
 		try
@@ -48,10 +51,9 @@ public class PurchaseServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			
+			orderNum = "0";
 		}
 		
-	    String result = "0";
 		synchronized(session)
 	    {
 			if (session.getAttribute("itemList") != null)
@@ -87,20 +89,28 @@ public class PurchaseServlet extends HttpServlet
 		    				cell = null;
 		    				String[] parameter = { Integer.toString(user.getId()) };
 		    				cell = db.getCell("bh_getLastOrderNum", parameter);
-		    				result = cell.getValue();
+		    				resultOrderNum = cell.getValue();
 						}
 		    			catch (SQLException e)
 		    			{
-							e.printStackTrace();
+							System.out.println("Error: Can't insert transaction in purchase!\nMessage: " + e.toString());
 						}
+		    			isPurchased = true;
+		    			session.removeAttribute("itemList");
 		    		}
-		    		session.removeAttribute("itemList");
 		    	}
 	    	}
 	    }
+		
+		String jsonString =
+			"{" +
+				"isPurchased: '" + isPurchased + "'," +
+				"talon: '" + resultOrderNum + "'" +
+			"}";
+		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		out.println(result);
+		out.println(jsonString);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

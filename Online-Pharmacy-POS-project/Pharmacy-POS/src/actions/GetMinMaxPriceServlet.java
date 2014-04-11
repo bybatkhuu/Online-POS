@@ -61,11 +61,11 @@ public class GetMinMaxPriceServlet extends HttpServlet
 		if (cellList != null && cellList.size() > 0)
 		{
 		    jsonString =
-		    		"{" +
-		    			"hasPrice: '" + true + "'," +
-			    		"minPrice: '" + cellList.get(0).getValue() + "'," +
-			    		"maxPrice: '" + cellList.get(1).getValue() + "'" +
-			    	"}";
+		    	"{" +
+		    		"hasPrice: '" + true + "'," +
+			    	"minPrice: '" + cellList.get(0).getValue() + "'," +
+			    	"maxPrice: '" + cellList.get(1).getValue() + "'" +
+			    "}";
 		}
 		else
 		{
