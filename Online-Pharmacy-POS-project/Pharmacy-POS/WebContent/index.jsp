@@ -56,6 +56,8 @@
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
+    
+    <script type="text/javascript" src="js/ace-extra.min.js"></script>
 
     <script type="text/javascript" src="js/page-js/cash.js"></script>
     <script type="text/javascript">
@@ -653,6 +655,15 @@
   		<div class="center">
   			<b>Түр хүлээнэ үү!</b>
   		</div>
+	</div>
+	
+	<div id="errorDialog">
+		<div class="alert alert-danger">
+			<strong>
+    			<i class="icon-remove"></i>
+    		</strong>
+    		Сервертэй холбогдоход алдаа гарлаа!
+    	</div>
 	</div>
 	
 	<div id="searchItemsDialog" title="Бараа хайх">

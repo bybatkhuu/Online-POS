@@ -62,10 +62,47 @@ function checkTime(i)
 
 function ajaxSetup()
 {
+	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype,
+	{
+		_title: function(title)
+		{
+			var $title = this.options.title || '&nbsp;';
+			if(("title_html" in this.options) && this.options.title_html == true)
+				title.html($title);
+			else
+				title.text($title);
+		}
+	}));
+	
 	$("#loadingDialog").dialog(
 	{
 		autoOpen: false,
 		modal: true
+	});
+	
+	$("#errorDialog").dialog(
+	{
+		autoOpen: false,
+		modal: true,
+		title: "<div class='widget-header header-color-red'><h5><i class='icon-warning-sign'></i>Анхааруулга!</h5></div>",
+		title_html: true,
+		buttons:
+		[{
+			html: "<i class='icon-trash bigger-110'></i>&nbsp; Delete all items",
+			"class" : "btn btn-danger btn-xs",
+			click: function()
+			{
+				$(this).dialog("close");
+			}
+		},
+		{
+			html: "<i class='icon-remove bigger-110'></i>&nbsp; Cancel",
+			"class" : "btn btn-xs",
+			click: function()
+			{
+				$(this).dialog("close");
+			}
+		}]
 	});
 	
 	$.ajaxSetup(
@@ -79,11 +116,23 @@ function ajaxSetup()
 	}).ajaxStop(function()
 	{
 		$("#loadingDialog").dialog("close");
+    }).ajaxError(function()
+    {
+    	$("#errorDialog").dialog("open");
     });
 }
 
 function initSearchDialog()
 {
+	$.ajax(
+	{
+		url: "asdasda",
+		success: function(result)
+		{
+			alert("OK");
+		}
+	});
+	
 	$("#searchItemsDialog").dialog(
 	{
 		autoOpen: false,
