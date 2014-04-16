@@ -27,6 +27,26 @@
 				message = "Энэ салбарын POS-н хязгаар хэтэрсэн байна!";
 				msgClass = "has-error";
 				break;
+            case 600:
+                message = "Та хэрэглэгчийн нэр, нууц үгээ оруулна уу!";
+                msgClass = "has-error";
+                break;
+            case 601:
+                message = "Хэтэрхий урт нэр, нууц үг хэрэглэхийг хориглоно!";
+                msgClass = "has-error";
+                break;
+            case 602:
+                message = "Тусгай тэмдэгт хэрэглэхийг хориглоно!";
+                msgClass = "has-error";
+                break;
+            case 500:
+                message = "Сервер: Бааз сервертэй холбогдохгүй байна!";
+                msgClass = "has-error";
+                break;
+            case 400:
+                message = "Алдаа: Нэвтрэхэд ямар нэгэн системийн алдаа гарлаа!";
+                msgClass = "has-error";
+                break;
 			default:
 				break;
 		}
@@ -41,7 +61,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="description" content="Infosystems LLC - Online POS: Main page">
+    <meta name="description" content="Infosystems LLC - Online Pharmacy POS: Login page">
     <meta name="keywords" content="Infosystems POS, Online POS, POS, Infosystems LLC, Infosystems">
     <meta name="author" content="Infosystems LLC">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
@@ -66,15 +86,22 @@
 	
     </style>
     
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function()
       {
+      	<%
+      		if (session.getAttribute("company") == null)
+            {
+                out.println("alert('Алдаа: Бааз сервертэй холбогдохгүй байна!')");
+            }
+        %>
       });
     </script>
   </head>
@@ -99,13 +126,13 @@
                     <div class="widget-main">
                       <h4 class="header blue lighter bigger">Та өөрийн мэдээллээ оруулна уу</h4>
                       <div class="space-6"></div>
-                      <form action="login" method="POST">
+                      <form action="login" method="POST" id="signin">
                         <fieldset>
                           <div class="form-group <%= msgClass %>">
 	                        <div class="red"><%= message %></div>
 	                        <label class="block clearfix">
 	                          <span class="block input-icon input-icon-right">
-	                            <input type="text" name="userName" class="form-control" placeholder="Нэвтрэх нэр" pattern="[A-Za-zA-Яа-яҮүӨөЁё0-9]{2,64}" autofocus required />
+	                            <input type="text" name="userName" class="form-control" placeholder="Нэвтрэх нэр" pattern="[A-Za-zA-Яа-яҮүӨөЁё0-9-]{2,64}" autofocus required />
 	                            <i class="icon-user"></i>
 	                          </span>
 	                        </label>

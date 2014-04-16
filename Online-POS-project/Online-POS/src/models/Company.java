@@ -50,6 +50,14 @@ public class Company implements Serializable
 					}
 				}
 			}
+			else
+			{
+				System.out.println("Warning: There isn't any company!");
+			}
+		}
+		else
+		{
+			System.out.println("Error: Can't connect to database!");
 		}
 		return company;
 	}

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.User;
+
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -36,23 +38,29 @@ public class GetBarcodesServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-		response.setContentType("text/html");
-	    PrintWriter out = response.getWriter();
 		List<Row> rowList = null;
-		PostgreSQLJDBC db = new PostgreSQLJDBC();
-		if (db.createConnection())
+		User user = (User) session.getAttribute("user");
+		if (user != null)
 		{
-			try
+			String branchID = Integer.toString(user.getBranchID());
+			PostgreSQLJDBC db = new PostgreSQLJDBC();
+			if (db.createConnection())
 			{
-				rowList = db.getRowList("bh_getBarcodes");	
-			}
-			catch (SQLException e)
-			{
-				rowList = null;
-				System.out.println("Error: can't execute bh_getBarcodes()!\nMessage: " + e.toString());
+				String[] parameter = { branchID };
+				try
+				{
+					rowList = db.getRowList("bh_getBarcodes", parameter);
+				}
+				catch (SQLException e)
+				{
+					rowList = null;
+					System.out.println("Error: can't execute bh_getBarcodes()!\nMessage: " + e.toString());
+				}
 			}
 		}
 		
+		response.setContentType("text/html");
+	    PrintWriter out = response.getWriter();
 		if (rowList != null)
 		{
 			for (int i = 0; i < rowList.size(); i++)

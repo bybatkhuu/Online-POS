@@ -1,0 +1,1 @@
+create type type_min_max_price as ("min_price" float8, "max_price" float8);

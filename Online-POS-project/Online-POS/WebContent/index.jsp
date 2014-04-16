@@ -4,7 +4,6 @@
 <%@ page import="utils.LoggedUser"%>
 <%@ page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)
@@ -50,15 +49,15 @@
     
     </style>
     
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
-    <script type="text/javascript" src="js/jquery.jkey.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
+    <script type="text/javascript" src="js/ace-extra.min.js"></script>
 
-    <script type="text/javascript" src="js/support.js"></script>
+    <script type="text/javascript" src="js/page-js/cash.js"></script>
     <script type="text/javascript">
       $(document).ready(function()
       {
@@ -101,6 +100,12 @@
                   <a href="#">
                     <i class="icon-user"></i>
                     Хувийн хэрэг
+                  </a>
+                </li>
+                <li>
+                  <a href="report.jsp">
+                    <i class="icon-bar-chart"></i>
+                    Тайлан
                   </a>
                 </li>
                 <li class="divider"></li>
@@ -156,7 +161,7 @@
                               <label for="pos" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">POS №:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="pos" value="${user.pos}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="pos" pattern="[0-9]{1,3}" disabled />
+                                  <input type="text" name="pos" value="${user.branchID}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="pos" pattern="[0-9]{1,3}" disabled />
                                   <span class="input-group-addon input-sm">
                                       <i class="bhicon bhicon-cd-software bh-icon-size-11"></i>
                                   </span>
@@ -201,6 +206,10 @@
     	                              					out.println((int)item.getQuantity());
     	                              				}
                                     	    	}
+                                      			else
+                                            	{
+                                      				out.print("1");
+                                            	}
                                     		}
                                     		else
                                     		{
@@ -246,26 +255,6 @@
                               </div>
                             </div>
                             <div class="space-4"></div>
-                            <!-- <div class="row hidden">
-	                              <div class="form-group">
-	                                <label for="serial" class="col-xs-12 col-sm-4">
-	                                  <b>Серийн №:</b>
-	                                </label>
-	                                <div class="col-xs-12 col-sm-8 no-padding">
-	                                  <div class="input-group col-xs-12">
-	                                    <input type="text" name="serial" class="form-control dark bh-input-skin-1" id="serial" tabindex="3" autocomplete="off" />
-	                                    <span class="input-group-addon">
-	                                      <i class="bhicon bhicon-product bh-icon-size-15-5"></i>
-	                                    </span>
-	                                  </div>
-	                                  <span class="col-xs-12 col-sm-12">
-	                                      <span class="pull-right">
-	                                          Сери өөрчлөх - F4
-	                                      </span>
-	                                  </span>
-	                                </div>
-	                              </div>
-                            </div> -->
 
                             <div class="space-4"></div>
                             
@@ -613,7 +602,7 @@
             <small>1.Барааны хайлт=(Ctrl+F)</small> <small class="hidden">2.Тохиргоо=(Ctrl+N) 3.Талоны загвар=(Ctrl+M)</small>
           </div>
           <div class="col-xs-12 col-sm-4 center">
-            &copy;2013  Infosystems LLC
+            &copy;2014  Infosystems LLC
           </div>
           <div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
           </div>
@@ -632,34 +621,81 @@
   		</div>
 	</div>
 	
+	<div id="errorDialog">
+		<div class="alert alert-danger">
+			<p id="errorMessage">
+				<strong>
+	    			<i class="icon-remove"></i>
+	    		</strong>
+	    		Серверт алдаа гарсан эсвэл сервертэй холболт тасарсан байна!
+    		</p>
+    	</div>
+    	<div class="alert alert-info">
+    		<b>Алдааг засах: </b>
+    		<ul>
+    			<li>
+    				Тухайн веб хуудсыг дахин дуудаж сервертэй дахин холбогдох.
+    			</li>
+    			<li>
+    				Сервер унтарсан эсвэл сүлжээний холболт салсан эсэхийг шалгах.
+    			</li>
+    			<li>
+    				Алдааны мэдээлэл арилахгүй байвал яааралтай системийн админтай холбогдох.
+    			</li>
+    		</ul>
+    	</div>
+	</div>
+	
 	<div id="searchItemsDialog" title="Бараа хайх">
 		<div class="col-sm-12">
 			<div class="row">
 				<form action="#" method="POST">
 					<div class="row">
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<label for="searchByName" class="control-label">
 								<b>Нэр:</b>
 							</label>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<label for="searchByBarcode" class="control-label">
 								<b>Баркод:</b>
 							</label>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-5">
-							<input type="text" class="form-control" id="searchByName" />
+						<div class="col-sm-6">
+							<input type="text" class="form-control input-sm" id="searchByName" />
 						</div>
-						<div class="col-sm-5">
-							<input type="text" class="form-control" id="searchByBarcode" />
+						<div class="col-sm-6">
+							<input type="text" class="form-control input-sm" id="searchByBarcode" />
 						</div>
-						<div class="col-sm-2">
+					</div>
+					<div class="space-8"></div>
+					<div class="row">
+						<div class="col-sm-1">
+							<label for="searchByPrice" class="control-label" style="padding-top: 5px;">
+								<b>Үнэ:</b>
+							</label>
+						</div>
+						<div class="col-sm-2 no-padding">
+							<input type="text" class="form-control text-center green" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
+						</div>
+						<div class="col-sm-1 no-padding">
+							<input type="text" class="form-control text-center green" value="-" style="border: 0px; font-weight:bold;" readonly disabled />
+						</div>
+						<div class="col-sm-2 no-padding">
+							<input type="text" class="form-control text-center green" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
+						</div>
+						<div class="col-sm-6">
 							<button type="submit" class="btn btn-sm btn-success pull-right" id="searchItems">
 								Хайх
 								<i class="icon-search"></i>
 							</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div id="slider-range"></div>
 						</div>
 					</div>
 				</form>
@@ -690,13 +726,13 @@
 			<div class="col-sm-6 col-xs-12">
 				<div class="row">
 					<div class="col-xs-3">№:</div>
-					<div class="col-xs-5" id="print-talon">1</div>
+					<div class="col-xs-5" id="print-talon"></div>
 					<div class="col-xs-2">POS:</div>
-					<div class="col-xs-2 center" id="print-pos">${user.pos}</div>
+					<div class="col-xs-2 center" id="print-pos">${user.branchID}</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-3">Огноо:</div>
-					<div class="col-xs-9" id="print-date">01/09/2014 02:03:48 PM</div>
+					<div class="col-xs-9" id="print-date"></div>
 				</div>
 				<div class="row">
 					<div class="col-xs-3">Кассчин:</div>

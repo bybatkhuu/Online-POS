@@ -48,6 +48,16 @@ public class SearchItemsServlet extends HttpServlet
 		{
 	    	barcode = "";
 		}
+	    String minPrice = request.getParameter("minPrice");
+	    if (minPrice == null)
+		{
+	    	minPrice = "";
+		}
+	    String maxPrice = request.getParameter("maxPrice");
+	    if (maxPrice == null)
+		{
+	    	maxPrice = "";
+		}
 	    List<Row> rowList = null;
 		if (!itemName.trim().equalsIgnoreCase("") || !barcode.trim().equalsIgnoreCase(""))
 		{
@@ -55,7 +65,7 @@ public class SearchItemsServlet extends HttpServlet
 			PostgreSQLJDBC db = new PostgreSQLJDBC();
 			if (db.createConnection())
 			{
-				String[] params = { String.valueOf(user.getBranchID()), itemName, barcode };
+				String[] params = { String.valueOf(user.getBranchID()), itemName, barcode, minPrice, maxPrice };
 				try
 				{
 					rowList = db.getRowList("bh_searchItems", params);
@@ -93,7 +103,7 @@ public class SearchItemsServlet extends HttpServlet
 		    					out.println("<td class='hidden'>" + cell.getValue() + "</td>");
 		    					break;
 		    				default:
-		    					System.out.println("More unknown columns from bh_getSearchItems()!");
+		    					System.out.println("More unknown columns from bh_searchItems()!");
 		    					break;
 		    			}
 		    		}

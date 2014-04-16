@@ -49,14 +49,12 @@
     
     </style>
     
-    <script type="text/javascript" src="js/ace-extra.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
-    
     <script type="text/javascript" src="js/ace-extra.min.js"></script>
 
     <script type="text/javascript" src="js/page-js/cash.js"></script>

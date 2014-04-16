@@ -62,6 +62,7 @@ public class CheckBarcode extends HttpServlet
 				}
 			}
 		}
+		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
 		out.println(hasBarcode);

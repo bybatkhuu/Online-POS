@@ -35,8 +35,6 @@ public class RemoveItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-		response.setContentType("text/html");
-	    PrintWriter out = response.getWriter();
 	    boolean isRemoved = false;
 		int id = 0;
 		try
@@ -71,6 +69,8 @@ public class RemoveItemServlet extends HttpServlet
 		    	}
 			}
 	    }
+		response.setContentType("text/html");
+	    PrintWriter out = response.getWriter();
 		out.println(isRemoved);
 	}
 

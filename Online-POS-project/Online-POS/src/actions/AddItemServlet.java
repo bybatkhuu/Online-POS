@@ -40,8 +40,9 @@ public class AddItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
+		boolean itemIncrement = false;
+		int itemID = 0;
 	    Item item = null;
-	    boolean hasItem = false;
 	    synchronized(session)
 	    {
 	    	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
@@ -51,7 +52,6 @@ public class AddItemServlet extends HttpServlet
 		    }
 		    User user = (User) session.getAttribute("user");
 		    String barcode = request.getParameter("barcode");
-		    String serial = request.getParameter("serial");
 		    double quantity = 0;
 		    try
 		    {
@@ -66,7 +66,7 @@ public class AddItemServlet extends HttpServlet
 		    {
 		    	try
 		    	{
-					item = findItem(barcode, itemList);
+		    		item = findItem(barcode, itemList);
 				}
 		    	catch (SQLException e)
 		    	{
@@ -76,17 +76,14 @@ public class AddItemServlet extends HttpServlet
 		    	if (item != null)
 		    	{
 		    		item.addQuantity(quantity);
-		    		hasItem = true;
+		    		itemIncrement = true;
+		    		itemID = item.getId();
 		    	}
 		    	else
 		    	{
 		    		try
 		    		{
-		    			if (serial == null)
-		    			{
-		    				serial = "";
-		    			}
-		    			item = new Item(barcode, user.getBranchID(), quantity);
+		    			item = getNewItem(barcode, user.getBranchID(), quantity);
 					}
 		    		catch (SQLException e)
 		    		{
@@ -98,22 +95,47 @@ public class AddItemServlet extends HttpServlet
 		    session.setAttribute("itemList", itemList);
 	    }
 	    
-	    DecimalFormat format = new DecimalFormat("###############.##");
-	    String jsonString = "";
-	    jsonString =
-	    	"{" +
-	    		"hasItem: '" + hasItem + "'," +
-	    		"ID: '" + item.getId() + "'," +
-	    		"name: '" + item.getName() + "'," +
-	    		"price: '" + format.format(item.getPrice()) + "'," +
-	    		"unit: '" + item.getUnit() + "'," +
-	    		"quantity: '" + format.format(item.getQuantity()) + "'," +
-	    		"total: '" + format.format(item.getTotal()) + "'" +
-	    	"}";
+	    List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+	    String str = "";
+	    if (itemList != null && itemList.size() > 0)
+	    {
+	    	DecimalFormat format = new DecimalFormat("###############.##");
+	    	for (int i = 0; itemList.size() > i ; i++)
+	    	{
+	    		if (!itemIncrement)
+	    		{
+		    		if (itemList.size() == i + 1)
+		    		{
+		    			str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
+		    		}
+		    		else
+		    		{
+		    			str = str + "<tr id='" + itemList.get(i).getId() + "'>";
+		    		}
+	    		}
+	    		else
+	    		{
+	    			if (itemList.get(i).getId() == itemID)
+		    		{
+		    			str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
+		    		}
+		    		else
+		    		{
+		    			str = str + "<tr id='" + itemList.get(i).getId() + "'>";
+		    		}
+	    		}
+	    		str = str + "<td>" + itemList.get(i).getName() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getQuantity()) + "</td>";
+	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "</tr>";
+	    	}
+	    }
 	    
 	    response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-	    out.print(jsonString);
+	    out.print(str);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -138,5 +160,59 @@ public class AddItemServlet extends HttpServlet
 			}
 		}
 		return(null);
+	}
+	
+	private Item getNewItem(String barcode, int branchID, double quantity) throws SQLException
+	{
+		Item item = null;
+		PostgreSQLJDBC db = new PostgreSQLJDBC();
+		if (db.createConnection())
+		{
+			Cell tmpCell = null;
+			String[] barcodeParam = { barcode };
+			List<Cell> cellList = db.getCellList("bh_getItem", barcodeParam);
+			if (cellList != null)
+			{
+				item = new Item();
+				for (Cell cell : cellList)
+				{
+					switch (cell.getColumn())
+					{
+						case "id":
+							item.setId(Integer.parseInt(cell.getValue()));
+							break;
+						case "name":
+							item.setName(cell.getValue());
+							break;
+						case "description":
+							item.setDescription(cell.getValue());
+							break;
+						case "item_unit_id":
+							item.setUnitID(Integer.parseInt(cell.getValue()));
+							break;
+						default:
+							break;
+					}
+				}
+				
+				String[] params = { String.valueOf(branchID), String.valueOf(item.getId()) };
+				tmpCell = db.getCell("bh_getPrice", params);
+				item.setPrice(Double.parseDouble(tmpCell.getValue()));
+				item.setQuantity(quantity);
+			}
+			
+			tmpCell = null;
+			String[] unitIdParam = { Integer.toString(item.getUnitID()) };
+			tmpCell = db.getCell("bh_getUnit", unitIdParam);
+			if (tmpCell != null && !tmpCell.getValue().trim().equalsIgnoreCase(""))
+			{
+				item.setUnit(tmpCell.getValue());
+			}
+			else
+			{
+				item.setUnit("ш");
+			}
+		}
+		return item;
 	}
 }

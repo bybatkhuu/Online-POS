@@ -40,9 +40,20 @@ public class PurchaseServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
+		boolean isPurchased = false;
+		String resultOrderNum = "0";
+		
 		User user = (User) session.getAttribute("user");
 		String orderNum = request.getParameter("orderNum");
-	    String result = "0";
+		try
+		{
+			Integer.parseInt(orderNum);
+		}
+		catch (Exception e)
+		{
+			orderNum = "0";
+		}
+		
 		synchronized(session)
 	    {
 			if (session.getAttribute("itemList") != null)
@@ -55,9 +66,8 @@ public class PurchaseServlet extends HttpServlet
 		    		{
 		    			try
 		    			{
-		    				
-		    				String[] parameter = { Integer.toString(user.getId()), orderNum };
-		    				Cell orderId = db.getCell("bh_getOrderId", parameter);
+		    				String[] parameters = { Integer.toString(user.getId()), orderNum };
+		    				Cell orderId = db.getCell("bh_purchase", parameters);
 		    				Cell cell = null;
 		    				for (Item item : itemList)
 		    				{
@@ -75,22 +85,30 @@ public class PurchaseServlet extends HttpServlet
 		    					db.insert("pos_transactions", cellList);
 		    				}
 		    				cell = null;
-		    				String[] param = { Integer.toString(user.getId()) };
-		    				cell = db.getCell("bh_getLastOrderNum", param);
-		    				result = cell.getValue();
+		    				String[] parameter = { Integer.toString(user.getId()) };
+		    				cell = db.getCell("bh_getLastOrderNum", parameter);
+		    				resultOrderNum = cell.getValue();
 						}
 		    			catch (SQLException e)
 		    			{
-							e.printStackTrace();
+							System.out.println("Error: Can't insert transaction in purchase!\nMessage: " + e.toString());
 						}
+		    			isPurchased = true;
+		    			session.removeAttribute("itemList");
 		    		}
-		    		session.removeAttribute("itemList");
 		    	}
 	    	}
 	    }
+		
+		String jsonString =
+			"{" +
+				"isPurchased: '" + isPurchased + "'," +
+				"talon: '" + resultOrderNum + "'" +
+			"}";
+		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		out.println(result);
+		out.println(jsonString);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

@@ -37,8 +37,6 @@ public class GetOrderServlet extends HttpServlet
 		}
 		
 		User user = (User) session.getAttribute("user");
-		response.setContentType("text/html");
-	    PrintWriter out = response.getWriter();
 		Cell cell = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
 		if (db.createConnection())
@@ -55,6 +53,8 @@ public class GetOrderServlet extends HttpServlet
 			}
 		}
 		
+		response.setContentType("text/html");
+	    PrintWriter out = response.getWriter();
 		if (cell != null)
 		{
 			out.println(cell.getValue());
