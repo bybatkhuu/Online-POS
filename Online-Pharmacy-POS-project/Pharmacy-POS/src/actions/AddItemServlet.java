@@ -222,7 +222,7 @@ public class AddItemServlet extends HttpServlet
 				}
 				else
 				{
-					String[] params = { serial };
+					String[] params = { serial, String.valueOf(branchID) };
 					tmpCell = db.getCell("bh_getSerialId", params);
 					item.setSerialID(Integer.parseInt(tmpCell.getValue()));
 					item.setSerial(serial);
