@@ -84,19 +84,20 @@ function ajaxSetup()
 	{
 		autoOpen: false,
 		modal: true,
-		title: "<div class='widget-header header-color-red'><h5><i class='icon-warning-sign'></i>Анхааруулга!</h5></div>",
+		title: "<div class='widget-header header-color-red'><h5><i class='icon-warning-sign'></i>&nbsp;Анхааруулга!</h5></div>",
 		title_html: true,
+		width: 550,
 		buttons:
 		[{
-			html: "<i class='icon-trash bigger-110'></i>&nbsp; Delete all items",
-			"class" : "btn btn-danger btn-xs",
+			html: "<i class='icon-refresh'></i>&nbsp; Дахин унших",
+			"class" : "btn btn-success btn-xs",
 			click: function()
 			{
-				$(this).dialog("close");
+				window.location.reload(true);
 			}
 		},
 		{
-			html: "<i class='icon-remove bigger-110'></i>&nbsp; Cancel",
+			html: "<i class='icon-remove'></i>&nbsp; Цуцлах",
 			"class" : "btn btn-xs",
 			click: function()
 			{
@@ -118,21 +119,18 @@ function ajaxSetup()
 		$("#loadingDialog").dialog("close");
     }).ajaxError(function()
     {
-    	$("#errorDialog").dialog("open");
+    	errorDialog("Сервертэй холбогдохгүй буюу серверээс холболт тасарсан байна!");
     });
+}
+
+function errorDialog(message)
+{
+	$("#errorMessage").html("<strong><i class='icon-remove'></i></strong>&nbsp; " + message);
+	$("#errorDialog").dialog("open");
 }
 
 function initSearchDialog()
 {
-	$.ajax(
-	{
-		url: "asdasda",
-		success: function(result)
-		{
-			alert("OK");
-		}
-	});
-	
 	$("#searchItemsDialog").dialog(
 	{
 		autoOpen: false,
@@ -397,6 +395,14 @@ function update(id, newQuant)
 		success: function(result)
 		{
 			$("#tableBody").html(result);
+			$("#tableBody > tr").bind("click", function()
+			{
+				clickedRow($(this));
+			});
+		    $("#tableBody > tr").bind("dblclick", function()
+			{
+		    	bindForm($(this));
+			});
 			checkAll();
 		}
 	});
@@ -785,7 +791,7 @@ function initEventHandlers()
   		$.ajax(
   		{
   			url: "clear-items",
-  		  	success: function()
+  		  	success: function(result)
   		  	{
   		  		$("#tableBody").html("");
   		  		$("#quantity").val("1");
