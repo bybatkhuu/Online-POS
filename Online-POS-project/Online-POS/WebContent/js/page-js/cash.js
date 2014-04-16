@@ -55,7 +55,7 @@ function checkTime(i)
 {
 	if (i < 10)
     {
-		  i = "0" + i;
+    	i = "0" + i;
     }
     return i;
 }
@@ -136,7 +136,7 @@ function initSearchDialog()
 		autoOpen: false,
 		modal: true,
 		width: 550,
-		height: 400
+		height: 500
 	});
 }
 
@@ -148,14 +148,14 @@ function initOrderNum()
   	  	success: function(result)
   	  	{
   	  		if (result.trim() != "0")
-	  		{
-	  			$("#talon").val(result);
-	  			$("#print-talon").val(result);
-	  		}
-	  		else
-	  		{
-	  			alert("Анхааруулга:\nСерверээс талоны мэдээлэл авч чадахгүй байна!\nВеб хуудсаа дахин дуудна уу!\nЭсвэл системийн админтай холбогдоно уу!");
-	  		}
+  	  		{
+  	  			$("#talon").val(result);
+  	  			$("#print-talon").val(result);
+  	  		}
+  	  		else
+  	  		{
+  	  			alert("Анхааруулга:\nСерверээс талоны мэдээлэл авч чадахгүй байна!\nВеб хуудсаа дахин дуудна уу!\nЭсвэл системийн админтай холбогдоно уу!");
+  	  		}
   	  	}
     });
 }
@@ -416,6 +416,7 @@ function purchase()
 	  		}
 	  	}
 	});
+	$("#barcode").focus();
 }
 
 function isNumber(n)
@@ -455,8 +456,11 @@ function initEventHandlers()
 		
 		if (event.which == 9)
 	  	{
-			event.preventDefault();
-			alert("Tab");
+			if ($("input:focus").attr("id") == "paid")
+			{
+				event.preventDefault();
+				$("#barcode").focus();
+			}
 	  	}
 		else if (event.which == 113)
 	  	{
@@ -491,6 +495,7 @@ function initEventHandlers()
 	  	else if (event.which == 118)
 	  	{
 	  		event.preventDefault();
+	  		$("#paid").val("");
 		  	$("#paid").focus();
 	  	}
 	  	else if (event.which == 38)
@@ -560,8 +565,8 @@ function initEventHandlers()
 
 	$("#barcode").keyup(function(event)
 	{
-		var barcode = $("#barcode").val();
-		var quantity = $("#quantity").val();
+		var barcode = $("#barcode").val().trim();
+		var quantity = $("#quantity").val().trim();
 		if (barcode != "" && quantity != "")
 		{
 			$("#addItem").prop("disabled", false);
@@ -573,8 +578,8 @@ function initEventHandlers()
 	});
 	$("#quantity").keyup(function(event)
 	{
-		var barcode = $("#barcode").val();
-		var quantity = $("#quantity").val();
+		var barcode = $("#barcode").val().trim();
+		var quantity = $("#quantity").val().trim();
 		if (barcode != "" && quantity != "")
 		{
 			$("#addItem").prop("disabled", false);
@@ -610,27 +615,7 @@ function initEventHandlers()
   				  	{
   				  		if ($(this).val() > 0)
   					  	{
-			  				$.ajax(
-			  				{
-			  					url: "update-item",
-			  					data:
-			  					{
-			  						"id": $("#tableBody > tr[class='success']").attr("id"),
-			  						"newQuant" : $(this).val()
-			  					},
-			  					success: function(result)
-			  					{
-			  						var res = eval(result);
-			  						if (res == true)
-			  						{
-				  						var i = $("#tableBody > tr[class='success']").index();
-				  						$("#tableBody > tr").eq(i).children().eq(thQuant).text($("#quantity").val());
-				  			  			var total = (($("#tableBody > tr").eq(i).children().eq(thPrice).text() * 10) * ($("#quantity").val() * 10)) / 100;
-				  			  			$("#tableBody > tr").eq(i).children().eq(thTotal).text(total);
-				  			  			checkAll();
-			  						}
-			  					}
-			  				});
+			  				update($("#tableBody > tr[class='success']").attr("id"), $(this).val());
   					  	}
   				  		else
   				  		{
@@ -685,6 +670,7 @@ function initEventHandlers()
   	
   	$("#deleteButton").click(function(event)
   	{
+  		event.preventDefault();
   		var id = $("#tableBody > tr[class='success']").attr("id");
   		$.ajax(
   		{
@@ -693,14 +679,24 @@ function initEventHandlers()
   			success: function(result)
   			{
   				$("#tableBody > tr[class='success']").remove();
-  				checkAll();
   			}
   		});
+  		
   		if ($("#tableBody > tr").size() > 0)
   		{
   			$("#tableBody > tr:eq(" + ($("#tableBody > tr").size() - 1) + ")").addClass("success");
+  			$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
+	  		$("#quantity").val($("#tableBody > tr[class='success']").children().eq(thQuant).text());
+	  		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
   		}
-  		event.preventDefault();
+	  	else
+	  	{
+	  		$("#quantity").val("1");
+	  		$("#itemName").val("");
+	  		$("#unitPrice").val("");
+	  		$("#unit").text("ш");
+	  	}
+  		checkAll();
   	});
   	
   	$("#clearButton").click(function(event)
@@ -708,9 +704,13 @@ function initEventHandlers()
   		$.ajax(
   		{
   			url: "clear-items",
-  		  	success: function()
+  		  	success: function(result)
   		  	{
   		  		$("#tableBody").html("");
+  		  		$("#quantity").val("1");
+  		  		$("#itemName").val("");
+  		  		$("#unitPrice").val("");
+  		  		$("#unit").text("ш");
   		  		checkAll();
   		  	}
   		});
@@ -741,20 +741,43 @@ function initEventHandlers()
   		event.preventDefault();
   		if ($("#searchByName").val().trim() != "" || $("#searchByBarcode").val().trim() != "")
   		{
+  			if (!isNumber($("#searchByMinPrice").val()))
+  			{
+  				$("#searchByMinPrice").val($("#slider-range").slider("option", "min"));
+  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+  			}
+  			
+  			if (!isNumber($("#searchByMaxPrice").val()))
+  			{
+  				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
+  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+  			}
+
   			$.ajax(
   			{
   				url: "searchItems",
   				data:
   				{
   					"itemName": $("#searchByName").val().trim(),
-  					"barcode": $("#searchByBarcode").val().trim()
+  					"barcode": $("#searchByBarcode").val().trim(),
+  					"minPrice": $("#searchByMinPrice").val().trim(),
+  					"maxPrice": $("#searchByMaxPrice").val().trim()
   				},
   				success: function(result)
   				{
   					$("#searchResultBody").html(result);
+	  				$("#searchResultBody > tr").click(function(event)
+  					{
+  						event.preventDefault();
+  						$("#searchResultBody > tr[class='success']").removeClass();
+  						$(this).addClass("success");
+  					});
+  					
 	  				$("#searchResultBody > tr").dblclick(function(event)
 	  				{
-	  					addItem($(this).children().eq(1).text().trim(), 1);
+	  					event.preventDefault();
+	  					addItem($(this).children().eq(1).text(), 1);
+	  					$("#searchResultBody > tr[class='success']").removeClass();
 	  					$("#searchItemsDialog").dialog("close");
 	  				});
   				}
