@@ -23,7 +23,7 @@ public class CharsetFilter implements Filter
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
-		if (null == request.getCharacterEncoding())
+		if (request.getCharacterEncoding() == null)
 		{
 			request.setCharacterEncoding(encoding);
 		}
@@ -33,5 +33,7 @@ public class CharsetFilter implements Filter
 		chain.doFilter(request, response);
 	}
 
-	public void destroy(){}
+	public void destroy()
+	{
+	}
 }
