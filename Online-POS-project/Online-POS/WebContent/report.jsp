@@ -207,10 +207,14 @@
 			              				</thead>
 			              				<tbody>${tableBody}</tbody>
 			              			</table>
+			              			<div class="12 text-center blue">
+			              				<h2>
+			              					<b>${total}</b>
+			              				</h2>
+			              			</div>
 			              		</div>
 			          		</div>
 			          	</div>
-
 			        </div>
         		</div>
         	</div>

@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/jquery-ui-1.10.3.full.min.css" />
+    <link rel="stylesheet" href="css/select2.css" />
     <link rel="stylesheet" href="css/ace-fonts.css" />
     <link rel="stylesheet" href="css/ace.min.css" />
     <link rel="stylesheet" href="css/ace-skins.min.css" />
@@ -53,6 +54,7 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="js/select2.min.js"></script>
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
     <script type="text/javascript" src="js/ace-extra.min.js"></script>
@@ -337,28 +339,44 @@
                               </div>
                               
 	                          <div class="col-xs-12 col-sm-12 col-md-8 pull-left">
-	                            <div class="checkbox no-padding">
-	                              <label>
-	                                <input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="insuranceCheck" <%
-	                                    		if (session.getAttribute("hasInsurance") != null)
-	                                    		{
-	                                    			out.print("checked");
-	                                    		}
-	                                 %>/>
-	                                 <span class="lbl">
-	                                   <b>&nbsp; Нэхэмжлэх</b>
-	                                 </span>
-	                               </label>
-	                             </div>
+	                            
 	                           </div>
                              </div>
                              
+                             <div class="space-4"></div>
+                             
                              <div class="row">
-                             	<div class="col-sm-12">
-                             		<select>
-                             			<option value="volvo">MUIS</option>
-                             			<option value="zuun">Zuun nast</option>
-                             			<option value="silver">Silver pen</option>
+                             	<div class="col-sm-6">
+                             		<div class="checkbox no-padding">
+			                        	<label>
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="customerCheck" />
+			                                <span class="lbl">
+			                                	<b>&nbsp; Нэхэмжлэх </b>
+			                                </span>
+			                            </label>
+			                    	</div>
+			                    </div>
+       							<div class="col-sm-6">
+                             		<select class="width-100" style="margin-top: 5px !important" id="customers" disabled>
+                             		</select>
+                             	</div>
+                             </div>
+                             
+                             <div class="space-2"></div>
+                             
+                             <div class="row">
+                             	<div class="col-sm-6">
+                             		<div class="checkbox no-padding">
+			                        	<label>
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="bankCheck" />
+			                                <span class="lbl">
+			                                	<b>&nbsp; Карт </b>
+			                                </span>
+			                            </label>
+			                    	</div>
+			                    </div>
+       							<div class="col-sm-6">
+                             		<select class="width-100" style="margin-top: 5px !important" id="banks" disabled>
                              		</select>
                              	</div>
                              </div>
@@ -571,9 +589,6 @@
             </div>
 
             <div class="row">
-              <div class="col-xs-4 col-sm-2 red center hidden">
-                ЭМДС - Хөнгөлөлт <b class="dark">F2</b>
-              </div>
               <div class="col-xs-4 col-sm-2 green center">
                 Баркод <b class="dark">F3</b>
               </div>
@@ -586,7 +601,7 @@
               <div class="col-xs-4 col-sm-2 blue center">
                 Харуилт <b class="dark">F7</b>
               </div>
-              <div class="col-xs-4 col-sm-2 blue center hidden">
+              <div class="col-xs-4 col-sm-2 blue center">
                 Тайлан <b class="dark">F8</b>
               </div>
             </div>
@@ -634,7 +649,7 @@
     		<b>Алдааг засах: </b>
     		<ul>
     			<li>
-    				Тухайн веб хуудсыг дахин дуудаж сервертэй дахин холбогдох.
+    				Тухайн веб програмыг дахин дуудаж сервертэй дахин холбогдох.
     			</li>
     			<li>
     				Сервер унтарсан эсвэл сүлжээний холболт салсан эсэхийг шалгах.

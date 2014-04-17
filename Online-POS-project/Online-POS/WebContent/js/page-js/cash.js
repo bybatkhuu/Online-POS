@@ -14,7 +14,7 @@ $(document).ready(function()
 	initBarcode();
 	initSearchSlider();
 	initTableSlim();
-	
+	initTypes();
 	checkAll();
 	
 	initEventHandlers();
@@ -117,9 +117,20 @@ function ajaxSetup()
 	}).ajaxStop(function()
 	{
 		$("#loadingDialog").dialog("close");
-    }).ajaxError(function()
+    }).ajaxError(function(event, xhr, options)
     {
-    	errorDialog("Сервертэй холбогдохгүй буюу серверээс холболт тасарсан байна!");
+    	if (xhr.status == 500)
+    	{
+    		errorDialog("Серверт алдаа гарсан байна!\nАлдааны хүсэлт: " + options.url);
+    	}
+    	else if (xhr.status == 404)
+    	{
+    		errorDialog("Сервертэй холбогдохгүй буюу серверээс холболт тасарсан байна!\nАлдааны хүсэлт: " + options.url);
+    	}
+    	else
+    	{
+    		errorDialog("Веб програмд ямар нэгэн алдаа гарлаа!\nАлдааны хүсэлт: " + options.url);
+    	}
     });
 }
 
@@ -127,6 +138,57 @@ function errorDialog(message)
 {
 	$("#errorMessage").html("<strong><i class='icon-remove'></i></strong>&nbsp; " + message);
 	$("#errorDialog").dialog("open");
+}
+
+function initTypes()
+{
+	$.ajax(
+	{
+		url: "get-customers",
+		success: function(result)
+		{
+			$("#customers").html(result);
+		}
+	});
+	$("#customers").select2();
+	$("#customerCheck").click(function()
+	{
+		var check = $("#customerCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			$("#customers").select2("enable", true);
+			$("#bankCheck").prop("disabled", true);
+		}
+		else
+		{
+			$("#customers").select2("enable", false);
+			$("#bankCheck").prop("disabled", false);
+		}
+	});
+	
+	$.ajax(
+	{
+		url: "get-banks",
+		success: function(result)
+		{
+			$("#banks").html(result);
+		}
+	});
+	$("#banks").select2();
+	$("#bankCheck").click(function()
+	{
+		var check = $("#bankCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			$("#banks").select2("enable", true);
+			$("#customerCheck").prop("disabled", true);
+		}
+		else
+		{
+			$("#banks").select2("enable", false);
+			$("#customerCheck").prop("disabled", false);
+		}
+	});
 }
 
 function initSearchDialog()
@@ -388,35 +450,53 @@ function update(id, newQuant)
 
 function purchase()
 {
-	window.print();
+	var type = "Cash";
+	var otherId = "0";
+	var check = $("#customerCheck").prop("checked");
+	if (check.toString() == "true")
+	{
+		type = "Invoice";
+		otherId = $("#customers").val().trim();
+	}
+	else
+	{
+		check = $("#bankCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			type = "Card";
+			otherId = $("#banks").val().trim();
+		}
+		else
+		{
+			type = "Cash";
+			otherId = "0";
+		}
+	}
+	
 	$.ajax(
 	{
 		url: "purchase-items",
 		data:
 		{
-			"orderNum" : $("#talon").val()
+			"orderNum": $("#talon").val().trim(),
+			"type": type,
+			"otherId": otherId
 		},
 	  	success: function(result)
 	  	{
 	  		var jsonData = eval("(" + result + ")");
 	  		if (jsonData.isPurchased != "true")
 	  		{
-	  			alert("Алдаа: Гүйлгээ амжилтгүй боллоо!\nТа хуудсаа дахин дуудаж гүйлгээгээ хийнэ үү!");
+	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cash").val().trim());
+	  			//location.reload(true);
 	  		}
 	  		else
 	  		{
-	  			$("#talon").val(jsonData.talon);
-		  		$("#print-talon").val(jsonData.talon);
-		  		$("#tableBody").html("");
-		  		$("#quantity").val("1");
-		  		$("#unit").text("ш");
-		  		$("#unitPrice").val("");
-		  		$("#itemName").val("");
-		  		checkAll();
+	  			window.print();
+		  		location.reload(true);
 	  		}
 	  	}
 	});
-	$("#barcode").focus();
 }
 
 function isNumber(n)
@@ -462,20 +542,6 @@ function initEventHandlers()
 				$("#barcode").focus();
 			}
 	  	}
-		else if (event.which == 113)
-	  	{
-	  		event.preventDefault();
-		  	$("#insuranceCheck").trigger('click');
-		  	var check = $("#insuranceCheck").prop("checked");
-	  		$.ajax(
-	  		{
-	  			url: "check-insurance",
-	  			data: { "hasInsurance" : check },
-	  			success: function(result)
-	  			{
-	  			}
-	  		});
-	  	}
 		else if (event.which == 114)
 	  	{
 			event.preventDefault();
@@ -497,6 +563,11 @@ function initEventHandlers()
 	  		event.preventDefault();
 	  		$("#paid").val("");
 		  	$("#paid").focus();
+	  	}
+	  	else if (event.which == 119)
+	  	{
+	  		event.preventDefault();
+	  		window.location.assign("report.jsp");
 	  	}
 	  	else if (event.which == 38)
 	  	{

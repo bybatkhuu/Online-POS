@@ -54,51 +54,61 @@ public class PurchaseServlet extends HttpServlet
 			orderNum = "0";
 		}
 		
-		synchronized(session)
-	    {
-			if (session.getAttribute("itemList") != null)
-	    	{
-				List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-		    	if (itemList != null)
+		String type = request.getParameter("type");
+		System.out.println("type: " + type);
+		if (type != null && !type.trim().equalsIgnoreCase(""))
+		{
+			String otherId = request.getParameter("otherId");
+			if (otherId == null)
+			{
+				otherId = "0";
+			}
+			synchronized(session)
+		    {
+				if (session.getAttribute("itemList") != null)
 		    	{
-		    		PostgreSQLJDBC db = new PostgreSQLJDBC();
-		    		if (db.createConnection())
-		    		{
-		    			try
-		    			{
-		    				String[] parameters = { Integer.toString(user.getId()), orderNum };
-		    				Cell orderId = db.getCell("bh_purchase", parameters);
-		    				Cell cell = null;
-		    				for (Item item : itemList)
-		    				{
-		    					List<Cell> cellList = new ArrayList<>();
-		    					cell = new Cell("item_id", Integer.toString(item.getId()));
-		    					cellList.add(cell);
-		    					cell = new Cell("order_id", orderId.getValue());
-		    					cellList.add(cell);
-		    					cell = new Cell("quantity", Double.toString(item.getQuantity()));
-		    					cellList.add(cell);
-		    					cell = new Cell("price", Double.toString(item.getPrice()));
-		    					cellList.add(cell);
-		    					cell = new Cell("total", Double.toString(item.getTotal()));
-		    					cellList.add(cell);
-		    					db.insert("pos_transactions", cellList);
-		    				}
-		    				cell = null;
-		    				String[] parameter = { Integer.toString(user.getId()) };
-		    				cell = db.getCell("bh_getLastOrderNum", parameter);
-		    				resultOrderNum = cell.getValue();
-						}
-		    			catch (SQLException e)
-		    			{
-							System.out.println("Error: Can't insert transaction in purchase!\nMessage: " + e.toString());
-						}
-		    			isPurchased = true;
-		    			session.removeAttribute("itemList");
-		    		}
+					List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+			    	if (itemList != null)
+			    	{
+			    		PostgreSQLJDBC db = new PostgreSQLJDBC();
+			    		if (db.createConnection())
+			    		{
+			    			try
+			    			{
+			    				String[] parameters = { Integer.toString(user.getId()), orderNum, type, otherId};
+			    				Cell orderId = db.getCell("bh_purchase", parameters);
+			    				Cell cell = null;
+			    				for (Item item : itemList)
+			    				{
+			    					List<Cell> cellList = new ArrayList<>();
+			    					cell = new Cell("item_id", Integer.toString(item.getId()));
+			    					cellList.add(cell);
+			    					cell = new Cell("order_id", orderId.getValue());
+			    					cellList.add(cell);
+			    					cell = new Cell("quantity", Double.toString(item.getQuantity()));
+			    					cellList.add(cell);
+			    					cell = new Cell("price", Double.toString(item.getPrice()));
+			    					cellList.add(cell);
+			    					cell = new Cell("total", Double.toString(item.getTotal()));
+			    					cellList.add(cell);
+			    					db.insert("pos_transactions", cellList);
+			    				}
+			    				cell = null;
+			    				String[] parameter = { Integer.toString(user.getId()) };
+			    				cell = db.getCell("bh_getLastOrderNum", parameter);
+			    				resultOrderNum = cell.getValue();
+							}
+			    			catch (SQLException e)
+			    			{
+								System.out.println("Error: Can't insert transaction in purchase!\nMessage: " + e.toString());
+							}
+			    			isPurchased = true;
+			    			session.removeAttribute("itemList");
+			    		}
+			    	}
 		    	}
-	    	}
-	    }
+		    }
+		}
 		
 		String jsonString =
 			"{" +
