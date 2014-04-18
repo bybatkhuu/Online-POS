@@ -46,7 +46,7 @@ function startTime()
     hour = checkTime(hour);
     minute = checkTime(minute);
     second = checkTime(second);
-    var dateTimeStr = year + "/" + month + "/" + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
+    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
     $("#time").html(dateTimeStr);
     $("#print-date").html(dateTimeStr);
     setTimeout(function(){ startTime(); }, 500);
@@ -473,6 +473,8 @@ function purchase()
 		}
 	}
 	
+	var isPurchased = false;
+	
 	$.ajax(
 	{
 		url: "purchase-items",
@@ -492,11 +494,16 @@ function purchase()
 	  		}
 	  		else
 	  		{
-	  			window.print();
-		  		location.reload(true);
+	  			isPurchased = true;
 	  		}
 	  	}
 	});
+	
+	if (isPurchased)
+	{
+		window.print();
+  		location.reload();
+	}
 }
 
 function isNumber(n)
@@ -867,17 +874,23 @@ function checkAll()
 	$("#print-pos").html($("#pos").val());
 	$("#print-date").html($("#time").html());
 	$("#print-cash").html($("#cash").val());
-	var str = "<table>";
+	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
-		str = str + "<tr>";
-			str = str + "<td class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
-			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-3 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
-		str = str + "</tr>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		str = str + "</div>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-6'></div>";
+			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-2 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "</div>";
+		if (i < ($("#tableBody > tr").size() - 1))
+		{
+			str = str + "<div class='space-4'></div>";
+		}
 	}
-	str = str + "</table>";
 	$("#print-items").html(str);
 	$("#print-s").html($("#tableBody > tr").size());
 	
@@ -946,7 +959,10 @@ function checkAll()
 			$("#updateButton").prop("disabled", false);
 	  	}
 	}
+	$("#print-cal-total").html($("#calTotal").val());
+	$("#print-sale").html($("#calSale").val());
 	$("#print-total").html($("#payOff").val());
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());
 }
+

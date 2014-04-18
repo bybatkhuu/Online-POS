@@ -187,20 +187,40 @@ html, body
 
 .bh-print-view
 {
-	display: none;
+	display: none !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+	
+	font-family: Consolas, Sans-serif !important;
+	font-size: 12px !important;
+	font-weight: bold !important;
+	line-height: 90% !important;
+	background: WHITE !important;
+	color: BLACK !important;
 }
 @media print
 {
 	.bh-non-print
 	{
-       display: none;
+       display: none !important;
     }
     
     .bh-print-view
     {
-       display: block;
-       font-size: 11px;
+    	display: block !important;
     }
+}
+
+.bh-print-separater
+{
+	border: 1px dashed BLACK !important;
+}
+
+.bh-print-header
+{
+	text-transform: uppercase !important;
 }
 
 input[type="text"][disabled].bh-bg-color-yellow
