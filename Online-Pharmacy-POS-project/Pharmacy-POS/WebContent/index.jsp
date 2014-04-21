@@ -757,131 +757,173 @@
 	</div>
 
 	<div class="bh-print-view">
-		<div class="row">
-			<div class="col-sm-6 col-xs-12">
-				<div class="row">
-					<div class="col-xs-3">№:</div>
-					<div class="col-xs-5" id="print-talon"></div>
-					<div class="col-xs-2">POS:</div>
-					<div class="col-xs-2 center" id="print-pos">${user.branchID}</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-3">Огноо:</div>
-					<div class="col-xs-9" id="print-date">01/09/2014 02:03:48 PM</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-3">Кассчин:</div>
-					<div class="col-xs-9" id="print-cash">${user.userName}</div>
-				</div>
-				<div class="row">
-					<div>
-						<div><hr></div>
-					</div>
-				</div>
-				<div id="print-items">
-					<%
-						if (session.getAttribute("itemList") != null)
-	              		{
-	              			@SuppressWarnings("unchecked")
-	              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-	              			if (itemList != null && !itemList.isEmpty())
-	            	    	{
-	              				for (Item item : itemList)
-	              				{
-	              					out.println("<div class='row'>");
-	              						out.println("<div class='col-xs-4'>" + item.getName() + "</div>");
-	              						Double result = item.getQuantity() - (int)(item.getQuantity());
-                          				if (result != 0)
-                          				{
-                          					out.println("<div class='col-xs-1'>" + item.getQuantity() + "</div>");
-                          				}
-                          				else
-                          				{
-                          					out.println("<div class='col-xs-1'>" + (int)item.getQuantity() + "</div>");
-                          				}
-                          				out.println("<div class='col-xs-3 align-left'>" + format.format(item.getPrice()) + "</div>");
-                          				out.println("<div class='col-xs-2 align-right'>" + format.format(item.getTotal()) + "</div>");
-	              					out.println("</div>");
-	              				}
-	            	    	}
-	              		}
-					%>
-				</div>
-				<div class="row">
-					<div>
-						<div><hr></div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-3">Н/тоо:</div>
-					<div class="col-xs-1" id="print-s">
-						<%
-							if (session.getAttribute("itemList") != null)
-		              		{
-		              			@SuppressWarnings("unchecked")
-		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-		              			if (itemList != null && !itemList.isEmpty())
-		            	    	{
-		              				out.print(itemList.size());
-		            	    	}
-		              			else
-		    					{
-		    						out.print("0");
-		    					}
-		              		}
-							else
-							{
-								out.print("0");
-							}
-						%>
-					</div>
-					<div class="col-xs-4">Нийт:</div>
-					<div class="col-xs-3 align-right" id="print-total">
-						<%
-							if (session.getAttribute("itemList") != null)
-		              		{
-		              			@SuppressWarnings("unchecked")
-		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-		              			if (itemList != null && !itemList.isEmpty())
-		            	    	{
-		              				double all = 0;
-		              				for (Item item : itemList)
-		              				{
-		              					all = all + item.getTotal();
-		              				}
-		              				out.print(format.format(all));
-		            	    	}
-		              			else
-		    					{
-		    						out.print("0");
-		    					}
-		              		}
-							else
-							{
-								out.print("0");
-							}
-						%>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-4"></div>
-					<div class="col-xs-4">Төлсөн:</div>
-					<div class="col-xs-3 align-right" id="print-paid">0</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-4"></div>
-					<div class="col-xs-4">Хариулт:</div>
-					<div class="col-xs-3 align-right" id="print-return">0</div>
-				</div>
-				<br>
-				<div class="row">
-					<div class="col-xs-12 center">Thank you for shopping</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-12 center">Powered by Infosystems POS system</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="bh-print-body">
+      <div class="row">
+        <div class="col-xs-12 center bh-print-header">
+          ${company.name} SHOP
+        </div>
+      </div>
+      <div class="space-4"></div>
+      <div class="row">
+        <div class="col-xs-3">No:</div>
+        <div class="col-xs-5" id="print-talon"></div>
+        <div class="col-xs-2">POS:</div>
+        <div class="col-xs-2 text-right" id="print-pos">${user.branchID}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">Огноо:</div>
+        <div class="col-xs-9" id="print-date"></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">Кассчин:</div>
+        <div class="col-xs-9" id="print-cash">${user.userName}</div>
+      </div>
+      <div class="space-6 bh-print-separater"></div>
+      <div id="print-items">
+        <%
+          if (session.getAttribute("itemList") != null)
+          {
+            @SuppressWarnings("unchecked")
+            List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+            if (itemList != null && !itemList.isEmpty())
+            {
+              for (int i = 0; i < itemList.size(); i++)
+              {
+                out.println("<div class='row'>");
+                          out.println("<div class='col-xs-12'>" + itemList.get(i).getName() + "</div>");
+                        out.println("</div>");
+                        out.println("<div class='row'>");
+                        out.println("<div class='col-xs-4'></div>");
+                          Double result = itemList.get(i).getQuantity() - (int)(itemList.get(i).getQuantity());
+                                if (result != 0)
+                                {
+                                  out.println("<div class='col-xs-2'>" + itemList.get(i).getQuantity() + "</div>");
+                                }
+                                else
+                                {
+                                  out.println("<div class='col-xs-2'>" + (int)itemList.get(i).getQuantity() + "</div>");
+                                }
+                                out.println("<div class='col-xs-3 text-right'>" + format.format(itemList.get(i).getPrice()) + "</div>");
+                                out.println("<div class='col-xs-3 text-right'>" + format.format(itemList.get(i).getTotal()) + "</div>");
+                        out.println("</div>");
+                        if (i < (itemList.size() - 1))
+                        {
+                          out.println("<div class='space-4'></div>");
+                        }
+                      }
+            }
+          }
+        %>
+      </div>
+      <div class="space-6 bh-print-separater"></div>
+      <div class="row">
+        <div class="col-xs-3">Н/тоо:</div>
+        <div class="col-xs-1" id="print-s">
+          <%
+            if (session.getAttribute("itemList") != null)
+            {
+              @SuppressWarnings("unchecked")
+                      List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+                      if (itemList != null && !itemList.isEmpty())
+                    {
+                        out.print(itemList.size());
+                    }
+                      else
+                {
+                  out.print("0");
+                }
+                  }
+            else
+            {
+              out.print("0");
+            }
+          %>
+        </div>
+        <div class="col-xs-4">Нийт дүн:</div>
+        <div class="col-xs-4 text-right" id="print-cal-total">
+          <%
+            if (session.getAttribute("itemList") != null)
+                  {
+                      @SuppressWarnings("unchecked")
+                      List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+                      if (itemList != null && !itemList.isEmpty())
+                    {
+                        double all = 0;
+                        for (Item item : itemList)
+                        {
+                          all = all + item.getTotal();
+                        }
+                        out.print(format.format(all));
+                      }
+                      else
+                      {
+                        out.print("0");
+                      }
+                  }
+            else
+            {
+              out.print("0");
+            }
+          %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">Хөнгөлөлт:</div>
+        <div class="col-xs-4 text-right" id="print-sale">0</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">Төлөх:</div>
+        <div class="col-xs-4 text-right" id="print-total">
+          <%
+            if (session.getAttribute("itemList") != null)
+                  {
+                      @SuppressWarnings("unchecked")
+                      List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+                      if (itemList != null && !itemList.isEmpty())
+                    {
+                        double all = 0;
+                        for (Item item : itemList)
+                        {
+                          all = all + item.getTotal();
+                        }
+                        out.print(format.format(all));
+                      }
+                      else
+                      {
+                        out.print("0");
+                      }
+                  }
+            else
+            {
+              out.print("0");
+            }
+          %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">Төлсөн:</div>
+        <div class="col-xs-4 text-right" id="print-paid">0</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">Хариулт:</div>
+        <div class="col-xs-4 text-right" id="print-return">0</div>
+      </div>
+      <div class="space-4"></div>
+      <div class="row">
+        <div class="col-xs-12 center">Thank you for shopping</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 center">Powered by Infosystems POS system</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 center">Жич: Эм онцгой бараа тул буцаахгүй!</div>
+      </div>
+    </div>
+  </div>
+  
   </body>
 </html>

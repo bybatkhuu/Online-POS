@@ -46,7 +46,7 @@ function startTime()
     hour = checkTime(hour);
     minute = checkTime(minute);
     second = checkTime(second);
-    var dateTimeStr = year + "/" + month + "/" + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
+    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
     $("#time").html(dateTimeStr);
     $("#print-date").html(dateTimeStr);
     setTimeout(function(){ startTime(); }, 500);
@@ -117,9 +117,20 @@ function ajaxSetup()
 	}).ajaxStop(function()
 	{
 		$("#loadingDialog").dialog("close");
-    }).ajaxError(function()
+    }).ajaxError(function(event, xhr, options)
     {
-    	errorDialog("Сервертэй холбогдохгүй буюу серверээс холболт тасарсан байна!");
+    	if (xhr.status == 500)
+    	{
+    		errorDialog("Серверт алдаа гарсан байна!\nАлдааны хүсэлт: " + options.url);
+    	}
+    	else if (xhr.status == 404)
+    	{
+    		errorDialog("Сервертэй холбогдохгүй буюу серверээс холболт тасарсан байна!\nАлдааны хүсэлт: " + options.url);
+    	}
+    	else
+    	{
+    		errorDialog("Веб програмд ямар нэгэн алдаа гарлаа!\nАлдааны хүсэлт: " + options.url);
+    	}
     });
 }
 
@@ -410,7 +421,8 @@ function update(id, newQuant)
 
 function purchase()
 {
-	window.print();
+	var talon = 0;
+	var isPurchased = false;
 	$.ajax(
 	{
 		url: "purchase-items",
@@ -420,22 +432,30 @@ function purchase()
 	  		var jsonData = eval("(" + result + ")");
 	  		if (jsonData.isPurchased != "true")
 	  		{
-	  			alert("Алдаа: Гүйлгээ амжилтгүй боллоо!\nТа хуудсаа дахин дуудаж гүйлгээгээ хийнэ үү!");
+	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cash").val().trim());
+	  			//location.reload(true);
 	  		}
 	  		else
 	  		{
-	  			$("#talon").val(jsonData.talon);
-		  		$("#print-talon").val(jsonData.talon);
-		  		$("#tableBody").html("");
-		  		$("#quantity").val("1");
-		  		$("#unit").text("ш");
-		  		$("#unitPrice").val("");
-		  		$("#itemName").val("");
-		  		checkAll();
+	  			isPurchased = true;
+	  			talon = jsonData.talon;
 	  		}
 	  	}
 	});
-	$("#barcode").focus();
+
+	if (isPurchased)
+	{
+		window.print();
+		$("#talon").val(talon);
+  		$("#print-talon").val(talon);
+  		$("#tableBody").html("");
+  		$("#quantity").val("1");
+  		$("#unit").text("ш");
+  		$("#unitPrice").val("");
+  		$("#itemName").val("");
+  		checkAll();
+  		$("#barcode").focus();
+	}
 }
 
 function isNumber(n)
@@ -883,17 +903,23 @@ function checkAll()
 	$("#print-pos").html($("#pos").val());
 	$("#print-date").html($("#time").html());
 	$("#print-cash").html($("#cash").val());
-	var str = "<table>";
+	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
-		str = str + "<tr>";
-			str = str + "<td class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
-			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-3 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
-		str = str + "</tr>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		str = str + "</div>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-4'></div>";
+			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "</div>";
+		if (i < ($("#tableBody > tr").size() - 1))
+		{
+			str = str + "<div class='space-4'></div>";
+		}
 	}
-	str = str + "</table>";
 	$("#print-items").html(str);
 	$("#print-s").html($("#tableBody > tr").size());
 	
@@ -962,6 +988,8 @@ function checkAll()
 			$("#updateButton").prop("disabled", false);
 	  	}
 	}
+	$("#print-cal-total").html($("#calTotal").val());
+	$("#print-sale").html($("#calSale").val());
 	$("#print-total").html($("#payOff").val());
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());

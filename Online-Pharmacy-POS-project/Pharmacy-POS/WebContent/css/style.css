@@ -187,20 +187,45 @@ html, body
 
 .bh-print-view
 {
-	display: none;
+	width: 100% !important;
+	display: none !important;
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+	
+	font-family: Consolas, Sans-serif !important;
+	font-size: 12px !important;
+	font-weight: bold !important;
+	line-height: 90% !important;
+	background: WHITE !important;
+	color: BLACK !important;
 }
 @media print
 {
 	.bh-non-print
 	{
-       display: none;
+       display: none !important;
     }
     
     .bh-print-view
     {
-       display: block;
-       font-size: 11px;
+    	display: block !important;
     }
+}
+
+.bh-print-separater
+{
+	border: 1px dashed BLACK !important;
+}
+.bh-print-header
+{
+	text-transform: uppercase !important;
+}
+.bh-print-body
+{
+	margin-left: 5px !important;
+	margin-right: 5px !important;
 }
 
 input[type="text"][disabled].bh-bg-color-yellow

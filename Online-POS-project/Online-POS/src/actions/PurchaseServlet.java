@@ -55,7 +55,6 @@ public class PurchaseServlet extends HttpServlet
 		}
 		
 		String type = request.getParameter("type");
-		System.out.println("type: " + type);
 		if (type != null && !type.trim().equalsIgnoreCase(""))
 		{
 			String otherId = request.getParameter("otherId");

@@ -194,10 +194,11 @@ html, body
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;
 	
-	font-family: Consolas, Sans-serif !important;
-	font-size: 12px !important;
-	font-weight: bold !important;
-	line-height: 90% !important;
+	/* font-family: "Times New Roman", Times, serif !important; */
+	font-family: Tahoma, monospace !important;
+	font-size: 14px !important;
+/* 	font-weight: bold !important; */
+	line-height: 100% !important;
 	background: WHITE !important;
 	color: BLACK !important;
 }
@@ -224,7 +225,6 @@ html, body
 }
 .bh-print-body
 {
-	margin-top: 5px !important;
 	margin-left: 5px !important;
 	margin-right: 5px !important;
 }
@@ -336,4 +336,14 @@ input[type="text"][disabled].bh-input-bg-color-1
 input.ace.ace-switch[type="checkbox"] + .lbl
 {
 	margin: 0px !important;
+}
+
+.applyBtn
+{
+	margin-left: 5px !important;
+}
+
+.cancelBtn
+{
+ 	margin-left: 8px !important;
 }

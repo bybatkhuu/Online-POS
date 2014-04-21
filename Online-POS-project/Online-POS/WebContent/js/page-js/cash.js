@@ -472,9 +472,8 @@ function purchase()
 			otherId = "0";
 		}
 	}
-	
+	var talon = 0;
 	var isPurchased = false;
-	
 	$.ajax(
 	{
 		url: "purchase-items",
@@ -495,14 +494,23 @@ function purchase()
 	  		else
 	  		{
 	  			isPurchased = true;
+	  			talon = jsonData.talon;
 	  		}
 	  	}
 	});
 	
-	if (isPurchased)
+	if (isPurchased == true)
 	{
 		window.print();
-  		location.reload();
+		$("#talon").val(talon);
+  		$("#print-talon").val(talon);
+  		$("#tableBody").html("");
+  		$("#quantity").val("1");
+  		$("#unit").text("ш");
+  		$("#unitPrice").val("");
+  		$("#itemName").val("");
+  		checkAll();
+  		$("#barcode").focus();
 	}
 }
 
@@ -511,24 +519,38 @@ function isNumber(n)
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function calculate()
+function loadPrintView()
 {
-	var str = "<table>";
+	$("#print-talon").html($("#talon").val());
+	$("#print-pos").html($("#pos").val());
+	$("#print-date").html($("#time").html());
+	$("#print-cash").html($("#cash").val());
+	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
-		str = str + "<tr>";
-			str = str + "<td class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
-			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-3 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
-		str = str + "</tr>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		str = str + "</div>";
+		str = str + "<div class='row'>";
+			str = str + "<div class='col-xs-4'></div>";
+			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "</div>";
+		if (i < ($("#tableBody > tr").size() - 1))
+		{
+			str = str + "<div class='space-4'></div>";
+		}
 	}
-	str = str + "</table>";
 	$("#print-items").html(str);
 	$("#print-s").html($("#tableBody > tr").size());
 	
-	$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
-	$("#clearButton").prop("disabled", false);
+	$("#print-cal-total").html($("#calTotal").val());
+	$("#print-sale").html($("#calSale").val());
+	$("#print-total").html($("#payOff").val());
+	$("#print-paid").html($("#paid").val());
+	$("#print-return").html($("#return").val());
+	
 }
 
 function initEventHandlers()
@@ -563,6 +585,7 @@ function initEventHandlers()
 	  	else if (event.which == 117)
 	  	{
 	  		event.preventDefault();
+	  		loadPrintView();
 		  	window.print();
 	  	}
 	  	else if (event.which == 118)
