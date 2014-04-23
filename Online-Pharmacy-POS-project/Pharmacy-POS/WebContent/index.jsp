@@ -758,7 +758,7 @@
 
 	<div class="bh-print-view">
     <div class="bh-print-body">
-      <div class="row">
+      <div class="row hidden">
         <div class="col-xs-12 center bh-print-header">
           ${company.name} SHOP
         </div>

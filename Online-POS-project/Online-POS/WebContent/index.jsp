@@ -740,7 +740,7 @@
 		<div class="bh-print-body">
 			<div class="row">
 				<div class="col-xs-12 center bh-print-header">
-					${company.name} SHOP
+					SILVER PEN SHOP
 				</div>
 			</div>
 			<div class="space-4"></div>
@@ -847,12 +847,12 @@
 					%>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row hidden">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Хөнгөлөлт:</div>
 				<div class="col-xs-4 text-right" id="print-sale">0</div>
 			</div>
-			<div class="row">
+			<div class="row hidden">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Төлөх:</div>
 				<div class="col-xs-4 text-right" id="print-total">
