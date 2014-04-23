@@ -867,34 +867,34 @@
           %>
         </div>
       </div>
-      <div class="row">
+      <div class="row hidden">
         <div class="col-xs-4"></div>
         <div class="col-xs-4">Хөнгөлөлт:</div>
         <div class="col-xs-4 text-right" id="print-sale">0</div>
       </div>
-      <div class="row">
+      <div class="row hidden">
         <div class="col-xs-4"></div>
-        <div class="col-xs-4">Төлөх:</div>
+        <div class="col-xs-4">Нийт дүн:</div>
         <div class="col-xs-4 text-right" id="print-total">
           <%
-            if (session.getAttribute("itemList") != null)
-                  {
-                      @SuppressWarnings("unchecked")
-                      List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                      if (itemList != null && !itemList.isEmpty())
+          	if (session.getAttribute("itemList") != null)
+            {
+          		@SuppressWarnings("unchecked")
+                List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+                if (itemList != null && !itemList.isEmpty())
+                {
+                	double all = 0;
+                    for (Item item : itemList)
                     {
-                        double all = 0;
-                        for (Item item : itemList)
-                        {
-                          all = all + item.getTotal();
-                        }
-                        out.print(format.format(all));
-                      }
-                      else
-                      {
-                        out.print("0");
-                      }
-                  }
+                    	all = all + item.getTotal();
+                    }
+                    out.print(format.format(all));
+                }
+                else
+                {
+                	out.print("0");
+                 }
+            }
             else
             {
               out.print("0");

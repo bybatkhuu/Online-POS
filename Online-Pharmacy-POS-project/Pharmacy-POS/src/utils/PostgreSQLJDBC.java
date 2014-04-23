@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PostgreSQLJDBC
@@ -29,7 +31,7 @@ public class PostgreSQLJDBC
         port = "5432";
         database = "PharmacyPOS";
         user = "postgres";
-        password = "root";
+        password = "123asd90@";
     }
 	
 	//Create connection
@@ -1473,6 +1475,6 @@ public class PostgreSQLJDBC
 	// - Not necessary OR Write to log...
 	private void writeToConsole(String query)
 	{
-		System.out.println(query);
+		System.out.println(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()) + ": " + query);
 	}
 }
