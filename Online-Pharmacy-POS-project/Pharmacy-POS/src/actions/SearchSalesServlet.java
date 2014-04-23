@@ -91,6 +91,7 @@ public class SearchSalesServlet extends HttpServlet
 		if (rowList != null && rowList.size() > 0)
 		{
 			String tableBody = "";
+			Double total = (double) 0;
 			DecimalFormat format = new DecimalFormat("###############.###");
 			for (Row row : rowList)
 	    	{
@@ -121,6 +122,7 @@ public class SearchSalesServlet extends HttpServlet
 		    					break;
 		    				case "total":
 		    					tableBody = tableBody + "<td>" + cell.getValue() + "</td>";
+		    					total = total + Double.parseDouble(cell.getValue());
 		    					break;
 		    				default:
 		    					System.out.println("More unknown columns from bh_searchSales()!");
@@ -132,6 +134,7 @@ public class SearchSalesServlet extends HttpServlet
 	    		}
 	    	}
 			request.setAttribute("tableBody", tableBody);
+			request.setAttribute("total", total);
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("report.jsp");

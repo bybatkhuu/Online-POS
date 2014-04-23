@@ -208,10 +208,14 @@
 			              				</thead>
 			              				<tbody>${tableBody}</tbody>
 			              			</table>
+			              			<div class="12 text-center blue">
+			              				<h2>
+			              					<b>Нийт дүн: ${total}</b>
+			              				</h2>
+			              			</div>
 			              		</div>
 			          		</div>
 			          	</div>
-
 			        </div>
         		</div>
         	</div>

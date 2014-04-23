@@ -31,7 +31,7 @@ public class PostgreSQLJDBC
         port = "5432";
         database = "PharmacyPOS";
         user = "postgres";
-        password = "123asd90@";
+        password = "root";
     }
 	
 	//Create connection
