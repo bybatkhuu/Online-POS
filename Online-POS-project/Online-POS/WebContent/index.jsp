@@ -343,7 +343,7 @@
 	                           </div>
                              </div>
                              
-                             <div class="space-4"></div>
+                             <div class="space-2"></div>
                              
                              <div class="row">
                              	<div class="col-sm-6">
@@ -362,15 +362,13 @@
                              	</div>
                              </div>
                              
-                             <div class="space-2"></div>
-                             
                              <div class="row">
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
 			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="bankCheck" />
 			                                <span class="lbl">
-			                                	<b>&nbsp; Карт </b>
+			                                	<b>&nbsp; Банкны карт </b>
 			                                </span>
 			                            </label>
 			                    	</div>
@@ -380,13 +378,47 @@
                              		</select>
                              	</div>
                              </div>
-                            
-							<div class="space-4"></div>
 							
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="">
-									</div>
+									<div class="widget-box bh-widget-box">
+                            			<div class="widget-body">
+                              				<div class="widget-main" style="background-color: #EEE;">
+                              					<div class="row">
+                              						<div class="col-sm-4">
+                              							<label for="cardNumber">Карт №: </label>
+                              						</div>
+                              						<div class="col-sm-8">
+                              							<input type="text" name="cardNumber" class="form-control input-sm" id="cardNumber" />
+                              						</div>
+                              					</div>
+                              					<div class="row">
+                              						<div class="col-sm-4">
+                              							<label for="owner">Эзэмшигч: </label>
+                              						</div>
+                              						<div class="col-sm-8">
+                              							<div id="owner"></div>
+                              						</div>
+                              					</div>
+                              					<div class="hr-4 hr-double dotted"></div>
+                              					<div class="row">
+                              						<div class="col-sm-4">
+                              							<label for="discountPercent">Хөнгөлөлт: </label>
+                              						</div>
+                              						<div class="col-sm-3">
+                              							<span class="input-icon input-icon-right">
+                              								<input type="text" name="discountPercent" class="form-control input-sm" id="discountPercent" />
+                              								<i class="green"></i>
+                              							</span>
+                              						</div>
+                              						<div class="col-sm-1">%</div>
+                              						<div class="col-sm-4">
+                              							<input type="text" name="discountPercent" class="form-control input-sm" id="discountPercent" />
+                              						</div>
+                              					</div>
+                              				</div>
+                              			</div>
+                              		</div>
 								</div>
 							</div>
 							
