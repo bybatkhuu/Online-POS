@@ -23,7 +23,7 @@ public class LoggedUser
 				{
 					user = (User) session.getAttribute("user");
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					System.out.println("Error: Can't parse user from session in checkLogin!\nMessage: " + ex.toString());
 					session.removeAttribute("user");

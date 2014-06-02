@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import models.User;
 
@@ -69,10 +70,10 @@ public class LoginServlet extends HttpServlet
 										parameters.add(rowList.get(0).getCellList().get(0).getValue());
 										if (db.execute("bh_isLogout", parameters))
 										{
+											String ip = LoggedUser.getIpAddress(request);
+											parameters.add(ip);
 											if (db.execute("bh_checkBranchUsers", parameters))
 											{
-												String ip = LoggedUser.getIpAddress(request);
-												parameters.add(ip);
 												if (db.execute("bh_login", parameters))
 												{
 													User user = new User();
@@ -92,14 +93,11 @@ public class LoginServlet extends HttpServlet
 															case "status":
 																user.setStatus(cell.getValue());
 																break;
-															case "branch_id":
-																user.setBranchID(Integer.parseInt(cell.getValue()));
-																break;
-															case "ip_address":
-																user.setIpAddress(cell.getValue());
-																break;
 															case "role_id":
 																user.setRoleID(Integer.parseInt(cell.getValue()));
+																break;
+															case "cash_name":
+																user.setCashName(cell.getValue());
 																break;
 															default:
 																break;
@@ -107,6 +105,7 @@ public class LoginServlet extends HttpServlet
 													}
 													session.setAttribute("user", user);
 													status = 1;
+													JOptionPane.showMessageDialog(null, "asdasd");
 												}
 												else
 												{

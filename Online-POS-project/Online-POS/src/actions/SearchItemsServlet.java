@@ -65,7 +65,7 @@ public class SearchItemsServlet extends HttpServlet
 			PostgreSQLJDBC db = new PostgreSQLJDBC();
 			if (db.createConnection())
 			{
-				String[] params = { String.valueOf(user.getBranchID()), itemName, barcode, minPrice, maxPrice };
+				String[] params = { itemName, barcode, minPrice, maxPrice };
 				try
 				{
 					rowList = db.getRowList("bh_searchItems", params);

@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import models.User;
-
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -38,22 +36,16 @@ public class GetMinMaxPriceServlet extends HttpServlet
 		}
 		
 		List<Cell> cellList = null;
-		User user = (User) session.getAttribute("user");
-		if (user != null)
+		PostgreSQLJDBC db = new PostgreSQLJDBC();
+		if (db.createConnection())
 		{
-			String branchID = Integer.toString(user.getBranchID());
-			PostgreSQLJDBC db = new PostgreSQLJDBC();
-			if (db.createConnection())
+			try
 			{
-				String[] parameter = { branchID };
-				try
-				{
-					cellList = db.getCellList("bh_getMinMaxPrice", parameter);
-				}
-				catch (SQLException e)
-				{
-					System.out.println("Error: Can't execute bh_getMaxPrice function!\nMessage: " + e.toString());
-				}
+				cellList = db.getCellList("bh_getMinMaxPrice");
+			}
+			catch (SQLException e)
+			{
+				System.out.println("Error: Can't execute bh_getMaxPrice function!\nMessage: " + e.toString());
 			}
 		}
 		
