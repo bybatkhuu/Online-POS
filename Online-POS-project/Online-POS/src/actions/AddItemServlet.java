@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Item;
-import models.User;
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -50,7 +49,7 @@ public class AddItemServlet extends HttpServlet
 		    {
 		    	itemList = new ArrayList<Item>();
 		    }
-		    User user = (User) session.getAttribute("user");
+		    //User user = (User) session.getAttribute("user");
 		    String barcode = request.getParameter("barcode");
 		    double quantity = 0;
 		    try

@@ -4,6 +4,7 @@
 <%@ page import="utils.LoggedUser"%>
 <%@ page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)
@@ -182,12 +183,22 @@
                       <div class="widget-body">
                         <div class="widget-main">
                           <form method="POST">
-                          	<div class="row">
-                          		<div class="col-xs-12 col-sm-12">
-                          			<select id="assetAccounts" class="width-100">
+                          	<input type="hidden" value="${cash.assetType}" id="assetType" />
+                          	<c:choose>
+                          		<c:when test="${cash.assetType == 'Select'}">
+                          			<div class="row">
+		                          		<div class="col-xs-12 col-sm-12">
+		                          			<select id="assetAccounts" class="width-100">
+		                          			</select>
+		                          		</div>
+		                          	</div>
+                          		</c:when>
+                          		<c:otherwise>
+                          			<select id="assetAccounts" class="hidden">
+                          				<option value="${cash.assetAcc}" selected>${cash.assetAcc}</option>
                           			</select>
-                          		</div>
-                          	</div>
+                          		</c:otherwise>
+                          	</c:choose>
                           	
                             <div class="row">
                               <div class="col-xs-12 col-sm-4 no-padding">

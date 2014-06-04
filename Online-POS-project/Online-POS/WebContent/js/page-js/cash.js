@@ -142,15 +142,18 @@ function errorDialog(message)
 
 function initTypes()
 {
-	$.ajax(
+	if ($("#assetType").val() == "Select")
 	{
-		url: "get-asset-accounts",
-		success: function(result)
+		$.ajax(
 		{
-			$("#assetAccounts").html(result);
-		}
-	});
-	$("#assetAccounts").select2();
+			url: "get-asset-accounts",
+			success: function(result)
+			{
+				$("#assetAccounts").html(result);
+			}
+		});
+		$("#assetAccounts").select2();
+	}
 	
 	$.ajax(
 	{
@@ -325,7 +328,11 @@ function addItem(barcode, quantity)
 				  	$.ajax(
 				  	{
 				  		url: "check-barcode",
-					  	data: { "barcode" : barcode },
+					  	data:
+					  	{
+					  		"barcode" : barcode,
+					  		"assetAcc" : $("#assetAccounts").val().trim()
+					  	},
 					  	success: function(result)
 					  	{
 					  		isBarcode = result;
