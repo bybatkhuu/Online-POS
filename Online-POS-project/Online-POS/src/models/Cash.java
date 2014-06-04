@@ -9,6 +9,8 @@ public class Cash implements Serializable
 	private String ip;
 	private int branchID;
 	private int posNum;
+	private String assetType;
+	private String assetAcc;
 	
 	public Cash()
 	{
@@ -62,5 +64,23 @@ public class Cash implements Serializable
 	public void setPosNum(int posNum)
 	{
 		this.posNum = posNum;
+	}
+	
+	public String getAssetType()
+	{
+		return assetType;
+	}
+	public void setAssetType(String assetType)
+	{
+		this.assetType = assetType;
+	}
+	
+	public String getAssetAcc()
+	{
+		return assetAcc;
+	}
+	public void setAssetAcc(String assetAcc)
+	{
+		this.assetAcc = assetAcc;
 	}
 }

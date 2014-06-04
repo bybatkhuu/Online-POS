@@ -17,12 +17,12 @@ import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 import utils.Row;
 
-@WebServlet("/get-barcodes")
-public class GetBarcodesServlet extends HttpServlet
+@WebServlet("/get-asset-accounts")
+public class GetAccountsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-       
-    public GetBarcodesServlet()
+
+    public GetAccountsServlet()
     {
         super();
     }
@@ -42,32 +42,44 @@ public class GetBarcodesServlet extends HttpServlet
 		{
 			try
 			{
-				rowList = db.getRowList("bh_getBarcodes");
+				rowList = db.getRowList("bh_getAccounts");
 			}
 			catch (SQLException e)
 			{
 				rowList = null;
-				System.out.println("Error: can't execute bh_getBarcodes()!\nMessage: " + e.toString());
+				System.out.println("Error: can't execute bh_getAccounts()!\nMessage: " + e.toString());
 			}
 		}
 		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		if (rowList != null)
+	    if (rowList != null)
 		{
 			for (int i = 0; i < rowList.size(); i++)
 			{
+				out.print("<option value='");
 				for (Cell cell : rowList.get(i).getCellList())
 				{
-					out.print(cell.getValue() + ",");
+					switch (cell.getColumn())
+					{
+						case "acc_no":
+							out.print(cell.getValue() + "'>");
+							break;
+						case "description":
+							out.print(cell.getValue());
+							break;
+						default:
+							break;
+					}
 				}
+				out.println("</option>");
 			}
 		}
+	    out.print("");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
 	}
-
 }

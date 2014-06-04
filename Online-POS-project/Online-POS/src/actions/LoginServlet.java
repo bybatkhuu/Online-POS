@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
 
+import models.Cash;
 import models.User;
 
 import utils.Cell;
@@ -103,9 +103,41 @@ public class LoginServlet extends HttpServlet
 																break;
 														}
 													}
+													
+													parameters = new ArrayList<>();
+													parameters.add(ip);
+													List<Cell> cellList = new ArrayList<Cell>();
+													cellList = db.getCellList("bh_getCash", parameters);
+													Cash cash = new Cash();
+													for (Cell cell : cellList)
+													{
+														switch (cell.getColumn())
+														{
+															case "id":
+																cash.setId(Integer.parseInt(cell.getValue()));
+																break;
+															case "ip_address":
+																cash.setIp(cell.getValue());
+																break;
+															case "barnch_id":
+																cash.setBranchID(Integer.parseInt(cell.getValue()));
+																break;
+															case "pos_num":
+																cash.setPosNum(Integer.parseInt(cell.getValue()));
+																break;
+															case "asset_type":
+																cash.setAssetType(cell.getValue());
+																break;
+															case "asset_acc":
+																cash.setAssetAcc(cell.getValue());
+																break;
+															default:
+																break;
+														}
+													}
+													session.setAttribute("cash", cash);
 													session.setAttribute("user", user);
 													status = 1;
-													JOptionPane.showMessageDialog(null, "asdasd");
 												}
 												else
 												{
@@ -163,7 +195,7 @@ public class LoginServlet extends HttpServlet
 			
 			if (status == 1)
 			{
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("cash.jsp");
 			}
 			else
 			{

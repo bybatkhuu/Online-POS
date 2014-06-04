@@ -182,6 +182,13 @@
                       <div class="widget-body">
                         <div class="widget-main">
                           <form method="POST">
+                          	<div class="row">
+                          		<div class="col-xs-12 col-sm-12">
+                          			<select id="assetAccounts" class="width-100">
+                          			</select>
+                          		</div>
+                          	</div>
+                          	
                             <div class="row">
                               <div class="col-xs-12 col-sm-4 no-padding">
                                 <div class="form-group">
@@ -256,8 +263,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="space-4"></div>
-
+                            
                             <div class="space-4"></div>
                             
                             <div class="row">
@@ -329,8 +335,8 @@
                               </div>
                             </div>
                             
-                            <div class="space-8"></div>
-
+                            <div class="space-4"></div>
+<!-- 
                             <div class="row">
                               <div class="col-xs-12 col-sm-12 col-md-4 pull-right">
                               	<button class="col-xs-12 btn btn-primary btn-sm pull-right" id="addItem">
@@ -343,7 +349,7 @@
 	                           </div>
                              </div>
                              
-                             <div class="space-2"></div>
+                             <div class="space-2"></div> -->
                              
                              <div class="row">
                              	<div class="col-sm-6">
@@ -780,7 +786,7 @@
 				<div class="col-xs-3">No:</div>
 				<div class="col-xs-5" id="print-talon"></div>
 				<div class="col-xs-2">POS:</div>
-				<div class="col-xs-2 text-right" id="print-pos">${user.branchID}</div>
+				<div class="col-xs-2 text-right" id="print-pos">${cash.posNum}</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-3">Огноо:</div>

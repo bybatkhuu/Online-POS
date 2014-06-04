@@ -144,6 +144,16 @@ function initTypes()
 {
 	$.ajax(
 	{
+		url: "get-asset-accounts",
+		success: function(result)
+		{
+			$("#assetAccounts").html(result);
+		}
+	});
+	$("#assetAccounts").select2();
+	
+	$.ajax(
+	{
 		url: "get-customers",
 		success: function(result)
 		{

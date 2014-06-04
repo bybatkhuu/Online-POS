@@ -83,7 +83,7 @@ public class AddItemServlet extends HttpServlet
 		    	{
 		    		try
 		    		{
-		    			item = getNewItem(barcode, user.getBranchID(), quantity);
+		    			item = getNewItem(barcode, 1, quantity);
 					}
 		    		catch (SQLException e)
 		    		{

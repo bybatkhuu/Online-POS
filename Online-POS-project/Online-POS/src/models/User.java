@@ -11,7 +11,6 @@ public class User implements Serializable
 	private String status;
 	private int roleID;
 	private String cashName;
-	private int branchID;
 	
 	public User()
 	{
@@ -24,9 +23,8 @@ public class User implements Serializable
 		this.status = user.getStatus();
 		this.roleID = user.getRoleID();
 		this.cashName = user.getCashName();
-		this.branchID = user.getBranchID();
 	}
-	public User(int id, String userName, String password, String status, int roleID, String cashName, int branchID)
+	public User(int id, String userName, String password, String status, int roleID, String cashName)
 	{
 		this.id = id;
 		this.userName = userName;
@@ -34,7 +32,6 @@ public class User implements Serializable
 		this.status = status;
 		this.roleID = roleID;
 		this.cashName = cashName;
-		this.branchID = branchID;
 	}
 	
 	public int getId()
@@ -89,14 +86,5 @@ public class User implements Serializable
 	public void setCashName(String cashName)
 	{
 		this.cashName = cashName;
-	}
-	
-	public int getBranchID()
-	{
-		return branchID;
-	}
-	public void setBranchID(int branchID)
-	{
-		this.branchID = branchID;
 	}
 }

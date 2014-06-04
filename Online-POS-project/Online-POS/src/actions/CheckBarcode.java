@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import models.User;
+import models.Cash;
 
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -38,16 +38,16 @@ public class CheckBarcode extends HttpServlet
 		
 	    int hasBarcode = 0;
 		String barcode = (String) request.getParameter("barcode");
-		User user = (User) session.getAttribute("user");
-		if (barcode != null && user != null)
+		Cash cash = (Cash) session.getAttribute("cash");
+		if (barcode != null && cash != null)
 		{
 			if (!Utilities.isEmpty(barcode))
 			{
 				PostgreSQLJDBC db = new PostgreSQLJDBC();
 				if (db.createConnection())
 				{
-					String branchID = Integer.toString(user.getBranchID());
-					String[] parameters = { barcode, branchID};
+					String cashID = Integer.toString(cash.getId());
+					String[] parameters = { barcode, cashID };
 					try
 					{
 						if (db.execute("bh_checkBarcode", parameters))
