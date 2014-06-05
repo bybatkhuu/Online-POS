@@ -12,6 +12,7 @@ public class Item implements Serializable
 	private int unitID;
 	private String unit;
 	private double quantity;
+	private String assetAcc;
 	/*private double salePrice;
 	private double saleQuantity;*/
 	private double total;
@@ -94,5 +95,14 @@ public class Item implements Serializable
 	public double getTotal()
 	{
 		return total;
+	}
+
+	public String getAssetAcc()
+	{
+		return assetAcc;
+	}
+	public void setAssetAcc(String assetAcc)
+	{
+		this.assetAcc = assetAcc;
 	}
 }

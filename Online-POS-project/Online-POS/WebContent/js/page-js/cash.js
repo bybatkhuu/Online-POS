@@ -330,8 +330,8 @@ function addItem(barcode, quantity)
 				  		url: "check-barcode",
 					  	data:
 					  	{
-					  		"barcode" : barcode,
-					  		"assetAcc" : $("#assetAccounts").val().trim()
+					  		"barcode": barcode,
+					  		"assetAcc": $("#assetAccounts").val().trim()
 					  	},
 					  	success: function(result)
 					  	{
@@ -345,8 +345,9 @@ function addItem(barcode, quantity)
 					  		url: "add-item",
 						  	data:
 						  	{
-						  		"barcode" : barcode,
-							  	"quantity" : quantity
+						  		"barcode": barcode,
+							  	"quantity": quantity,
+							  	"assetAcc": $("#assetAccounts").val().trim()
 					      	},
 					      	success: function(result)
 					      	{
@@ -371,7 +372,7 @@ function addItem(barcode, quantity)
     			  	}
 				  	else
 				  	{
-				  		alert("'" + barcode + "' гэсэн баркод танай салбарт олдохгүй байна!");
+				  		alert("'" + barcode + "' гэсэн баркодтай бараа энэ тасагт олдохгүй байна!");
     			  	}
 			  	}
 			  	else
@@ -706,7 +707,48 @@ function initEventHandlers()
 		{
 			$("#addItem").prop("disabled", true);
 		}
-	});	
+	});
+	
+	$("#cardNumber").keypress(function(event)
+	{
+		if(event.which == 13)
+		{
+			var hasCardNumber = 0;
+			event.preventDefault();
+			$.ajax(
+			{
+				url: "check-card-number",
+				data:
+				{
+					"cardNumber": $("#cardNumber").val()
+				},
+				success: function(result)
+				{
+					hasCardNumber = result;
+				}
+			});
+			
+			if (hasCardNumber == 1)
+			{
+				$.ajax(
+				{
+					url: "get-card-users",
+					data:
+					{
+						"cardNumber": $("#cardNumber").val()
+					},
+					success: function(result)
+					{
+						
+					}
+				});
+			}
+			else
+			{
+				alert("Таны оруулсан картын дугаар бүртгэлгүй байна!");
+			}
+		}
+	});
 	
 	$("#barcode").keypress(function(event)
 	{

@@ -188,6 +188,13 @@
                           		<c:when test="${cash.assetType == 'Select'}">
                           			<div class="row">
 		                          		<div class="col-xs-12 col-sm-12">
+		                          			<label for="assetAccounts">
+		                          				<b>Барааны тасаг:</b>
+		                          			</label>
+		                          		</div>
+		                          	</div>
+                          			<div class="row">
+		                          		<div class="col-xs-12 col-sm-12">
 		                          			<select id="assetAccounts" class="width-100">
 		                          			</select>
 		                          		</div>
@@ -406,7 +413,7 @@
                               							<label for="cardNumber">Карт №: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<input type="text" name="cardNumber" class="form-control input-sm" id="cardNumber" />
+                              							<input type="text" name="cardNumber" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
                               						</div>
                               					</div>
                               					<div class="row">
@@ -424,13 +431,13 @@
                               						</div>
                               						<div class="col-sm-3">
                               							<span class="input-icon input-icon-right">
-                              								<input type="text" name="discountPercent" class="form-control input-sm" id="discountPercent" />
+                              								<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
                               								<i class="green"></i>
                               							</span>
                               						</div>
                               						<div class="col-sm-1">%</div>
                               						<div class="col-sm-4">
-                              							<input type="text" name="discountPercent" class="form-control input-sm" id="discountPercent" />
+                              							<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountNumber" disabled />
                               						</div>
                               					</div>
                               				</div>

@@ -51,6 +51,7 @@ public class AddItemServlet extends HttpServlet
 		    }
 		    //User user = (User) session.getAttribute("user");
 		    String barcode = request.getParameter("barcode");
+		    String assetAcc = request.getParameter("assetAcc");
 		    double quantity = 0;
 		    try
 		    {
@@ -61,7 +62,8 @@ public class AddItemServlet extends HttpServlet
 		    	quantity = 0;
 		    	System.out.println(e.toString());
 		    }
-		    if ((barcode != null) && (!barcode.trim().equals("")))
+		    
+		    if ((barcode != null) && (!barcode.trim().equals("")) && (assetAcc != null) && (!assetAcc.trim().equals("")))
 		    {
 		    	try
 		    	{
@@ -82,7 +84,7 @@ public class AddItemServlet extends HttpServlet
 		    	{
 		    		try
 		    		{
-		    			item = getNewItem(barcode, 1, quantity);
+		    			item = getNewItem(barcode, assetAcc, quantity);
 					}
 		    		catch (SQLException e)
 		    		{
@@ -161,7 +163,7 @@ public class AddItemServlet extends HttpServlet
 		return(null);
 	}
 	
-	private Item getNewItem(String barcode, int branchID, double quantity) throws SQLException
+	private Item getNewItem(String barcode, String assetAcc, double quantity) throws SQLException
 	{
 		Item item = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
@@ -194,10 +196,11 @@ public class AddItemServlet extends HttpServlet
 					}
 				}
 				
-				String[] params = { String.valueOf(branchID), String.valueOf(item.getId()) };
+				String[] params = { assetAcc, String.valueOf(item.getId()) };
 				tmpCell = db.getCell("bh_getPrice", params);
 				item.setPrice(Double.parseDouble(tmpCell.getValue()));
 				item.setQuantity(quantity);
+				item.setAssetAcc(assetAcc);
 			}
 			
 			tmpCell = null;

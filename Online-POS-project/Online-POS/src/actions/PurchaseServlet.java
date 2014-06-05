@@ -79,7 +79,7 @@ public class PurchaseServlet extends HttpServlet
 			    				Cell cell = null;
 			    				for (Item item : itemList)
 			    				{
-			    					List<Cell> cellList = new ArrayList<>();
+			    					List<Cell> cellList = new ArrayList<Cell>();
 			    					cell = new Cell("item_id", Integer.toString(item.getId()));
 			    					cellList.add(cell);
 			    					cell = new Cell("order_id", orderId.getValue());
@@ -89,6 +89,8 @@ public class PurchaseServlet extends HttpServlet
 			    					cell = new Cell("price", Double.toString(item.getPrice()));
 			    					cellList.add(cell);
 			    					cell = new Cell("total", Double.toString(item.getTotal()));
+			    					cellList.add(cell);
+			    					cell = new Cell("asset_acc", item.getAssetAcc());
 			    					cellList.add(cell);
 			    					db.insert("pos_transactions", cellList);
 			    				}

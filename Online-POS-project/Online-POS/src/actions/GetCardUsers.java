@@ -13,14 +13,13 @@ import javax.servlet.http.HttpSession;
 
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
-import utils.Utilities;
 
-@WebServlet("/check-barcode")
-public class CheckBarcode extends HttpServlet
+@WebServlet("/get-card-users")
+public class GetCardUsers extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-    public CheckBarcode()
+    public GetCardUsers()
     {
         super();
     }
@@ -34,35 +33,27 @@ public class CheckBarcode extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-	    int hasBarcode = 0;
-		String barcode = (String) request.getParameter("barcode");
-		String assetAcc = (String) request.getParameter("assetAcc");
-		if (barcode != null)
+		String cardNumber = (String) request.getParameter("cardNumber");
+		if (cardNumber != null && !cardNumber.equalsIgnoreCase(""))
 		{
-			if (!Utilities.isEmpty(barcode))
+			PostgreSQLJDBC db = new PostgreSQLJDBC();
+			if (db.createConnection())
 			{
-				PostgreSQLJDBC db = new PostgreSQLJDBC();
-				if (db.createConnection())
+				String[] parameter = { cardNumber };
+				try
 				{
-					String[] parameters = { barcode, assetAcc };
-					try
-					{
-						if (db.execute("bh_checkBarcode", parameters))
-						{
-							hasBarcode = 1;
-						}
-					}
-					catch (SQLException e)
-					{
-						System.out.println("Error: Can't execute bh_checkBarcode() function!\nMessage: " + e.toString());
-					}
+					db.execute("bh_getCardUsers", parameter);
+				}
+				catch (SQLException e)
+				{
+					System.out.println("Error: Can't execute bh_getCardUsers() function!\nMessage: " + e.toString());
 				}
 			}
 		}
 		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
-		out.print(hasBarcode);
+		out.println("");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
