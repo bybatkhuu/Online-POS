@@ -7,7 +7,7 @@ public class Cash implements Serializable
 {
 	private int id;
 	private String ip;
-	private int branchID;
+	private int branchId;
 	private int posNum;
 	private String assetType;
 	private String assetAcc;
@@ -19,14 +19,14 @@ public class Cash implements Serializable
 	{
 		this.id = cash.getId();
 		this.ip = cash.getIp();
-		this.branchID = cash.getBranchID();
+		this.branchId = cash.getBranchId();
 		this.posNum = cash.getPosNum();
 	}
-	public Cash(int id, String ip, int branchID, int posNum)
+	public Cash(int id, String ip, int branchId, int posNum)
 	{
 		this.id = id;
 		this.ip = ip;
-		this.branchID = branchID;
+		this.branchId = branchId;
 		this.posNum = posNum;
 	}
 	
@@ -48,13 +48,13 @@ public class Cash implements Serializable
 		this.ip = ip;
 	}
 	
-	public int getBranchID()
+	public int getBranchId()
 	{
-		return branchID;
+		return branchId;
 	}
-	public void setBranchID(int branchID)
+	public void setBranchId(int branchId)
 	{
-		this.branchID = branchID;
+		this.branchId = branchId;
 	}
 	
 	public int getPosNum()

@@ -62,6 +62,13 @@ function checkTime(i)
 
 function ajaxSetup()
 {
+	$("#cardUsersDialog").dialog(
+	{
+		autoOpen: false,
+		modal: true,
+		width: 700
+	});
+	
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype,
 	{
 		_title: function(title)
@@ -211,7 +218,7 @@ function initSearchDialog()
 		autoOpen: false,
 		modal: true,
 		width: 550,
-		height: 500
+		height: 550
 	});
 }
 
@@ -265,7 +272,7 @@ function initTableSlim()
 {
 	$('#mainTableSlim').slimScroll(
     {
-      	height: '356px',
+      	height: '370px',
       	railVisible: true,
       	size: '12px'
     });
@@ -594,6 +601,10 @@ function initEventHandlers()
 			event.preventDefault();
 		  	$("#barcode").focus();
 	  	}
+		else if (event.which == 115)
+	  	{
+			event.preventDefault();
+	  	}
 	  	else if (event.which == 116)
 	  	{
 	  		event.preventDefault();
@@ -739,7 +750,32 @@ function initEventHandlers()
 					},
 					success: function(result)
 					{
-						
+						$("#cardUsersBody").html(result);
+						$("#cardUsersBody tr").click(function(event)
+						{
+							$("#cardOwner").text($(this).children().eq(0).text());
+							$("#discountPercent").val($(this).children().eq(3).text());
+							$("#discountType").val($(this).children().eq(2).text());
+							$("#cardUsersDialog").dialog("close");
+							$.ajax(
+							{
+								url: "set-card",
+								data:
+								{
+									"cardId": $(this).attr("id"),
+									"customerId": $(this).children().eq(0).attr("id"),
+									"cardNumber": $(this).children().eq(1).text(),
+									"type": $(this).children().eq(2).text(),
+									"discountPercent": $(this).children().eq(3).text(),
+									"partOwner": $(this).children().eq(4).text()
+								},
+								success: function(result)
+								{
+									
+								}
+							});
+						});
+						$("#cardUsersDialog").dialog("open");
 					}
 				});
 			}

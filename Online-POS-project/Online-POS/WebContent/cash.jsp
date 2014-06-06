@@ -421,10 +421,10 @@
                               							<label for="owner">Эзэмшигч: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<div id="owner"></div>
+                              							<div id="cardOwner" class="bolder"></div>
                               						</div>
                               					</div>
-                              					<div class="hr-4 hr-double dotted"></div>
+                              					<div class="hr-2 hr-double dotted"></div>
                               					<div class="row">
                               						<div class="col-sm-4">
                               							<label for="discountPercent">Хөнгөлөлт: </label>
@@ -432,12 +432,10 @@
                               						<div class="col-sm-3">
                               							<span class="input-icon input-icon-right">
                               								<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
-                              								<i class="green"></i>
                               							</span>
                               						</div>
-                              						<div class="col-sm-1">%</div>
-                              						<div class="col-sm-4">
-                              							<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountNumber" disabled />
+                              						<div class="col-sm-5">
+                              							<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountType" disabled />
                               						</div>
                               					</div>
                               				</div>
@@ -649,6 +647,9 @@
                 Баркод <b class="dark">F3</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
+                Хөнгөлөлт устгах <b class="dark">F4</b>
+              </div>
+              <div class="col-xs-4 col-sm-2 blue center">
                 Тоо засах <b class="dark">F5</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
@@ -715,6 +716,26 @@
     			</li>
     		</ul>
     	</div>
+	</div>
+	
+	<div id="cardUsersDialog" title="Картын хэрэглэгчид">
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Хэрэглэгч</th>
+							<th>Картын дугаар</th>
+							<th>Ангилал</th>
+							<th>Хөнгөлөлт %</th>
+							<th>Хамтран эзэмшигч</th>
+						</tr>
+					</thead>
+					<tbody id="cardUsersBody">
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 	
 	<div id="searchItemsDialog" title="Бараа хайх">
