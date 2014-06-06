@@ -757,13 +757,18 @@ function initEventHandlers()
 							$("#discountPercent").val($(this).children().eq(3).text());
 							$("#discountType").val($(this).children().eq(2).text());
 							$("#cardUsersDialog").dialog("close");
+							var tmpStr = $(this).attr("id").split("-");
+							var cardId = tmpStr[1];
+							tmpStr = $(this).children().eq(0).attr("id").split("-");
+							var customerId = tmpStr[1];
 							$.ajax(
 							{
 								url: "set-card",
 								data:
 								{
-									"cardId": $(this).attr("id"),
-									"customerId": $(this).children().eq(0).attr("id"),
+									"cardId": cardId,
+									"customerId": customerId,
+									"customerName": $(this).children().eq(0).text(),
 									"cardNumber": $(this).children().eq(1).text(),
 									"type": $(this).children().eq(2).text(),
 									"discountPercent": $(this).children().eq(3).text(),
