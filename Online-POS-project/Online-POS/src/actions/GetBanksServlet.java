@@ -58,20 +58,27 @@ public class GetBanksServlet extends HttpServlet
 			for (int i = 0; i < rowList.size(); i++)
 			{
 				out.print("<option value='");
+				String id = "";
+				String assetAcc = "";
+				String name = "";
 				for (Cell cell : rowList.get(i).getCellList())
 				{
 					switch (cell.getColumn())
 					{
 						case "id":
-							out.print(cell.getValue() + "'>");
+							id = cell.getValue();
+							break;
+						case "asset_acc":
+							assetAcc = cell.getValue();
 							break;
 						case "name":
-							out.print(cell.getValue());
+							name = cell.getValue();
 							break;
 						default:
 							break;
 					}
 				}
+				out.print(id + "'>" + assetAcc + " - " + name);
 				out.println("</option>");
 			}
 		}

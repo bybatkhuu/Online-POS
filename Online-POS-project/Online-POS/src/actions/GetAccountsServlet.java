@@ -64,6 +64,7 @@ public class GetAccountsServlet extends HttpServlet
 					{
 						case "acc_no":
 							out.print(cell.getValue() + "'>");
+							out.print(cell.getValue() + " - ");
 							break;
 						case "description":
 							out.print(cell.getValue());

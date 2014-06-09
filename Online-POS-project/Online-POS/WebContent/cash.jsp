@@ -5,6 +5,7 @@
 <%@ page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)
@@ -18,6 +19,7 @@
 			response.sendRedirect("login.jsp?message=" + status);
 		}
 	}
+	DecimalFormat format = new DecimalFormat("###############.##");
 %>
 <!DOCTYPE html>
 <html lang="mn">
@@ -153,7 +155,7 @@
                               <label for="cash" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Кассчин:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="cash" value="${user.userName}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="cash" disabled />
+                                  <input type="text" name="cash" value="${user.cashName}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="cash" disabled />
                                   <span class="input-group-addon input-sm">
                                       <i class="bhicon bhicon-cash bh-icon-size-15"></i>
                                   </span>
@@ -214,55 +216,31 @@
                                     <b>Тоо:</b>
                                   </label>
                                   <div class="input-group col-xs-12">
-                                    <input type="text" name="quantity" value="<%
-                                    		DecimalFormat format = new DecimalFormat("###############.##");
-                                    		if (session.getAttribute("itemList") != null)
-                                    		{
-                                    			@SuppressWarnings("unchecked")
-                                      			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                                      			if (itemList != null && !itemList.isEmpty()) 
-                                    	    	{
-                                      				Item item = itemList.get(itemList.size() - 1);
-                                      				Double result = item.getQuantity() - (int)(item.getQuantity());
-    	                              				if (result != 0)
-    	                              				{
-    	                              					out.println(item.getQuantity());
-    	                              				}
-    	                              				else
-    	                              				{
-    	                              					out.println((int)item.getQuantity());
-    	                              				}
-                                    	    	}
-                                      			else
-                                            	{
-                                      				out.print("1");
-                                            	}
-                                    		}
-                                    		else
-                                    		{
-                                    			out.print("1");
-                                    		}
-                                    %>" class="form-control text-right bolder dark bh-input-skin-1" id="quantity" pattern="[0-9]{1,9}" tabindex="2" autocomplete="off" />
+                                    <input type="text" name="quantity"
+                                    	<c:choose>
+                                    		<c:when test="${itemList.size() > 0}">
+                                    			<c:forEach items="${itemList}" var="item" varStatus="status">
+		        									<c:if test="${status.last}">
+		        										value="<fmt:formatNumber type="number" pattern="#############.###" value="${item.quantity}" />"
+		        									</c:if>
+		    									</c:forEach>
+                                    		</c:when>
+                                    		<c:otherwise>
+                                    			value="1"
+                                    		</c:otherwise>
+    									</c:choose>
+    									class="form-control text-right bolder dark bh-input-skin-1" id="quantity" pattern="[0-9]{1,9}" tabindex="2" autocomplete="off" />
                                     <span class="input-group-addon bh-padding-6" style="font-size: 11px;" id="unit">
-                                    	<%
-                                    		if (session.getAttribute("itemList") != null)
-                                    		{
-                                    			@SuppressWarnings("unchecked")
-                                      			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                                      			if (itemList != null && !itemList.isEmpty())
-                                    	    	{
-                                      				out.print(itemList.get(itemList.size() - 1).getUnit());
-                                    	    	}
-                                      			else
-                                        		{
-                                        			out.print("ш");
-                                        		}
-                                    		}
-                                    		else
-                                    		{
-                                    			out.print("ш");
-                                    		}
-                                    	%>
+                                    	<c:choose>
+                                    		<c:when test="${itemList.size() > 0}">
+                                    			<c:forEach items="${itemList}" var="item" varStatus="status">
+		        									<c:if test="${status.last}">
+		        										${item.unit}
+		        									</c:if>
+		    									</c:forEach>								
+                                    		</c:when>
+                                    		<c:otherwise>ш</c:otherwise>
+    									</c:choose>
                                     </span>
                                   </div>
                                 </div>
@@ -290,17 +268,19 @@
                                 	Барааны нэр:
                                 </label>
                                 <div class="col-xs-12 col-sm-7">
-                                  <input type="text" name="itemName" value="<%
-                                    		if (session.getAttribute("itemList") != null)
-                                    		{
-                                    			@SuppressWarnings("unchecked")
-                                      			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                                      			if (itemList != null && !itemList.isEmpty())
-                                    	    	{
-                                      				out.print(itemList.get(itemList.size() - 1).getName());
-                                    	    	}
-                                    		}
-                                    	%>" class="form-control input-sm dark text-right bh-input-skin-1" id="itemName" disabled />
+                                  <input type="text" name="itemName"
+                                  	<c:choose>
+                                    	<c:when test="${itemList.size() > 0}">
+                                    		<c:forEach items="${itemList}" var="item" varStatus="status">
+		        								<c:if test="${status.last}">
+		        									value="${item.name}"
+		        								</c:if>
+		    								</c:forEach>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                    		value=""
+                                    	</c:otherwise>
+    								</c:choose> class="form-control input-sm dark text-right bh-input-skin-1" id="itemName" disabled />
                                 </div>
                               </div>
                             </div>
@@ -311,26 +291,20 @@
                                 	Үнэ:
                                 </label>
                                 <div class="col-xs-12 col-sm-7">
-                                  <input type="text" name="unitPrice" value="<%
-                                    		if (session.getAttribute("itemList") != null)
-                                    		{
-                                    			@SuppressWarnings("unchecked")
-                                      			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                                      			if (itemList != null && !itemList.isEmpty())
-                                    	    	{
-                                      				Item item = itemList.get(itemList.size() - 1);
-    	                              				out.println(format.format(item.getPrice()));
-                                    	    	}
-                                      			else
-                                        		{
-                                        			out.print("0");
-                                        		}
-                                    		}
-                                    		else
-                                    		{
-                                    			out.print("0");
-                                    		}
-                                    	%>" class="form-control input-sm dark text-right bh-input-skin-1" id="unitPrice" disabled />
+                                  <input type="text" name="unitPrice"
+                                  	<c:choose>
+                                    	<c:when test="${itemList.size() > 0}">
+                                    		<c:forEach items="${itemList}" var="item" varStatus="status">
+		        								<c:if test="${status.last}">
+		        									value="${item.price}"
+		        								</c:if>
+		    								</c:forEach>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                    		value="0"
+                                    	</c:otherwise>
+    								</c:choose>
+                                   	class="form-control input-sm dark text-right bh-input-skin-1" id="unitPrice" disabled />
                                 </div>
                               </div>
                             </div>
@@ -381,7 +355,7 @@
 			                    	</div>
 			                    </div>
        							<div class="col-sm-6">
-                             		<select class="width-100" style="margin-top: 5px !important" id="customers" disabled>
+                             		<select class="width-100" style="margin-top: 3px !important" id="customers" disabled>
                              		</select>
                              	</div>
                              </div>
@@ -398,7 +372,7 @@
 			                    	</div>
 			                    </div>
        							<div class="col-sm-6">
-                             		<select class="width-100" style="margin-top: 5px !important" id="banks" disabled>
+                             		<select class="width-100" style="margin-top: 3px !important" id="banks" disabled>
                              		</select>
                              	</div>
                              </div>
@@ -413,7 +387,7 @@
                               							<label for="cardNumber">Карт №: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<input type="text" name="cardNumber" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
+                              							<input type="text" name="cardNumber" value="${card.cardNumber}" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
                               						</div>
                               					</div>
                               					<div class="row">
@@ -421,7 +395,7 @@
                               							<label for="owner">Эзэмшигч: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<div id="cardOwner" class="bolder"></div>
+                              							<div id="cardOwner" class="bolder">${card.customer.name}</div>
                               						</div>
                               					</div>
                               					<div class="hr-2 hr-double dotted"></div>
@@ -431,11 +405,11 @@
                               						</div>
                               						<div class="col-sm-3">
                               							<span class="input-icon input-icon-right">
-                              								<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
+                              								<input type="text" name="discountPercent" value="${card.discountPercent}" class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
                               							</span>
                               						</div>
                               						<div class="col-sm-5">
-                              							<input type="text" name="discountPercent" class="form-control input-sm bolder dark bh-input-skin-1" id="discountType" disabled />
+                              							<input type="text" name="discountType" value="${card.type}" class="form-control input-sm bolder dark bh-input-skin-1" id="discountType" disabled />
                               						</div>
                               					</div>
                               				</div>
@@ -502,7 +476,7 @@
 	                      						out.println("<td>" + item.getUnit() + "</td>");
 	                      						out.println("<td class='text-right'>" + format.format(item.getPrice()) + "</td>");
 	                      						out.println("<td class='text-right'>" + format.format(item.getTotal()) + "</td>");
-	                      						out.println("<td class='text-right hidden'>0</td>");
+	                      						out.println("<td class='hidden discountTotal'>" + format.format(item.getDiscountTotal()) + "</td>");
 	                      						out.println("</tr>");
                               					i++;
                               				}
@@ -596,11 +570,34 @@
                                 </div>
                                 <div>
                                 	<div class="form-group">
-                                		<label for="calSale" class="col-xs-12 col-sm-6 control-label no-padding-right">
+                                		<label for="discountTotal" class="col-xs-12 col-sm-6 control-label no-padding-right">
                                 			<b>Хөнгөлөлт:</b>
                                 		</label>
                                 		<div class="col-xs-12 col-sm-6">
-                                			<input type="text" name="caleSale" value="0" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calSale" disabled />
+                                			<input type="text" name="discountTotal" value="<%
+	                                    		if (session.getAttribute("itemList") != null)
+	                  		              		{
+	                  		              			@SuppressWarnings("unchecked")
+	                  		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+	                  		              			if (itemList != null && !itemList.isEmpty())
+	                  		            	    	{
+	                  		              				double allDisTotal = 0;
+	                  		              				for (Item item : itemList)
+	                  		              				{
+	                  		              				allDisTotal = allDisTotal + item.getDiscountTotal();
+	                  		              				}
+	                  		              				out.print(format.format(allDisTotal));
+	                  		            	    	}
+	                  		              			else
+	                  		    					{
+	                  		    						out.print("0");
+	                  		    					}
+	                  		              		}
+	                  							else
+	                  							{
+	                  								out.print("0");
+	                  							}
+	                                      %>" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="discountTotal" disabled />
                                 		</div>
                                 	</div>
                                 </div>
@@ -927,7 +924,7 @@
 			<div class="row hidden">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Хөнгөлөлт:</div>
-				<div class="col-xs-4 text-right" id="print-sale">0</div>
+				<div class="col-xs-4 text-right" id="print-discount">0</div>
 			</div>
 			<div class="row hidden">
 				<div class="col-xs-4"></div>

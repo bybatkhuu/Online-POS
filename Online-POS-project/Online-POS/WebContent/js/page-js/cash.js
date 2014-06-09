@@ -3,7 +3,7 @@ var thQuant = 1;
 var thUnit = 2;
 var thPrice = 3;
 var thTotal = 4;
-var thSale = 5;
+var thDiscount = 5;
 
 $(document).ready(function()
 {
@@ -571,7 +571,7 @@ function loadPrintView()
 	$("#print-s").html($("#tableBody > tr").size());
 	
 	$("#print-cal-total").html($("#calTotal").val());
-	$("#print-sale").html($("#calSale").val());
+	$("#print-discount").html($("#discountTotal").val());
 	$("#print-total").html($("#payOff").val());
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());
@@ -763,7 +763,7 @@ function initEventHandlers()
 							var customerId = tmpStr[1];
 							$.ajax(
 							{
-								url: "set-card",
+								url: "set-discount-card",
 								data:
 								{
 									"cardId": cardId,
@@ -776,7 +776,16 @@ function initEventHandlers()
 								},
 								success: function(result)
 								{
-									
+									$("#tableBody").html(result);
+									$("#tableBody > tr").bind("click", function()
+									{
+										clickedRow($(this));
+									});
+									$("#tableBody > tr").bind("dblclick", function()
+									{
+										bindForm($(this));
+									});
+									checkAll();
 								}
 							});
 						});
@@ -1011,7 +1020,7 @@ function checkAll()
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
-			str = str + "<div class='space-4'></div>";
+			str = str + "<div class='space-2'></div>";
 		}
 	}
 	$("#print-items").html(str);
@@ -1036,6 +1045,7 @@ function checkAll()
 	if ($("#tableBody > tr").size() <= 0)
 	{
 		$("#calTotal").val("0");
+		$("#discountTotal").val("0");
 	  	$("#payOff").val("0");
 	  	$("#paid").prop("disabled", true);
 	  	$("#paid").val("0");
@@ -1046,7 +1056,6 @@ function checkAll()
 	{
 		$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
 		$("#clearButton").prop("disabled", false);
-		
 		var total = 0;
 	  	var rowSize = $("#tableBody > tr").size();
 	  	for (var i = 0; rowSize > i; i++)
@@ -1054,7 +1063,14 @@ function checkAll()
 	  		total = total + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).text());
 	  	}
 	  	$("#calTotal").val(total);
-	  	var payOff = total;
+	  	
+	  	var discountTotal = 0;
+	  	for (var i = 0; rowSize > i; i++)
+	  	{
+	  		discountTotal = discountTotal + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thDiscount).text());
+	  	}
+	  	$("#discountTotal").val(discountTotal);
+	  	var payOff = total - discountTotal;
 	  	if (payOff > 0)
 	  	{
 	  		$("#paid").prop("disabled", false);
@@ -1083,9 +1099,8 @@ function checkAll()
 	  	}
 	}
 	$("#print-cal-total").html($("#calTotal").val());
-	$("#print-sale").html($("#calSale").val());
+	$("#print-discount").html($("#discountTotal").val());
 	$("#print-total").html($("#payOff").val());
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());
 }
-

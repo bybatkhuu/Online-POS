@@ -7,15 +7,18 @@ public class Item implements Serializable
 {
 	private int id;
 	private String name;
-	private double price;
-	private String description;
 	private int unitID;
 	private String unit;
-	private double quantity;
 	private String assetAcc;
+	private double quantity;
+	private double price;
+	private double discountPrice;
+	private float discountPercent;
+	private double total;
+	private double discountTotal;
+	private String description;
 	/*private double salePrice;
 	private double saleQuantity;*/
-	private double total;
 	
 	public Item()
 	{
@@ -37,16 +40,6 @@ public class Item implements Serializable
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-	
-	public double getPrice()
-	{
-		return price;
-	}
-	public void setPrice(double price)
-	{
-		this.price = price;
-		this.total = this.quantity * this.price;
 	}
 	
 	public String getDescription()
@@ -75,6 +68,20 @@ public class Item implements Serializable
 	{
 		this.unit = unit;
 	}
+	
+	public double getPrice()
+	{
+		return price;
+	}
+	public void setPrice(double price)
+	{
+		this.price = price;
+		this.total = this.quantity * this.price;
+		if (this.discountPrice <= 0)
+		{
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+	}
 
 	public double getQuantity()
 	{
@@ -84,17 +91,27 @@ public class Item implements Serializable
 	{
 		this.quantity = quantity;
 		this.total = this.quantity * this.price;
+		if (this.discountPrice <= 0)
+		{
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		else
+		{
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
 	}
-	
 	public void addQuantity(double quantity)
 	{
 		this.quantity = this.quantity + quantity;
 		this.total = this.quantity * this.price;
-	}
-
-	public double getTotal()
-	{
-		return total;
+		if (this.discountPrice <= 0)
+		{
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		else
+		{
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
 	}
 
 	public String getAssetAcc()
@@ -104,5 +121,48 @@ public class Item implements Serializable
 	public void setAssetAcc(String assetAcc)
 	{
 		this.assetAcc = assetAcc;
+	}
+
+	public double getDiscountPrice()
+	{
+		return discountPrice;
+	}
+	public void setDiscountPrice(double discountPrice)
+	{
+		if (discountPrice >= 0)
+		{
+			this.discountPrice = discountPrice;
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+	}
+	
+	public float getDiscountPercent()
+	{
+		return discountPercent;
+	}
+	public void setDiscountPercent(float discountPercent)
+	{
+		if (0 <= discountPercent && discountPercent <= 100)
+		{
+			this.discountPercent = discountPercent;
+			if (this.discountPrice <= 0)
+			{
+				this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+			}
+			else
+			{
+				this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+			}
+		}
+	}
+
+	public double getTotal()
+	{
+		return total;
+	}
+	
+	public double getDiscountTotal()
+	{
+		return discountTotal;
 	}
 }

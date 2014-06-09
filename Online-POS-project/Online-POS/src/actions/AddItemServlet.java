@@ -49,7 +49,6 @@ public class AddItemServlet extends HttpServlet
 		    {
 		    	itemList = new ArrayList<Item>();
 		    }
-		    //User user = (User) session.getAttribute("user");
 		    String barcode = request.getParameter("barcode");
 		    String assetAcc = request.getParameter("assetAcc");
 		    double quantity = 0;
