@@ -668,7 +668,7 @@
 		</div>
 	</div>
 	
-	<div id="searchItemsDialog" title="Бараа хайх">
+	<div id="searchItemsDialog">
 		<div class="col-sm-12">
 			<div class="row">
 				<form action="#" method="POST">
@@ -731,6 +731,9 @@
 								<th>Нэр</th>
 								<th>Баркод</th>
 								<th>Үнэ</th>
+                          		<c:if test="${cash.assetType == 'Select'}">
+									<th>Барааны тасаг</th>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody id="searchResultBody">

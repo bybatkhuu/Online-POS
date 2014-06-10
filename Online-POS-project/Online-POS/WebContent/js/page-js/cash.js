@@ -215,9 +215,11 @@ function initSearchDialog()
 {
 	$("#searchItemsDialog").dialog(
 	{
+		title: "<div class='widget-header'><h5>Бараа хайх</h5></div>",
+		title_html: true,
 		autoOpen: false,
 		modal: true,
-		width: 550,
+		width: 700,
 		height: 550
 	});
 }
@@ -272,7 +274,7 @@ function initTableSlim()
 {
 	$('#mainTableSlim').slimScroll(
     {
-      	height: '370px',
+      	height: '374px',
       	railVisible: true,
       	size: '12px'
     });
@@ -321,7 +323,7 @@ function initSearchSlider()
 	});
 }
 
-function addItem(barcode, quantity)
+function addItem(barcode, quantity, assetAcc)
 {
 	if (barcode != "")
   	{
@@ -338,7 +340,7 @@ function addItem(barcode, quantity)
 					  	data:
 					  	{
 					  		"barcode": barcode,
-					  		"assetAcc": $("#assetAccounts").val().trim()
+					  		"assetAcc": assetAcc
 					  	},
 					  	success: function(result)
 					  	{
@@ -354,7 +356,7 @@ function addItem(barcode, quantity)
 						  	{
 						  		"barcode": barcode,
 							  	"quantity": quantity,
-							  	"assetAcc": $("#assetAccounts").val().trim()
+							  	"assetAcc": assetAcc
 					      	},
 					      	success: function(result)
 					      	{
@@ -817,7 +819,7 @@ function initEventHandlers()
 		if(event.which == 13)
 		{
 			event.preventDefault();
-			addItem($("#barcode").val().trim(), $("#quantity").val().trim());
+			addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#assetAccounts").val().trim());
 		}
 	});
 	$("#quantity").keypress(function(event)
@@ -827,7 +829,7 @@ function initEventHandlers()
   			event.preventDefault();
   			if ($("#barcode").val() != "")
   			{
-  				addItem($("#barcode").val().trim(), $("#quantity").val().trim());
+  				addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#assetAccounts").val().trim());
   			}
   			else
   			{
@@ -859,7 +861,7 @@ function initEventHandlers()
   	$("#addItem").click(function(event)
   	{
   		event.prventDeafult();
-  		addItem($("#barcode").val().trim(), $("#quantity").val().trim());
+  		addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#assetAccounts").val().trim());
   	});
   	
   	$("#tableBody > tr").click(function()
@@ -998,7 +1000,7 @@ function initEventHandlers()
 	  				$("#searchResultBody > tr").dblclick(function(event)
 	  				{
 	  					event.preventDefault();
-	  					addItem($(this).children().eq(1).text().trim(), 1);
+	  					addItem($(this).children().eq(1).text().trim(), 1, $(this).children().eq(3).text().trim());
 	  					$("#searchResultBody > tr[class='success']").removeClass();
 	  					$("#searchItemsDialog").dialog("close");
 	  				});

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Cash;
+
 
 import utils.Cell;
 import utils.LoggedUser;
@@ -57,24 +59,45 @@ public class SearchItemsServlet extends HttpServlet
 		{
 	    	maxPrice = "";
 		}
+	    
 	    List<Row> rowList = null;
-		if (!itemName.trim().equalsIgnoreCase("") || !barcode.trim().equalsIgnoreCase(""))
-		{
-			//User user = (User) session.getAttribute("user");
-			PostgreSQLJDBC db = new PostgreSQLJDBC();
-			if (db.createConnection())
+	    Cash cash = (Cash) session.getAttribute("cash");
+	    if (cash != null)
+	    {
+			if (!itemName.trim().equalsIgnoreCase("") || !barcode.trim().equalsIgnoreCase(""))
 			{
-				String[] params = { itemName, barcode, minPrice, maxPrice };
-				try
+				PostgreSQLJDBC db = new PostgreSQLJDBC();
+				if (db.createConnection())
 				{
-					rowList = db.getRowList("bh_searchItems", params);
-				}
-				catch(SQLException e)
-				{
-					System.out.println("Error: Can't get Items by bh_searchItems()!\nMessage: " + e.toString());
+					String assetAcc = "";
+					if (cash.getAssetType().equalsIgnoreCase("Set"))
+					{
+						assetAcc = cash.getAssetAcc();
+						String[] params = { itemName, barcode, minPrice, maxPrice, assetAcc };
+						try
+						{
+							rowList = db.getRowList("bh_searchItems1", params);
+						}
+						catch (SQLException e)
+						{
+							System.out.println("Error: Can't get Items by bh_searchItems1()!\nMessage: " + e.toString());
+						}
+					}
+					else
+					{
+						String[] params = { itemName, barcode, minPrice, maxPrice };
+						try
+						{
+							rowList = db.getRowList("bh_searchItems2", params);
+						}
+						catch (SQLException e)
+						{
+							System.out.println("Error: Can't get Items by bh_searchItems2()!\nMessage: " + e.toString());
+						}
+					}
 				}
 			}
-		}
+	    }
 		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
@@ -97,6 +120,23 @@ public class SearchItemsServlet extends HttpServlet
 		    					break;
 		    				case "price":
 		    					out.println("<td>" + cell.getValue() + "</td>");
+		    					break;
+		    				case "asset_acc":
+		    					if (cash != null)
+		    					{
+		    						if (cash.getAssetType().equalsIgnoreCase("Set"))
+		    						{
+		    							out.println("<td class='hidden'>" + cell.getValue() + "</td>");
+		    						}
+		    						else
+		    						{
+		    							out.println("<td>" + cell.getValue() + "</td>");
+		    						}
+		    					}
+		    					else
+		    					{
+		    						out.println("<td></td>");
+		    					}
 		    					break;
 		    				case "item_id":
 		    					out.println("<td class='hidden'>" + cell.getValue() + "</td>");
