@@ -359,20 +359,7 @@ function addItem(barcode, quantity)
 					      	success: function(result)
 					      	{
 					      		$("#tableBody").html(result);
-					      		$("#tableBody > tr").bind("click", function()
-						    	{
-					      			clickedRow($(this));
-						    	});
-					      		$("#tableBody > tr").bind("dblclick", function()
-						    	{
-					      			bindForm($(this));
-								});
-					    	  	$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
-					    	  	$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
-					    	  	$("#unit").text($("#tableBody > tr[class='success']").children().eq(thUnit).text());
-					    	  	$("#quantity").val("1");
-					    	  	$("#barcode").val("");
-					    	  	$("#serial").val("");
+					      		initTableEvents();
 					    	  	checkAll();
 					      	}
 					  	});
@@ -405,8 +392,8 @@ function addItem(barcode, quantity)
 
 function bindForm(element)
 {
-	var oldQuant = parseFloat($(element).children().eq(thQuant).text());
-	var price = parseFloat($(element).children().eq(thPrice).text());
+	var oldQuant = parseFloat($(element).children().eq(thQuant).text().trim());
+	var price = parseFloat($(element).children().eq(thPrice).text().trim());
 	var id = $(element).attr("id");
 	$(element).children().first().next().html
 	(
@@ -445,6 +432,10 @@ function clickedRow(element)
 {
 	$("#tableBody > tr[class='success']").removeClass();
 	$(element).addClass("success");
+	$("#itemName").val($(element).children().eq(thName).text().trim());
+  	$("#unitPrice").val($(element).children().eq(thPrice).text().trim());
+  	$("#unit").text($(element).children().eq(thUnit).text().trim());
+  	$("#quantity").val("1");
 	checkAll();
 }
 function update(id, newQuant)
@@ -460,14 +451,7 @@ function update(id, newQuant)
 		success: function(result)
 		{
 			$("#tableBody").html(result);
-			$("#tableBody > tr").bind("click", function()
-			{
-				clickedRow($(this));
-			});
-		    $("#tableBody > tr").bind("dblclick", function()
-			{
-		    	bindForm($(this));
-			});
+			initTableEvents();
 			checkAll();
 		}
 	});
@@ -513,7 +497,7 @@ function purchase()
 	  		var jsonData = eval("(" + result + ")");
 	  		if (jsonData.isPurchased != "true")
 	  		{
-	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cash").val().trim());
+	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cashier").val().trim());
 	  			//location.reload(true);
 	  		}
 	  		else
@@ -534,6 +518,10 @@ function purchase()
   		$("#unit").text("ш");
   		$("#unitPrice").val("");
   		$("#itemName").val("");
+  		$("#cardNumber").val("");
+  		$("#cardOwner").text("");
+  		$("#discountPercent").val("");
+  		$("#discountType").val("");
   		checkAll();
   		$("#barcode").focus();
 	}
@@ -549,7 +537,7 @@ function loadPrintView()
 	$("#print-talon").html($("#talon").val());
 	$("#print-pos").html($("#pos").val());
 	$("#print-date").html($("#time").html());
-	$("#print-cash").html($("#cash").val());
+	$("#print-cashier").html($("#cashier").val());
 	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
@@ -564,11 +552,11 @@ function loadPrintView()
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
-			str = str + "<div class='space-4'></div>";
+			str = str + "<div class='space-2'></div>";
 		}
 	}
 	$("#print-items").html(str);
-	$("#print-s").html($("#tableBody > tr").size());
+	$("#print-item-count").html($("#tableBody > tr").size());
 	
 	$("#print-cal-total").html($("#calTotal").val());
 	$("#print-discount").html($("#discountTotal").val());
@@ -576,6 +564,23 @@ function loadPrintView()
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());
 	
+}
+
+function initTableEvents()
+{
+	$("#tableBody > tr").bind("click", function()
+	{
+		clickedRow($(this));
+	});
+	$("#tableBody > tr").bind("dblclick", function()
+	{
+		bindForm($(this));
+	});
+	$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
+	$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text().trim());
+	$("#unit").text($("#tableBody > tr[class='success']").children().eq(thUnit).text().trim());
+	$("#quantity").val("1");
+    $("#barcode").val("");
 }
 
 function initEventHandlers()
@@ -604,6 +609,20 @@ function initEventHandlers()
 		else if (event.which == 115)
 	  	{
 			event.preventDefault();
+			$.ajax(
+			{
+				url: "remove-discount-card",
+				success: function(result)
+				{
+					$("#tableBody").html(result);
+					initTableEvents();
+					$("#cardNumber").val("");
+					$("#cardOwner").text("");
+					$("#discountPercent").val("");
+					$("#discountType").val("");
+					checkAll();
+				}
+			});
 	  	}
 	  	else if (event.which == 116)
 	  	{
@@ -648,10 +667,10 @@ function initEventHandlers()
 					  	}
 					  	$("#tableBody > tr[class='success']").removeClass();
 					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text());
+					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 				  	}
 				}
 			  	checkAll();
@@ -677,10 +696,10 @@ function initEventHandlers()
 					  	}
 					  	$("#tableBody > tr[class='success']").removeClass();
 					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text());
+					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 				  	}
 			  	}
 			  	checkAll();
@@ -753,9 +772,9 @@ function initEventHandlers()
 						$("#cardUsersBody").html(result);
 						$("#cardUsersBody tr").click(function(event)
 						{
-							$("#cardOwner").text($(this).children().eq(0).text());
-							$("#discountPercent").val($(this).children().eq(3).text());
-							$("#discountType").val($(this).children().eq(2).text());
+							$("#cardOwner").text($(this).children().eq(0).text().trim());
+							$("#discountPercent").val($(this).children().eq(3).text().trim());
+							$("#discountType").val($(this).children().eq(2).text().trim());
 							$("#cardUsersDialog").dialog("close");
 							var tmpStr = $(this).attr("id").split("-");
 							var cardId = tmpStr[1];
@@ -768,23 +787,16 @@ function initEventHandlers()
 								{
 									"cardId": cardId,
 									"customerId": customerId,
-									"customerName": $(this).children().eq(0).text(),
-									"cardNumber": $(this).children().eq(1).text(),
-									"type": $(this).children().eq(2).text(),
-									"discountPercent": $(this).children().eq(3).text(),
-									"partOwner": $(this).children().eq(4).text()
+									"customerName": $(this).children().eq(0).text().trim(),
+									"cardNumber": $(this).children().eq(1).text().trim(),
+									"type": $(this).children().eq(2).text().trim(),
+									"discountPercent": $(this).children().eq(3).text().trim(),
+									"partOwner": $(this).children().eq(4).text().trim()
 								},
 								success: function(result)
 								{
 									$("#tableBody").html(result);
-									$("#tableBody > tr").bind("click", function()
-									{
-										clickedRow($(this));
-									});
-									$("#tableBody > tr").bind("dblclick", function()
-									{
-										bindForm($(this));
-									});
+									initTableEvents();
 									checkAll();
 								}
 							});
@@ -895,9 +907,9 @@ function initEventHandlers()
   		if ($("#tableBody > tr").size() > 0)
   		{
   			$("#tableBody > tr:eq(" + ($("#tableBody > tr").size() - 1) + ")").addClass("success");
-  			$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
-	  		$("#quantity").val($("#tableBody > tr[class='success']").children().eq(thQuant).text());
-	  		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+  			$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text().trim());
+	  		$("#quantity").val($("#tableBody > tr[class='success']").children().eq(thQuant).text().trim());
+	  		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
   		}
 	  	else
 	  	{
@@ -986,7 +998,7 @@ function initEventHandlers()
 	  				$("#searchResultBody > tr").dblclick(function(event)
 	  				{
 	  					event.preventDefault();
-	  					addItem($(this).children().eq(1).text(), 1);
+	  					addItem($(this).children().eq(1).text().trim(), 1);
 	  					$("#searchResultBody > tr[class='success']").removeClass();
 	  					$("#searchItemsDialog").dialog("close");
 	  				});
@@ -1005,7 +1017,7 @@ function checkAll()
 	$("#print-talon").html($("#talon").val());
 	$("#print-pos").html($("#pos").val());
 	$("#print-date").html($("#time").html());
-	$("#print-cash").html($("#cash").val());
+	$("#print-cashier").html($("#cashier").val());
 	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
@@ -1024,7 +1036,7 @@ function checkAll()
 		}
 	}
 	$("#print-items").html(str);
-	$("#print-s").html($("#tableBody > tr").size());
+	$("#print-item-count").html($("#tableBody > tr").size());
 	
 	var barcode = $("#barcode").val();
 	var quantity = $("#quantity").val();
@@ -1050,24 +1062,24 @@ function checkAll()
 	  	$("#paid").prop("disabled", true);
 	  	$("#paid").val("0");
 	  	$("#return").val("0");
-	  	$("#tableTotal").val("Нийт: 0");
+	  	$("#itemCount").val("Нийт: 0");
 	}
 	else
 	{
-		$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
+		$("#itemCount").val("Нийт: " + $("#tableBody > tr").size());
 		$("#clearButton").prop("disabled", false);
 		var total = 0;
 	  	var rowSize = $("#tableBody > tr").size();
 	  	for (var i = 0; rowSize > i; i++)
 	  	{
-	  		total = total + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).text());
+	  		total = total + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).text().trim());
 	  	}
 	  	$("#calTotal").val(total);
 	  	
 	  	var discountTotal = 0;
 	  	for (var i = 0; rowSize > i; i++)
 	  	{
-	  		discountTotal = discountTotal + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thDiscount).text());
+	  		discountTotal = discountTotal + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thDiscount).text().trim());
 	  	}
 	  	$("#discountTotal").val(discountTotal);
 	  	var payOff = total - discountTotal;

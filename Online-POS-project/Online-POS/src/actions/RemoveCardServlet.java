@@ -16,16 +16,16 @@ import models.Item;
 
 import utils.LoggedUser;
 
-@WebServlet("/update-item")
-public class UpdateItemServlet extends HttpServlet
+@WebServlet("/remove-discount-card")
+public class RemoveCardServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	
-    public UpdateItemServlet()
+
+    public RemoveCardServlet()
     {
         super();
     }
-    
+
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -36,40 +36,7 @@ public class UpdateItemServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-		int id = 0;
-		double newQuantity = 0;
-		try
-		{
-			id = Integer.parseInt(request.getParameter("id"));
-			newQuantity = Double.parseDouble(request.getParameter("newQuant"));
-		}
-		catch (Exception e)
-		{
-			id = 0;
-			newQuantity = 0;
-		}
-		
-		if (id != 0 && newQuantity > 0)
-		{
-			synchronized(session)
-		    {
-				if (session.getAttribute("itemList") != null)
-		    	{
-		    		List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-			    	if (itemList != null)
-			    	{
-			    		for (int i = 0; i < itemList.size() ; i++)
-			    		{
-			    			if (itemList.get(i).getId() == id)
-			    			{
-			    				itemList.get(i).setQuantity(newQuantity);
-			    			}
-			    		}
-			    		session.setAttribute("itemList", itemList);
-			    	}
-		    	}
-		    }
-		}
+		session.removeAttribute("card");
 		
 		List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 		String str = "";
@@ -78,7 +45,8 @@ public class UpdateItemServlet extends HttpServlet
 	    	DecimalFormat format = new DecimalFormat("###############.##");
 	    	for (int i = 0; itemList.size() > i ; i++)
 	    	{
-	    		if (itemList.get(i).getId() == id)
+	    		itemList.get(i).setDiscountPercent(0);
+	    		if (i == (itemList.size() - 1))
 		    	{
 		    		str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
 		    	}
@@ -95,6 +63,7 @@ public class UpdateItemServlet extends HttpServlet
 	    		str = str + "</tr>";
 	    	}
 	    }
+	    session.setAttribute("itemList", itemList);
 		
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();

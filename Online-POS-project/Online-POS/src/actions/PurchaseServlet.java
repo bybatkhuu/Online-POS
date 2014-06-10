@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Card;
 import models.Item;
 import models.User;
 
@@ -66,6 +67,7 @@ public class PurchaseServlet extends HttpServlet
 		    {
 				if (session.getAttribute("itemList") != null)
 		    	{
+					Card card = (Card) session.getAttribute("card");
 					List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 			    	if (itemList != null)
 			    	{
@@ -74,7 +76,12 @@ public class PurchaseServlet extends HttpServlet
 			    		{
 			    			try
 			    			{
-			    				String[] parameters = { Integer.toString(user.getId()), orderNum, type, otherId};
+			    				String cardId = "0";
+					    		if (card != null)
+					    		{
+					    			cardId = String.valueOf(card.getId());
+					    		}
+			    				String[] parameters = { Integer.toString(user.getId()), orderNum, type, otherId, cardId };
 			    				Cell orderId = db.getCell("bh_purchase", parameters);
 			    				Cell cell = null;
 			    				for (Item item : itemList)
@@ -89,6 +96,8 @@ public class PurchaseServlet extends HttpServlet
 			    					cell = new Cell("price", Double.toString(item.getPrice()));
 			    					cellList.add(cell);
 			    					cell = new Cell("total", Double.toString(item.getTotal()));
+			    					cellList.add(cell);
+			    					cell = new Cell("card_discount_percent", Float.toString(item.getDiscountPercent()));
 			    					cellList.add(cell);
 			    					cell = new Cell("asset_acc", item.getAssetAcc());
 			    					cellList.add(cell);
@@ -105,6 +114,7 @@ public class PurchaseServlet extends HttpServlet
 							}
 			    			isPurchased = true;
 			    			session.removeAttribute("itemList");
+			    			session.removeAttribute("card");
 			    		}
 			    	}
 		    	}

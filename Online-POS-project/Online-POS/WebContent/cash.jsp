@@ -1,11 +1,8 @@
-<%@ page import="java.util.List"%>
-<%@ page import="models.User"%>
-<%@ page import="models.Item"%>
 <%@ page import="utils.LoggedUser"%>
-<%@ page import="java.text.DecimalFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)
@@ -19,21 +16,20 @@
 			response.sendRedirect("login.jsp?message=" + status);
 		}
 	}
-	DecimalFormat format = new DecimalFormat("###############.##");
 %>
 <!DOCTYPE html>
 <html lang="mn">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="description" content="Infosystems LLC - Online POS: Main page">
+    <meta name="description" content="Infosystems LLC - Online POS: Cash page">
     <meta name="keywords" content="Infosystems POS, Online POS, POS, Infosystems LLC, Infosystems">
     <meta name="author" content="Infosystems LLC">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-    <title>Нүүр хуудас - [${company.name} ХХК]</title>
+    <title>Кассын хуудас - [${company.name} ХХК]</title>
     
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <link rel="apple-touch-icon" href="images/Logo.png">
@@ -152,10 +148,10 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label for="cash" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Кассчин:</label>
+                              <label for="cashier" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Кассчин:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="cash" value="${user.cashName}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="cash" disabled />
+                                  <input type="text" name="cashier" value="${user.cashName}" class="col-xs-12 col-sm-12 input-sm bolder dark bh-input-skin-1 bh-font-size-14" id="cashier" disabled />
                                   <span class="input-group-addon input-sm">
                                       <i class="bhicon bhicon-cash bh-icon-size-15"></i>
                                   </span>
@@ -216,27 +212,12 @@
                                     <b>Тоо:</b>
                                   </label>
                                   <div class="input-group col-xs-12">
-                                    <input type="text" name="quantity"
-                                    	<c:choose>
-                                    		<c:when test="${itemList.size() > 0}">
-                                    			<c:forEach items="${itemList}" var="item" varStatus="status">
-		        									<c:if test="${status.last}">
-		        										value="<fmt:formatNumber type="number" pattern="#############.###" value="${item.quantity}" />"
-		        									</c:if>
-		    									</c:forEach>
-                                    		</c:when>
-                                    		<c:otherwise>
-                                    			value="1"
-                                    		</c:otherwise>
-    									</c:choose>
-    									class="form-control text-right bolder dark bh-input-skin-1" id="quantity" pattern="[0-9]{1,9}" tabindex="2" autocomplete="off" />
+                                    <input type="text" name="quantity" value="1" class="form-control text-right bolder dark bh-input-skin-1" id="quantity" pattern="[0-9]{1,9}" tabindex="2" autocomplete="off" />
                                     <span class="input-group-addon bh-padding-6" style="font-size: 11px;" id="unit">
                                     	<c:choose>
                                     		<c:when test="${itemList.size() > 0}">
                                     			<c:forEach items="${itemList}" var="item" varStatus="status">
-		        									<c:if test="${status.last}">
-		        										${item.unit}
-		        									</c:if>
+		        									<c:if test="${status.last}">${item.unit}</c:if>
 		    									</c:forEach>								
                                     		</c:when>
                                     		<c:otherwise>ш</c:otherwise>
@@ -296,7 +277,7 @@
                                     	<c:when test="${itemList.size() > 0}">
                                     		<c:forEach items="${itemList}" var="item" varStatus="status">
 		        								<c:if test="${status.last}">
-		        									value="${item.price}"
+		        									value="<fmt:formatNumber type="number" value="${item.price}" pattern="###############.###" />"
 		        								</c:if>
 		    								</c:forEach>
                                     	</c:when>
@@ -392,7 +373,7 @@
                               					</div>
                               					<div class="row">
                               						<div class="col-sm-4">
-                              							<label for="owner">Эзэмшигч: </label>
+                              							<label for="cardOwner">Эзэмшигч: </label>
                               						</div>
                               						<div class="col-sm-8">
                               							<div id="cardOwner" class="bolder">${card.customer.name}</div>
@@ -405,7 +386,9 @@
                               						</div>
                               						<div class="col-sm-3">
                               							<span class="input-icon input-icon-right">
-                              								<input type="text" name="discountPercent" value="${card.discountPercent}" class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
+                              								<input type="text" name="discountPercent"
+                              									value="<fmt:formatNumber type="number" value="${card.discountPercent}" pattern="###############.###" />"
+                              									class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
                               							</span>
                               						</div>
                               						<div class="col-sm-5">
@@ -441,48 +424,28 @@
                                   <th>Нэгж</th>
                                   <th>Нэгж үнэ</th>
                                   <th>Нийт дүн</th>
-                                  <th class="hidden">Хөн %</th>
+                                  <th class="hidden">Хөнгөлөлт</th>
                                 </tr>
                               </thead>
                               <tbody id="tableBody">
-                              	<%
-                              		if (session.getAttribute("itemList") != null)
-                              		{
-                              			@SuppressWarnings("unchecked")
-                              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                              			if (itemList != null && !itemList.isEmpty())
-                            	    	{
-                              				int i = 1;
-                              				for (Item item : itemList)
-                              				{
-                              					if (itemList.size() == i)
-                              					{
-                              						out.println("<tr class='success' id='" + item.getId() + "'>");
-                              					}
-                              					else
-                              					{
-                              						out.println("<tr id='" + item.getId() + "'>");
-                              					}
-	                              				out.println("<td>" + item.getName() + "</td>");
-	                              				Double result = item.getQuantity() - (int)(item.getQuantity());
-	                              				if (result != 0)
-	                              				{
-	                              					out.println("<td class='text-right'>" + item.getQuantity() + "</td>");
-	                              				}
-	                              				else
-	                              				{
-	                              					out.println("<td class='text-right'>" + (int)item.getQuantity() + "</td>");
-	                              				}
-	                      						out.println("<td>" + item.getUnit() + "</td>");
-	                      						out.println("<td class='text-right'>" + format.format(item.getPrice()) + "</td>");
-	                      						out.println("<td class='text-right'>" + format.format(item.getTotal()) + "</td>");
-	                      						out.println("<td class='hidden discountTotal'>" + format.format(item.getDiscountTotal()) + "</td>");
-	                      						out.println("</tr>");
-                              					i++;
-                              				}
-                            	    	}
-                              		}
-                              	%>
+                              	<c:forEach items="${itemList}" var="item" varStatus="status">
+                              		<tr <c:if test="${status.last}">class="success"</c:if> id="${item.id}">
+                              			<td>${item.name}</td>
+                              			<td class="text-right">
+                              				<fmt:formatNumber type="number" value="${item.quantity}" pattern="###############.###" />
+                              			</td>
+                              			<td>${item.unit}</td>
+                              			<td class="text-right">
+                              				<fmt:formatNumber type="number" value="${item.price}" pattern="###############.###" />
+                              			</td>
+                              			<td class="text-right">
+                              				<fmt:formatNumber type="number" value="${item.total}" pattern="###############.###" />
+                              			</td>
+                              			<td class="hidden discountTotal">
+                              				<fmt:formatNumber type="number" value="${item.discountTotal}" pattern="###############.###" />
+                              			</td>
+                              		</tr>
+                              	</c:forEach>
                               </tbody>
                             </table>
                             <div id="pager">
@@ -496,7 +459,7 @@
                                 <form method="POST">
                                   <div class="row">
                                     <div class="col-xs-12 col-sm-4 col-md-3">
-                                      <input type="text" name="tableTotal" value="Нийт: 0" class="form-control input-sm bh-input-skin-1" id="tableTotal" disabled />
+                                      <input type="text" name="itemCount" value="Нийт: ${fn:length(itemList)}" class="form-control input-sm bh-input-skin-1" id="itemCount" disabled />
                                     </div>
                                     <div class="col-xs-6 col-sm-4 col-md-2">
                                       <button class="col-xs-12 btn btn-sm btn-warning" tabindex="-1" id="updateButton">
@@ -542,30 +505,13 @@
                                     <b>Нийт дүн:</b>
                                   </label>
                                   <div class="col-xs-12 col-sm-6">
-                                      <input type="text" name="calTotal" value="<%
-                                    		if (session.getAttribute("itemList") != null)
-                  		              		{
-                  		              			@SuppressWarnings("unchecked")
-                  		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-                  		              			if (itemList != null && !itemList.isEmpty())
-                  		            	    	{
-                  		              				double all = 0;
-                  		              				for (Item item : itemList)
-                  		              				{
-                  		              					all = all + item.getTotal();
-                  		              				}
-                  		              				out.print(format.format(all));
-                  		            	    	}
-                  		              			else
-                  		    					{
-                  		    						out.print("0");
-                  		    					}
-                  		              		}
-                  							else
-                  							{
-                  								out.print("0");
-                  							}
-                                      %>" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calTotal" disabled />
+                                  	<c:set var="allTotal" value="0" scope="page" />
+                                  	<c:forEach items="${itemList}" var="item" varStatus="status">
+                                  		<c:set var="allTotal" value="${allTotal + item.total}" />
+                                  	</c:forEach>
+                                    <input type="text" name="calTotal"
+                                    	value="<fmt:formatNumber type="number" value="${allTotal}" pattern="###############.###" />"
+                                    	class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="calTotal" disabled />
                                   </div>
                                 </div>
                                 <div>
@@ -574,30 +520,13 @@
                                 			<b>Хөнгөлөлт:</b>
                                 		</label>
                                 		<div class="col-xs-12 col-sm-6">
-                                			<input type="text" name="discountTotal" value="<%
-	                                    		if (session.getAttribute("itemList") != null)
-	                  		              		{
-	                  		              			@SuppressWarnings("unchecked")
-	                  		              			List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-	                  		              			if (itemList != null && !itemList.isEmpty())
-	                  		            	    	{
-	                  		              				double allDisTotal = 0;
-	                  		              				for (Item item : itemList)
-	                  		              				{
-	                  		              				allDisTotal = allDisTotal + item.getDiscountTotal();
-	                  		              				}
-	                  		              				out.print(format.format(allDisTotal));
-	                  		            	    	}
-	                  		              			else
-	                  		    					{
-	                  		    						out.print("0");
-	                  		    					}
-	                  		              		}
-	                  							else
-	                  							{
-	                  								out.print("0");
-	                  							}
-	                                      %>" class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="discountTotal" disabled />
+                                			<c:set var="allDisTotal" value="0" scope="page" />
+		                                  	<c:forEach items="${itemList}" var="item" varStatus="status">
+		                                  		<c:set var="allDisTotal" value="${allDisTotal + item.discountTotal}" />
+		                                  	</c:forEach>
+                                			<input type="text" name="discountTotal"
+                                				value="<fmt:formatNumber type="number" value="${allDisTotal}" pattern="###############.###" />"
+                                				class="form-control input-sm bolder dark text-right bh-input-skin-1 bh-input-bg-color-1" id="discountTotal" disabled />
                                 		</div>
                                 	</div>
                                 </div>
@@ -609,7 +538,9 @@
                                     <b>Төлөх:</b>
                                   </label>
                                   <div class="col-xs-12 col-sm-7">
-                                      <input type="text" name="payOff" value="0" class="form-control input-sm bolder dark text-right bh-font-size-18" id="payOff" disabled />
+                                  	<input type="text" name="payOff"
+                                  		value="<fmt:formatNumber type="number" value="${allTotal - allDisTotal}" pattern="###############.###" />"
+                                      	class="form-control input-sm bolder dark text-right bh-font-size-18" id="payOff" disabled />
                                   </div>
                                 </div>
                                 <div class="form-group has-success">
@@ -625,7 +556,9 @@
                                     <b>Хариулт:</b>
                                   </label>
                                   <div class="col-xs-12 col-sm-7">
-                                      <input type="text" name="return" value="0" class="form-control input-sm bolder dark text-right bh-font-size-16" id="return" disabled />
+                                  	<input type="text" name="return"
+                                  		value="<fmt:formatNumber type="number" value="-${allTotal - allDisTotal}" pattern="###############.###" />"
+                                  		class="form-control input-sm bolder dark text-right bh-font-size-16" id="return" disabled />
                                   </div>
                                 </div>
                               </div>
@@ -814,7 +747,7 @@
 		<div class="bh-print-body">
 			<div class="row">
 				<div class="col-xs-12 center bh-print-header">
-					SILVER PEN SHOP
+					${company.name} SHOP
 				</div>
 			</div>
 			<div class="space-4"></div>
@@ -830,130 +763,54 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-3">Кассчин:</div>
-				<div class="col-xs-9" id="print-cash">${user.userName}</div>
+				<div class="col-xs-9" id="print-cashier">${user.cashName}</div>
 			</div>
 			<div class="space-6 bh-print-separater"></div>
 			<div id="print-items">
-				<%
-					if (session.getAttribute("itemList") != null)
-					{
-						@SuppressWarnings("unchecked")
-						List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-						if (itemList != null && !itemList.isEmpty())
-						{
-							for (int i = 0; i < itemList.size(); i++)
-							{
-								out.println("<div class='row'>");
-			              			out.println("<div class='col-xs-12'>" + itemList.get(i).getName() + "</div>");
-		              			out.println("</div>");
-		              			out.println("<div class='row'>");
-		              			out.println("<div class='col-xs-4'></div>");
-			              			Double result = itemList.get(i).getQuantity() - (int)(itemList.get(i).getQuantity());
-		                          	if (result != 0)
-		                          	{
-		                          		out.println("<div class='col-xs-2'>" + itemList.get(i).getQuantity() + "</div>");
-		                          	}
-		                          	else
-		                          	{
-		                          		out.println("<div class='col-xs-2'>" + (int)itemList.get(i).getQuantity() + "</div>");
-		                          	}
-		                          	out.println("<div class='col-xs-3 text-right'>" + format.format(itemList.get(i).getPrice()) + "</div>");
-		                          	out.println("<div class='col-xs-3 text-right'>" + format.format(itemList.get(i).getTotal()) + "</div>");
-		              			out.println("</div>");
-		              			if (i < (itemList.size() - 1))
-		              			{
-		              				out.println("<div class='space-4'></div>");
-		              			}
-		              		}
-						}
-					}
-				%>
+				<c:forEach items="${itemList}" var="item" varStatus="status">
+					<div class='row'>
+						<div class='col-xs-12'>${item.name}</div>
+					</div>
+					<div class='row'>
+						<div class='col-xs-4'></div>
+						<div class='col-xs-2'>
+							<fmt:formatNumber type="number" value="${item.quantity}" pattern="###############.###" />
+						</div>
+						<div class='col-xs-3 text-right'>
+							<fmt:formatNumber type="number" value="${item.price}" pattern="###############.###" />
+						</div>
+						<div class='col-xs-3 text-right'>
+							<fmt:formatNumber type="number" value="${item.total}" pattern="###############.###" />
+						</div>
+					</div>
+					<c:if test="${!status.last}">
+						<div class='space-2'></div>
+					</c:if>
+                </c:forEach>
 			</div>
 			<div class="space-6 bh-print-separater"></div>
 			<div class="row">
 				<div class="col-xs-3">Н/тоо:</div>
-				<div class="col-xs-1" id="print-s">
-					<%
-						if (session.getAttribute("itemList") != null)
-						{
-							@SuppressWarnings("unchecked")
-			              	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-			              	if (itemList != null && !itemList.isEmpty())
-			            	{
-			              		out.print(itemList.size());
-			            	}
-			              	else
-			    			{
-			    				out.print("0");
-			    			}
-			            }
-						else
-						{
-							out.print("0");
-						}
-					%>
+				<div class="col-xs-1" id="print-item-count">
+					${fn:length(itemList)}
 				</div>
 				<div class="col-xs-4">Нийт дүн:</div>
 				<div class="col-xs-4 text-right" id="print-cal-total">
-					<%
-						if (session.getAttribute("itemList") != null)
-			          	{
-			              	@SuppressWarnings("unchecked")
-			              	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-			              	if (itemList != null && !itemList.isEmpty())
-			            	{
-			              		double all = 0;
-			              		for (Item item : itemList)
-			              		{
-			              			all = all + item.getTotal();
-			              		}
-			              		out.print(format.format(all));
-			              	}
-			              	else
-			              	{
-			              		out.print("0");
-			              	}
-			            }
-						else
-						{
-							out.print("0");
-						}
-					%>
+					<fmt:formatNumber type="number" value="${allTotal}" pattern="###############.###" />
 				</div>
 			</div>
-			<div class="row hidden">
+			<div class="row">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Хөнгөлөлт:</div>
-				<div class="col-xs-4 text-right" id="print-discount">0</div>
+				<div class="col-xs-4 text-right" id="print-discount">
+					<fmt:formatNumber type="number" value="${allDisTotal}" pattern="###############.###" />
+				</div>
 			</div>
-			<div class="row hidden">
+			<div class="row">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Төлөх:</div>
 				<div class="col-xs-4 text-right" id="print-total">
-					<%
-						if (session.getAttribute("itemList") != null)
-			          	{
-			              	@SuppressWarnings("unchecked")
-			              	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
-			              	if (itemList != null && !itemList.isEmpty())
-			            	{
-			              		double all = 0;
-			              		for (Item item : itemList)
-			              		{
-			              			all = all + item.getTotal();
-			              		}
-			              		out.print(format.format(all));
-			              	}
-			              	else
-			              	{
-			              		out.print("0");
-			              	}
-			            }
-						else
-						{
-							out.print("0");
-						}
-					%>
+					<fmt:formatNumber type="number" value="${allTotal - allDisTotal}" pattern="###############.###" />
 				</div>
 			</div>
 			<div class="row">
@@ -964,7 +821,9 @@
 			<div class="row">
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4">Хариулт:</div>
-				<div class="col-xs-4 text-right" id="print-return">0</div>
+				<div class="col-xs-4 text-right" id="print-return">
+					<fmt:formatNumber type="number" value="-${allTotal - allDisTotal}" pattern="###############.###" />
+				</div>
 			</div>
 			<div class="space-4"></div>
 			<div class="row">

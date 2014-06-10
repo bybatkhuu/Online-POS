@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Card;
 import models.Item;
 import utils.Cell;
 import utils.LoggedUser;
@@ -44,6 +45,7 @@ public class AddItemServlet extends HttpServlet
 	    Item item = null;
 	    synchronized(session)
 	    {
+	    	Card card = (Card) session.getAttribute("card");
 	    	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 		    if (itemList == null)
 		    {
@@ -84,6 +86,10 @@ public class AddItemServlet extends HttpServlet
 		    		try
 		    		{
 		    			item = getNewItem(barcode, assetAcc, quantity);
+		    			if (card != null)
+			    		{
+			    			item.setDiscountPercent(card.getDiscountPercent());
+			    		}
 					}
 		    		catch (SQLException e)
 		    		{
@@ -129,6 +135,7 @@ public class AddItemServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
 	    	}
 	    }

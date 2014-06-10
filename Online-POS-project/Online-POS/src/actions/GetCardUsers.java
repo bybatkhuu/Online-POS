@@ -3,6 +3,7 @@ package actions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class GetCardUsers extends HttpServlet
 					if (rowList != null)
 					{
 						List<Card> cardList = new ArrayList<Card>();
+						DecimalFormat format = new DecimalFormat("###############.##");
 						for (Row row : rowList)
 						{
 							Card card = new Card();
@@ -115,7 +117,7 @@ public class GetCardUsers extends HttpServlet
 									"<td id='customer-" + card.getCustomer().getId() + "'>" + card.getCustomer().getName() + "</td>" +
 									"<td>" + card.getCardNumber() + "</td>" +
 									"<td>" + card.getType() + "</td>" +
-									"<td>" + card.getDiscountPercent() + "</td>" +
+									"<td>" + format.format(card.getDiscountPercent()) + "</td>" +
 									"<td>" + card.getPartOwner() + "</td>" +
 								"</tr>";
 						}
