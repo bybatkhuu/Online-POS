@@ -140,7 +140,7 @@
                               <label for="talon" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Талон №:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" pattern="[0-9]{1,3}" disabled />
+                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" pattern="[0-9]{1,3}" />
                                   <span class="input-group-addon input-sm">
                                     <i class="bhicon bhicon-receipt"></i>
                                   </span>
@@ -573,7 +573,7 @@
             </div>
 
             <div class="row">
-              <div class="col-xs-4 col-sm-2 green center">
+              <div class="col-xs-4 col-sm-1 green center">
                 Баркод <b class="dark">F3</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
@@ -588,8 +588,11 @@
               <div class="col-xs-4 col-sm-2 blue center">
                 Харуилт <b class="dark">F7</b>
               </div>
-              <div class="col-xs-4 col-sm-2 blue center">
+              <div class="col-xs-4 col-sm-1 blue center">
                 Тайлан <b class="dark">F8</b>
+              </div>
+              <div class="col-xs-4 col-sm-2 red center">
+                Үнэ засах <b class="dark">F9</b>
               </div>
             </div>
           </div>

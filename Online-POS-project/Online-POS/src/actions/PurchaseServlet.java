@@ -93,12 +93,17 @@ public class PurchaseServlet extends HttpServlet
 			    					cellList.add(cell);
 			    					cell = new Cell("quantity", Double.toString(item.getQuantity()));
 			    					cellList.add(cell);
-			    					cell = new Cell("price", Double.toString(item.getPrice()));
+			    					cell = new Cell("price", Double.toString(item.getFirstPrice()));
 			    					cellList.add(cell);
 			    					cell = new Cell("total", Double.toString(item.getTotal()));
 			    					cellList.add(cell);
 			    					cell = new Cell("card_discount_percent", Float.toString(item.getDiscountPercent()));
 			    					cellList.add(cell);
+			    					if (item.hasDiscountPrice())
+			    					{
+			    						cell = new Cell("discount_price", Double.toString(item.getDiscountPrice()));
+			    						cellList.add(cell);
+			    					}
 			    					cell = new Cell("asset_acc", item.getAssetAcc());
 			    					cellList.add(cell);
 			    					db.insert("pos_transactions", cellList);

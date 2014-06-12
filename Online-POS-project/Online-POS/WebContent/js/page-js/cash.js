@@ -534,6 +534,42 @@ function isNumber(n)
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+function editPrice()
+{
+	if ($("#unitPrice").val() != "")
+	{
+		if (isNumber($("#unitPrice").val()))
+		{
+			$.ajax(
+			{
+				url: "edit-price",
+				data:
+				{
+					"id" : $("#tableBody > tr[class='success']").attr("id"),
+					"price" : $("#unitPrice").val()
+				},
+				success: function(result)
+				{
+					$("#tableBody").html(result);
+					initTableEvents();
+					checkAll();
+				}
+			});
+		}
+		else
+		{
+			alert("Үнэ засах хэсэгт зөвхөн тоо оруулна уу!");
+			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+		}
+	}
+	else
+	{
+		alert("Засах үнээ оруулна уу!");
+		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+	}
+	$("#unitPrice").prop("disabled", true);
+}
+
 function loadPrintView()
 {
 	$("#print-talon").html($("#talon").val());
@@ -648,6 +684,19 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 	  		window.location.assign("report.jsp");
+	  	}
+	  	else if (event.which == 120)
+	  	{
+	  		event.preventDefault();
+	  		if ($("#tableBody > tr[class='success']").size() == 1)
+	  		{
+	  			$("#unitPrice").prop("disabled", false);
+		  		$("#unitPrice").focus();
+	  		}
+	  		else
+	  		{
+	  			$("#unitPrice").prop("disabled", true);
+	  		}
 	  	}
 	  	else if (event.which == 38)
 	  	{
@@ -862,6 +911,15 @@ function initEventHandlers()
   	{
   		event.prventDeafult();
   		addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#assetAccounts").val().trim());
+  	});
+  	
+  	$("#unitPrice").keypress(function(event)
+  	{
+  		if (event.which == 13)
+  		{
+  			event.preventDefault();
+  			editPrice();
+  		}
   	});
   	
   	$("#tableBody > tr").click(function()

@@ -71,6 +71,10 @@ public class Item implements Serializable
 	
 	public double getPrice()
 	{
+		if (discountPrice > 0)
+		{
+			return discountPrice;
+		}
 		return price;
 	}
 	public void setPrice(double price)
@@ -90,26 +94,28 @@ public class Item implements Serializable
 	public void setQuantity(double quantity)
 	{
 		this.quantity = quantity;
-		this.total = this.quantity * this.price;
 		if (this.discountPrice <= 0)
 		{
+			this.total = this.quantity * this.price;
 			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
 		}
 		else
 		{
+			this.total = this.quantity * this.discountPrice;
 			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
 		}
 	}
 	public void addQuantity(double quantity)
 	{
 		this.quantity = this.quantity + quantity;
-		this.total = this.quantity * this.price;
 		if (this.discountPrice <= 0)
 		{
+			this.total = this.quantity * this.price;
 			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
 		}
 		else
 		{
+			this.total = this.quantity * this.discountPrice;
 			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
 		}
 	}
@@ -129,9 +135,10 @@ public class Item implements Serializable
 	}
 	public void setDiscountPrice(double discountPrice)
 	{
-		if (discountPrice >= 0)
+		if (discountPrice > 0)
 		{
 			this.discountPrice = discountPrice;
+			this.total = this.quantity * this.discountPrice;
 			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
 		}
 	}
@@ -164,5 +171,19 @@ public class Item implements Serializable
 	public double getDiscountTotal()
 	{
 		return discountTotal;
+	}
+	
+	public boolean hasDiscountPrice()
+	{
+		if (discountPrice > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public Double getFirstPrice()
+	{
+		return price;
 	}
 }
