@@ -181,8 +181,8 @@ public class Item implements Serializable
 		}
 		return false;
 	}
-	
-	public Double getFirstPrice()
+
+	public double getFirstPrice()
 	{
 		return price;
 	}

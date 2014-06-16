@@ -37,9 +37,9 @@ public class CheckBarcode extends HttpServlet
 	    int hasBarcode = 0;
 		String barcode = (String) request.getParameter("barcode");
 		String assetAcc = (String) request.getParameter("assetAcc");
-		if (barcode != null)
+		if (barcode != null && assetAcc != null)
 		{
-			if (!Utilities.isEmpty(barcode))
+			if (!Utilities.isEmpty(barcode) && !Utilities.isEmpty(assetAcc))
 			{
 				PostgreSQLJDBC db = new PostgreSQLJDBC();
 				if (db.createConnection())

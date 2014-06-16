@@ -46,14 +46,6 @@ public class PurchaseServlet extends HttpServlet
 		
 		User user = (User) session.getAttribute("user");
 		String orderNum = request.getParameter("orderNum");
-		try
-		{
-			Integer.parseInt(orderNum);
-		}
-		catch (Exception e)
-		{
-			orderNum = "0";
-		}
 		
 		String type = request.getParameter("type");
 		if (type != null && !type.trim().equalsIgnoreCase(""))
@@ -63,6 +55,7 @@ public class PurchaseServlet extends HttpServlet
 			{
 				otherId = "0";
 			}
+			
 			synchronized(session)
 		    {
 				if (session.getAttribute("itemList") != null)

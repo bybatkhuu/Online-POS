@@ -34,6 +34,7 @@ public class LoginServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		System.out.println("Warning: User try to login by GET method!");
+		
 		response.sendRedirect("login.jsp");
 	}
 

@@ -485,47 +485,55 @@ function purchase()
 	}
 	var talon = 0;
 	var isPurchased = false;
-	$.ajax(
-	{
-		url: "purchase-items",
-		data:
-		{
-			"orderNum": $("#talon").val().trim(),
-			"type": type,
-			"otherId": otherId
-		},
-	  	success: function(result)
-	  	{
-	  		var jsonData = eval("(" + result + ")");
-	  		if (jsonData.isPurchased != "true")
-	  		{
-	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cashier").val().trim());
-	  			//location.reload(true);
-	  		}
-	  		else
-	  		{
-	  			isPurchased = true;
-	  			talon = jsonData.talon;
-	  		}
-	  	}
-	});
 	
-	if (isPurchased == true)
+	if ($("#talon").val().trim() != "")
 	{
-		window.print();
-		$("#talon").val(talon);
-  		$("#print-talon").val(talon);
-  		$("#tableBody").html("");
-  		$("#quantity").val("1");
-  		$("#unit").text("ш");
-  		$("#unitPrice").val("");
-  		$("#itemName").val("");
-  		$("#cardNumber").val("");
-  		$("#cardOwner").text("");
-  		$("#discountPercent").val("");
-  		$("#discountType").val("");
-  		checkAll();
-  		$("#barcode").focus();
+		$.ajax(
+		{
+			url: "purchase-items",
+			data:
+			{
+				"orderNum": $("#talon").val().trim(),
+				"type": type,
+				"otherId": otherId
+			},
+		  	success: function(result)
+		  	{
+		  		var jsonData = eval("(" + result + ")");
+		  		if (jsonData.isPurchased != "true")
+		  		{
+		  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cashier").val().trim());
+		  			//location.reload(true);
+		  		}
+		  		else
+		  		{
+		  			isPurchased = true;
+		  			talon = jsonData.talon;
+		  		}
+		  	}
+		});
+		
+		if (isPurchased == true)
+		{
+			window.print();
+			$("#talon").val(talon);
+	  		$("#print-talon").val(talon);
+	  		$("#tableBody").html("");
+	  		$("#quantity").val("1");
+	  		$("#unit").text("ш");
+	  		$("#unitPrice").val("");
+	  		$("#itemName").val("");
+	  		$("#cardNumber").val("");
+	  		$("#cardOwner").text("");
+	  		$("#discountPercent").val("");
+	  		$("#discountType").val("");
+	  		checkAll();
+	  		$("#barcode").focus();
+		}
+	}
+	else
+	{
+		alert("Талоны дугаараа оруулна уу!");
 	}
 }
 

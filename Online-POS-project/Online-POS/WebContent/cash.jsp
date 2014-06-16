@@ -140,7 +140,7 @@
                               <label for="talon" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Талон №:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" pattern="[0-9]{1,3}" />
+                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" />
                                   <span class="input-group-addon input-sm">
                                     <i class="bhicon bhicon-receipt"></i>
                                   </span>
