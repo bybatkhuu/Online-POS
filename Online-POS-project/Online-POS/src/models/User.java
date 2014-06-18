@@ -83,8 +83,8 @@ public class User implements Serializable
 	{
 		return cashName;
 	}
-	public void setCashName(String cashName)
+	public void setCashName(String value)
 	{
-		this.cashName = cashName;
+		this.cashName = value;
 	}
 }
