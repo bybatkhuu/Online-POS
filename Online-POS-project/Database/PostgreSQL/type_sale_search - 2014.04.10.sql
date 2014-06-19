@@ -1,1 +1,0 @@
-CREATE TYPE type_sale_search AS ("order_date" TIMESTAMP, "order_num" INT, "name" VARCHAR, "quantity" float8, "price" float8, "total" float8);

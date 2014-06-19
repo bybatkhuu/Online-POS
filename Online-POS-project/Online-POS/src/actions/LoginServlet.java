@@ -73,6 +73,7 @@ public class LoginServlet extends HttpServlet
 										{
 											String ip = LoggedUser.getIpAddress(request);
 											parameters.add(ip);
+											System.out.println(ip);
 											if (db.execute("bh_checkBranchUsers", parameters))
 											{
 												if (db.execute("bh_login", parameters))

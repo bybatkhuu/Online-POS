@@ -85,6 +85,6 @@ public class User implements Serializable
 	}
 	public void setCashName(String value)
 	{
-		this.cashName = value;
+		this.cashName = value;	
 	}
 }

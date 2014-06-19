@@ -45,6 +45,7 @@ public class CheckBarcode extends HttpServlet
 				if (db.createConnection())
 				{
 					String[] parameters = { barcode, assetAcc };
+					System.out.println(assetAcc);
 					try
 					{
 						if (db.execute("bh_checkBarcode", parameters))
