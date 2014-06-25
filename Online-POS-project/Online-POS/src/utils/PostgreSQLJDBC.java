@@ -117,7 +117,7 @@ public class PostgreSQLJDBC
         return true;
     }
 	
-	//Open onnection
+	//Open connection
 	private boolean openConnection()
 	{
 		if (Utilities.isEmpty(port))

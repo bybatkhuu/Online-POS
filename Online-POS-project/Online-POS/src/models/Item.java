@@ -181,7 +181,7 @@ public class Item implements Serializable
 		}
 		return false;
 	}
-	
+
 	public double getFirstPrice()
 	{
 		return price;

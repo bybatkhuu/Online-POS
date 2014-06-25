@@ -162,7 +162,7 @@ function initTypes()
 		$("#assetAccounts").select2();
 	}
 	
-	$.ajax(
+	/*$.ajax(
 	{
 		url: "get-customers",
 		success: function(result)
@@ -184,7 +184,7 @@ function initTypes()
 			$("#customers").select2("enable", false);
 			$("#bankCheck").prop("disabled", false);
 		}
-	});
+	});*/
 	
 	$.ajax(
 	{

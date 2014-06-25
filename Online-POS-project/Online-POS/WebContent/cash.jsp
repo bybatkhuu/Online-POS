@@ -324,7 +324,7 @@
                              
                              <div class="space-2"></div> -->
                              
-                             <div class="row">
+                             <div class="row hidden">
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
@@ -347,7 +347,7 @@
 			                        	<label>
 			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="bankCheck" />
 			                                <span class="lbl">
-			                                	<b>&nbsp; Банкны карт </b>
+			                                	<b>&nbsp; Банк </b>
 			                                </span>
 			                            </label>
 			                    	</div>
