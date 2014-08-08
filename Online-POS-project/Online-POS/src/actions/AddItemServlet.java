@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
+
 
 import models.Card;
 import models.Item;
@@ -86,9 +88,10 @@ public class AddItemServlet extends HttpServlet
 		    		try
 		    		{
 		    			item = getNewItem(barcode, assetAcc, quantity);
-		    			if (card != null)
+		    			float disCount = (float) session.getAttribute("discountPercent");
+		    			if (card != null || disCount !=0)
 			    		{
-			    			item.setDiscountPercent(card.getDiscountPercent());
+			    			item.setDiscountPercent(disCount);
 			    		}
 					}
 		    		catch (SQLException e)
@@ -135,8 +138,10 @@ public class AddItemServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
 	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
+	    		JOptionPane.showMessageDialog(null, itemList.get(i).getDiscountPrice() + " " + itemList.get(i).getDiscountTotal());
 	    	}
 	    }
 	    

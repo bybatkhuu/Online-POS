@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import models.Card;
 import models.Customer;
 import models.Item;
-
 import utils.LoggedUser;
 
 @WebServlet("/set-discount-card")
@@ -56,10 +55,10 @@ public class SetCardServlet extends HttpServlet
 	    card.setDiscountPercent(Float.parseFloat(discountPercent));
 	    card.setPartOwner(partOwner);
 	    card.setCustomer(customer);
-	    
 	    synchronized(session)
 	    {
 	    	session.setAttribute("card", card);
+	    	session.setAttribute("discountPercent", card.getDiscountPercent());
 	    }
 	    
 	    List<Item> itemList = (List<Item>) session.getAttribute("itemList");
@@ -83,6 +82,7 @@ public class SetCardServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
 	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
 	    	}

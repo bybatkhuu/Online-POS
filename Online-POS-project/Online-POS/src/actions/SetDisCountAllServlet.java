@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Item;
-
 import utils.LoggedUser;
+@WebServlet("/set-discount-All")
+public class SetDisCountAllServlet extends HttpServlet{
 
-@WebServlet("/remove-discount-card")
-public class RemoveCardServlet extends HttpServlet
-{
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-
-    public RemoveCardServlet()
+	public SetDisCountAllServlet()
     {
         super();
     }
@@ -36,17 +36,20 @@ public class RemoveCardServlet extends HttpServlet
 			response.sendRedirect("login.jsp");
 		}
 		
-		session.removeAttribute("card");
-		session.removeAttribute("discountPercent");
-		
-		List<Item> itemList = (List<Item>) session.getAttribute("itemList");
+	    String discountPercent = request.getParameter("discountPercent");
+	    synchronized(session)
+	    {
+	    	session.setAttribute("discountPercent", Float.parseFloat(discountPercent));
+	    }
+	    
+	    List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 		String str = "";
 	    if (itemList != null && itemList.size() > 0)
 	    {
 	    	DecimalFormat format = new DecimalFormat("###############.##");
 	    	for (int i = 0; itemList.size() > i ; i++)
 	    	{
-	    		itemList.get(i).setDiscountPercent(0);
+	    		itemList.get(i).setDiscountPercent(Float.parseFloat(discountPercent));
 	    		if (i == (itemList.size() - 1))
 		    	{
 		    		str = str + "<tr class='success' id='" + itemList.get(i).getId() + "'>";
@@ -60,13 +63,13 @@ public class RemoveCardServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
-	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPrice())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
 	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
 	    	}
 	    }
 	    session.setAttribute("itemList", itemList);
-		
+	    
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();
 		out.print(str);

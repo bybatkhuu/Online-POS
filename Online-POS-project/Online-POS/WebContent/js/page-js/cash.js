@@ -3,7 +3,8 @@ var thQuant = 1;
 var thUnit = 2;
 var thPrice = 3;
 var thTotal = 4;
-var thDiscount = 5;
+var thDisCountPercent = 5;
+var thDiscount = 6;
 
 $(document).ready(function()
 {
@@ -647,14 +648,21 @@ function initEventHandlers()
 				$("#barcode").focus();
 			}
 	  	}
-		else if (event.which == 114)
+		else if (event.which == 113)
 	  	{
 			event.preventDefault();
 		  	$("#barcode").focus();
 	  	}
+		 if (event.which == 114)
+		  	{
+				event.preventDefault();
+				$("#discountPercent").prop("disabled", false);
+			  	$("#discountPercent").focus();
+		  	}
 		else if (event.which == 115)
 	  	{
 			event.preventDefault();
+			$("#discountPercent").prop("disabled", true);
 			$.ajax(
 			{
 				url: "remove-discount-card",
@@ -797,7 +805,28 @@ function initEventHandlers()
 			$("#addItem").prop("disabled", true);
 		}
 	});
-	
+	$("#discountPercent").keypress(function(event)
+			{
+				if(event.which == 13)
+				{
+				event.preventDefault();
+				$.ajax(
+				{
+					url: "set-discount-All",
+					data:
+					{
+						"discountPercent": $("#discountPercent").val(),
+					},
+					success: function(result)
+					{
+						$("#tableBody").html(result);
+						initTableEvents();
+						checkAll();
+					}
+				});
+				$("#barcode").focus();
+				}
+			});
 	$("#cardNumber").keypress(function(event)
 	{
 		if(event.which == 13)

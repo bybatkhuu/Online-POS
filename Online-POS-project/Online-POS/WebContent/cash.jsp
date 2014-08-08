@@ -387,7 +387,7 @@
                               						<div class="col-sm-3">
                               							<span class="input-icon input-icon-right">
                               								<input type="text" name="discountPercent"
-                              									value="<fmt:formatNumber type="number" value="${card.discountPercent}" pattern="###############.###" />"
+                              									value="<fmt:formatNumber type="number" value="${discountPercent}" pattern="###############.###" />"
                               									class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
                               							</span>
                               						</div>
@@ -424,6 +424,7 @@
                                   <th>Нэгж</th>
                                   <th>Нэгж үнэ</th>
                                   <th>Нийт дүн</th>
+                                  <th>Хөнгөлөлт %</th>
                                   <th class="hidden">Хөнгөлөлт</th>
                                 </tr>
                               </thead>
@@ -441,7 +442,10 @@
                               			<td class="text-right">
                               				<fmt:formatNumber type="number" value="${item.total}" pattern="###############.###" />
                               			</td>
-                              			<td class="hidden discountTotal">
+                              			<td class="text-right">
+                              				<fmt:formatNumber type="number" value="${item.discountPercent}" pattern="###############.###" />
+                              			</td>
+                              			<td class=" discountTotal">
                               				<fmt:formatNumber type="number" value="${item.discountTotal}" pattern="###############.###" />
                               			</td>
                               		</tr>
@@ -574,7 +578,10 @@
 
             <div class="row">
               <div class="col-xs-4 col-sm-1 green center">
-                Баркод <b class="dark">F3</b>
+                Баркод <b class="dark">F2</b>
+              </div>
+              <div class="col-xs-4 col-sm-1 blue center">
+                Хөнгөлөлт<b class="dark">F3</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
                 Хөнгөлөлт устгах <b class="dark">F4</b>
@@ -582,7 +589,7 @@
               <div class="col-xs-4 col-sm-2 blue center">
                 Тоо засах <b class="dark">F5</b>
               </div>
-              <div class="col-xs-4 col-sm-2 blue center">
+              <div class="col-xs-4 col-sm-1 blue center">
                 Хэвлэх <b class="dark">F6</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
@@ -748,7 +755,6 @@
 	</div>
 	
 	</div>
-	
 	<div class="bh-print-view">
 		<div class="bh-print-body">
 			<div class="row">
@@ -771,7 +777,13 @@
 				<div class="col-xs-3">Кассчин:</div>
 				<div class="col-xs-9" id="print-cashier">${user.cashName}</div>
 			</div>
-			<div class="space-6 bh-print-separater"></div>
+<!-- 			<div class = "row">
+				<div class='col-xs-4'>Барааны нэр</div>
+				<div class='col-xs-2'>Тоо ширхэг</div>
+				<div class='col-xs-3 text-right'>Нэгж үнэн</div>
+				<div class='col-xs-3 text-right'>Нийт Дүн</div>
+			</div>
+ -->			<div class="space-6 bh-print-separater"></div>
 			<div id="print-items">
 				<c:forEach items="${itemList}" var="item" varStatus="status">
 					<div class='row'>

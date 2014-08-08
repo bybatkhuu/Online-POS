@@ -27,9 +27,10 @@ public class PostgreSQLJDBC
     {
         server = "localhost";
         port = "5432";
-        database = "CostcaDB";
+        database = "OnlinePOS";
+//        database = "Gamba";
         user = "postgres";
-        password = "root";
+        password = "123asd90@";
     }
 	
 	//Create connection
