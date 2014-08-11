@@ -907,14 +907,15 @@ function checkAll()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		str = str + "</div>";
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-4'></div>";
+			str = str + "<div class='col-xs-4'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+//		str = str + "</div>";
+//		str = str + "<div class='row'>";
+//			str = str + "<div class='col-xs-4'></div>";
 			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
+		
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
 			str = str + "<div class='space-4'></div>";

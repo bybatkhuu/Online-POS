@@ -790,10 +790,10 @@
               for (int i = 0; i < itemList.size(); i++)
               {
                 out.println("<div class='row'>");
-                          out.println("<div class='col-xs-12'>" + itemList.get(i).getName() + "</div>");
-                        out.println("</div>");
+                          out.println("<div class='col-xs-4'>" + itemList.get(i).getName() + "</div>");
+                       /*  out.println("</div>");
                         out.println("<div class='row'>");
-                        out.println("<div class='col-xs-4'></div>");
+                        out.println("<div class='col-xs-4'></div>"); */
                           Double result = itemList.get(i).getQuantity() - (int)(itemList.get(i).getQuantity());
                                 if (result != 0)
                                 {

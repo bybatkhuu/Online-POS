@@ -113,6 +113,7 @@ public class PurchaseServlet extends HttpServlet
 			    			isPurchased = true;
 			    			session.removeAttribute("itemList");
 			    			session.removeAttribute("card");
+			    			session.removeAttribute("discountPercent");
 			    		}
 			    	}
 		    	}

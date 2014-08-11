@@ -28,7 +28,6 @@ public class PostgreSQLJDBC
         server = "localhost";
         port = "5432";
         database = "OnlinePOS";
-//        database = "Gamba";
         user = "postgres";
         password = "123asd90@";
     }

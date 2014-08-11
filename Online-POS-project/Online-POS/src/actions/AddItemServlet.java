@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
-
 
 import models.Card;
 import models.Item;
@@ -45,9 +43,12 @@ public class AddItemServlet extends HttpServlet
 		boolean itemIncrement = false;
 		int itemID = 0;
 	    Item item = null;
+	    Float disCount;
 	    synchronized(session)
 	    {
 	    	Card card = (Card) session.getAttribute("card");
+	    	disCount = (Float) session.getAttribute("discountPercent");
+	    	
 	    	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 		    if (itemList == null)
 		    {
@@ -88,8 +89,7 @@ public class AddItemServlet extends HttpServlet
 		    		try
 		    		{
 		    			item = getNewItem(barcode, assetAcc, quantity);
-		    			float disCount = (float) session.getAttribute("discountPercent");
-		    			if (card != null || disCount !=0)
+		    			if (card != null || disCount !=null)
 			    		{
 			    			item.setDiscountPercent(disCount);
 			    		}
@@ -141,7 +141,6 @@ public class AddItemServlet extends HttpServlet
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
 	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
-	    		JOptionPane.showMessageDialog(null, itemList.get(i).getDiscountPrice() + " " + itemList.get(i).getDiscountTotal());
 	    	}
 	    }
 	    

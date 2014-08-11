@@ -298,7 +298,6 @@
                                 </div>
                               </div>
                             </div>
-
                             <div class="row hidden">
                               <div class="form-group">
                                 <label for="wholesaleQuantity" class="col-xs-12 col-sm-5">Бөөн.тоо:</label>
@@ -419,12 +418,12 @@
                             <table class="table table-bordered table-hover no-margin" id="mainTable">
                               <thead>
                                 <tr>
-                                  <th>Барааны нэр</th>
-                                  <th>Тоо</th>
-                                  <th>Нэгж</th>
-                                  <th>Нэгж үнэ</th>
-                                  <th>Нийт дүн</th>
-                                  <th>Хөнгөлөлт %</th>
+                                  <th class = "col-md-4">Барааны нэр</th>
+                                  <th class = "col-md-1">Тоо</th>
+                                  <th class = "col-md-1">Нэгж</th>
+                                  <th class = "col-md-2">Нэгж үнэ</th>
+                                  <th class = "col-md-3">Нийт дүн</th>
+                                  <th class = "col-md-1">Хөн %</th>
                                   <th class="hidden">Хөнгөлөлт</th>
                                 </tr>
                               </thead>
@@ -443,9 +442,9 @@
                               				<fmt:formatNumber type="number" value="${item.total}" pattern="###############.###" />
                               			</td>
                               			<td class="text-right">
-                              				<fmt:formatNumber type="number" value="${item.discountPercent}" pattern="###############.###" />
+                              				<fmt:formatNumber type="number" value="${item.discountPercent}" pattern="###.##" />
                               			</td>
-                              			<td class=" discountTotal">
+                              			<td class="hidden discountTotal">
                               				<fmt:formatNumber type="number" value="${item.discountTotal}" pattern="###############.###" />
                               			</td>
                               		</tr>
@@ -577,11 +576,11 @@
             </div>
 
             <div class="row">
-              <div class="col-xs-4 col-sm-1 green center">
-                Баркод <b class="dark">F2</b>
-              </div>
               <div class="col-xs-4 col-sm-1 blue center">
-                Хөнгөлөлт<b class="dark">F3</b>
+                Хөнгөлөлт<b class="dark">F2</b>
+              </div>
+              <div class="col-xs-4 col-sm-1 green center">
+                Баркод <b class="dark">F3</b>
               </div>
               <div class="col-xs-4 col-sm-2 blue center">
                 Хөнгөлөлт устгах <b class="dark">F4</b>
@@ -787,10 +786,10 @@
 			<div id="print-items">
 				<c:forEach items="${itemList}" var="item" varStatus="status">
 					<div class='row'>
-						<div class='col-xs-12'>${item.name}</div>
-					</div>
+						<div class='col-xs-4'>${item.name}</div>
+					<!-- </div>
 					<div class='row'>
-						<div class='col-xs-4'></div>
+						<div class='col-xs-4'></div> -->
 						<div class='col-xs-2'>
 							<fmt:formatNumber type="number" value="${item.quantity}" pattern="###############.###" />
 						</div>

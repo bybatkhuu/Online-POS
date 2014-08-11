@@ -5,6 +5,7 @@ var thPrice = 3;
 var thTotal = 4;
 var thDisCountPercent = 5;
 var thDiscount = 6;
+var leftKey = 1;
 
 $(document).ready(function()
 {
@@ -396,26 +397,91 @@ function addItem(barcode, quantity, assetAcc)
 function bindForm(element)
 {
 	var oldQuant = parseFloat($(element).children().eq(thQuant).text().trim());
+	var oldDisCountPercent = parseFloat($(element).children().eq(thDisCountPercent).text().trim());
 	var price = parseFloat($(element).children().eq(thPrice).text().trim());
 	var id = $(element).attr("id");
-	$(element).children().first().next().html
-	(
-		"<input type='text' value='' size='1' class='input-sm' id='newQuant' />"
-	);
-	
-	$("#newQuant").focus();
-	
-	$("#newQuant").keypress(function(event)
-	{
-		if (event.which == 13)
+	if(leftKey == 1){
+		$(element).children().first().next().html
+		(
+			"<input type='text' value='' size='1' class='input-sm' id='newQuant' />"
+		);
+		
+		$("#newQuant").focus();
+		
+		$("#newQuant").keydown(function(event)
 		{
-			updateFromTable(element, id, price, oldQuant);
-		}
-	});
-  	$("#newQuant").focusout(function()
-  	{
-  		updateFromTable(element, id, price, oldQuant);
-  	});
+			
+			if (event.which == 13)
+			{
+				updateFromTable(element, id, price, oldQuant);
+			}
+			 if(event.which == 37 || event.which == 39)
+			{
+				 event.preventDefault();
+				if($("#newQuant").is(":focus")){
+					leftKey = 2;
+					$("#newQuant").remove();
+					$(element).children().eq(thQuant).text(oldQuant);
+					 bindForm(element);
+				}else
+				if($("#newQuant1").is(":focus"))
+				{
+					$("#newQuant1").remove();
+					leftKey = 1;
+					$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
+					 bindForm(element);
+				}
+				
+			}
+			
+		});
+				
+	  	$("#newQuant").focusout(function()
+	  	{
+	  		updateFromTable(element, id, price, oldQuant);
+	  	});
+	}else{
+		
+		$(element).children().eq(thDisCountPercent).html
+		(
+			"<input type='text' value='' size='1' class='input-sm' id='newQuant1' />"
+		);
+		
+		$("#newQuant1").focus();
+		
+		$("#newQuant1").keydown(function(event)
+				{
+					
+					if (event.which == 13)
+					{
+						updateFromTableDisCount(element, id, oldDisCountPercent);
+					}
+					 if(event.which == 37 || event.which == 39)
+					{
+						 event.preventDefault();
+						if($("#newQuant").is(":focus")){
+							leftKey = 2;
+							$("#newQuant").remove();
+							$(element).children().eq(thQuant).text(oldQuant);
+							 bindForm(element);
+						}else
+						if($("#newQuant1").is(":focus"))
+						{
+							$("#newQuant1").remove();
+							leftKey = 1;
+							$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
+							 bindForm(element);
+						}
+						
+					}
+					
+				});			
+	  	$("#newQuant1").focusout(function()
+	  	{
+	  		updateFromTableDisCount(element, id, oldDisCountPercent);
+	  	});
+	}
+	
 }
 function updateFromTable(element, id, price, oldQuant)
 {
@@ -428,6 +494,19 @@ function updateFromTable(element, id, price, oldQuant)
 	else
 	{
 		$(element).children().eq(thQuant).text(oldQuant);
+	}
+}
+function updateFromTableDisCount(element, id, oldDiscount)
+{
+	var newDiscount = parseFloat($("#newQuant1").val());
+	$("#newQuant1").remove();
+	if (oldDiscount != newDiscount && !isNaN(newDiscount) && 0 < newDiscount)
+	{
+		updateDisCount(id, newDiscount);
+	}
+	else
+	{
+		$(element).children().eq(thDisCountPercent).text(oldDiscount);
 	}
 }
 
@@ -450,6 +529,24 @@ function update(id, newQuant)
 		{
 			"id": id,
 			"newQuant": newQuant
+		},
+		success: function(result)
+		{
+			$("#tableBody").html(result);
+			initTableEvents();
+			checkAll();
+		}
+	});
+}
+function updateDisCount(id, newDisCount)
+{
+	$.ajax(
+	{
+		url: "updateDisCount-item",
+		data:
+		{
+			"id": id,
+			"newDisCount": newDisCount
 		},
 		success: function(result)
 		{
@@ -589,10 +686,10 @@ function loadPrintView()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		str = str + "</div>";
+			str = str + "<div class='col-xs-14'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		/*str = str + "</div>";
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-4'></div>";
+			str = str + "<div class='col-xs-4'></div>";*/
 			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
@@ -648,12 +745,12 @@ function initEventHandlers()
 				$("#barcode").focus();
 			}
 	  	}
-		else if (event.which == 113)
+		else if (event.which == 114)
 	  	{
 			event.preventDefault();
 		  	$("#barcode").focus();
 	  	}
-		 if (event.which == 114)
+		 if (event.which == 113)
 		  	{
 				event.preventDefault();
 				$("#discountPercent").prop("disabled", false);
@@ -1119,10 +1216,10 @@ function checkAll()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-12'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		str = str + "</div>";
+			str = str + "<div class='col-xs-14'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		/*str = str + "</div>";
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-4'></div>";
+			str = str + "<div class='col-xs-4'></div>";*/
 			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
 			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
