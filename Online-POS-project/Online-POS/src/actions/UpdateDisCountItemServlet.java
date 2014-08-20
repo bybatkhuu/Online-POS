@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Item;
-
 import utils.LoggedUser;
 
 @WebServlet("/updateDisCount-item")
@@ -49,7 +48,7 @@ public class UpdateDisCountItemServlet extends HttpServlet
 			newDisCount = 0;
 		}
 		
-		if (id != 0 && newDisCount > 0)
+		if (id != 0 && newDisCount >= 0 && newDisCount <=100)
 		{
 			synchronized(session)
 		    {

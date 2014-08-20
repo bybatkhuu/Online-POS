@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import models.Cash;
 import models.User;
-
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -101,6 +100,12 @@ public class LoginServlet extends HttpServlet
 															case "cash_name":
 																user.setCashName(cell.getValue());
 																break;
+															case "asset_type":
+																user.setAssetType(cell.getValue());
+																break;
+															case "asset_acc":
+																user.setAssetAcc(cell.getValue());
+																break;
 															default:
 																break;
 														}
@@ -133,10 +138,17 @@ public class LoginServlet extends HttpServlet
 															case "asset_acc":
 																cash.setAssetAcc(cell.getValue());
 																break;
+															case "human_type":
+																cash.setHumanType(cell.getValue());
+																break;
 															default:
 																break;
 														}
 													}
+												if(cash.getHumanType() != null && cash.getHumanType().trim().equals("Human")){
+													cash.setAssetAcc(user.getAssetAcc());
+													cash.setAssetType(user.getAssetType());
+												}
 													session.setAttribute("cash", cash);
 													session.setAttribute("user", user);
 													status = 1;

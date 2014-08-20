@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -44,10 +45,11 @@ public class CheckBarcode extends HttpServlet
 				PostgreSQLJDBC db = new PostgreSQLJDBC();
 				if (db.createConnection())
 				{
-					String[] parameters = { barcode, assetAcc };
+					String[] parameters = { barcode.trim(), assetAcc.trim() };
 					System.out.println(assetAcc);
 					try
 					{
+						
 						if (db.execute("bh_checkBarcode", parameters))
 						{
 							hasBarcode = 1;

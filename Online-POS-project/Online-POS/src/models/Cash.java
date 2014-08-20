@@ -11,6 +11,7 @@ public class Cash implements Serializable
 	private int posNum;
 	private String assetType;
 	private String assetAcc;
+	private String humanType;
 	
 	public Cash()
 	{
@@ -21,6 +22,7 @@ public class Cash implements Serializable
 		this.ip = cash.getIp();
 		this.branchId = cash.getBranchId();
 		this.posNum = cash.getPosNum();
+		this.humanType = cash.getHumanType();
 	}
 	public Cash(int id, String ip, int branchId, int posNum)
 	{
@@ -83,4 +85,11 @@ public class Cash implements Serializable
 	{
 		this.assetAcc = assetAcc;
 	}
+	public String getHumanType() {
+		return humanType;
+	}
+	public void setHumanType(String humanType) {
+		this.humanType = humanType;
+	}
+	
 }

@@ -195,7 +195,7 @@ html, body
 	margin-bottom: 0px !important;
 	
 	font-family: Consolas, Sans-serif !important;
-	font-size: 9px !important;
+	font-size: 11px !important;
 	font-weight: bold !important;
 	line-height: 90% !important;
 	background: WHITE !important;
@@ -211,6 +211,18 @@ html, body
     .bh-print-view
     {
     	display: block !important;
+    	width: 95% !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		margin-top: 0px !important;
+		margin-bottom: 0px !important;
+		
+		font-family: Consolas, Sans-serif !important;
+		font-size: 9px !important;
+		font-weight: bold !important;
+		line-height: 90% !important;
+		background: WHITE !important;
+		color: BLACK !important;
     }
 }
 

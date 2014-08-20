@@ -11,6 +11,8 @@ public class User implements Serializable
 	private String status;
 	private int roleID;
 	private String cashName;
+	private String assetType;
+	private String assetAcc;
 	
 	public User()
 	{
@@ -23,8 +25,12 @@ public class User implements Serializable
 		this.status = user.getStatus();
 		this.roleID = user.getRoleID();
 		this.cashName = user.getCashName();
+		this.assetAcc = user.getAssetAcc();
+		this.assetType = user.getAssetType();
 	}
-	public User(int id, String userName, String password, String status, int roleID, String cashName)
+	public User(int id, String userName, String password, String status, int roleID, String cashName,
+			String assetType , String assetAcc
+			)
 	{
 		this.id = id;
 		this.userName = userName;
@@ -32,6 +38,8 @@ public class User implements Serializable
 		this.status = status;
 		this.roleID = roleID;
 		this.cashName = cashName;
+		this.assetAcc = assetAcc;
+		this.assetType = assetType;
 	}
 	
 	public int getId()
@@ -87,4 +95,17 @@ public class User implements Serializable
 	{
 		this.cashName = value;
 	}
+	public String getAssetType() {
+		return assetType;
+	}
+	public void setAssetType(String assetType) {
+		this.assetType = assetType;
+	}
+	public String getAssetAcc() {
+		return assetAcc;
+	}
+	public void setAssetAcc(String assetAcc) {
+		this.assetAcc = assetAcc;
+	}
+	
 }

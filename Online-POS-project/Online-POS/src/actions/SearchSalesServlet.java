@@ -50,6 +50,7 @@ public class SearchSalesServlet extends HttpServlet
 		{
 			if (startDateStr != null && !startDateStr.equals(""))
 				startDate = formatter.parse(startDateStr);
+			
 		}
 		catch (ParseException e)
 		{

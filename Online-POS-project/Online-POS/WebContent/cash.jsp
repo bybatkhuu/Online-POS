@@ -114,6 +114,7 @@
                   <a href="logout">
                     <i class="icon-off"></i>
                     Гарах
+                    <small> (Ctrl+F2)</small>
                   </a>
                 </li>
               </ul>
@@ -199,6 +200,18 @@
 		                          	</div>
                           		</c:when>
                           		<c:otherwise>
+                          			<div class="row">
+		                          		<div class="col-xs-6 col-sm-6">
+		                          			<label for="assetAccounts">
+		                          				<b>Барааны тасаг:</b>
+		                          			</label>
+		                          		</div>
+		                          		<div class="col-xs-6 col-sm-6">
+		                          			<label class="width-100">
+		                          			${cash.assetAcc}
+		                          			</label>
+		                          		</div>
+		                          	</div>
                           			<select id="assetAccounts" class="hidden">
                           				<option value="${cash.assetAcc}" selected>${cash.assetAcc}</option>
                           			</select>
@@ -323,7 +336,7 @@
                              
                              <div class="space-2"></div> -->
                              
-                             <div class="row hidden">
+                             <div class="row ">
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
@@ -387,7 +400,7 @@
                               							<span class="input-icon input-icon-right">
                               								<input type="text" name="discountPercent"
                               									value="<fmt:formatNumber type="number" value="${discountPercent}" pattern="###############.###" />"
-                              									class="form-control input-sm bolder dark bh-input-skin-1" id="discountPercent" disabled />
+                              									class="form-control input-sm bolder dark bh-input-skin-1" pattern="[0-9]{1,9}" id="discountPercent" disabled />
                               							</span>
                               						</div>
                               						<div class="col-sm-5">
@@ -464,17 +477,17 @@
                                     <div class="col-xs-12 col-sm-4 col-md-3">
                                       <input type="text" name="itemCount" value="Нийт: ${fn:length(itemList)}" class="form-control input-sm bh-input-skin-1" id="itemCount" disabled />
                                     </div>
-                                    <div class="col-xs-6 col-sm-4 col-md-2">
+                                    <div class="col-xs-6 col-sm-4 col-md-3">
                                       <button class="col-xs-12 btn btn-sm btn-warning" tabindex="-1" id="updateButton">
 		                                <i class="icon-edit"></i> Засах
 		                              </button>
                                     </div>
-                                    <div class="col-xs-6 col-sm-4 col-md-2">
+                                    <div class="col-xs-6 col-sm-4 col-md-2 hidden">
                                       <button class="col-xs-12 btn btn-sm btn-danger" tabindex="-1" id="deleteButton">
 		                                <i class="icon-minus"></i> Хасах
 		                              </button>
                                     </div>
-                                    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-offset-0 col-md-2">
+                                    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-offset-0 col-md-3">
                                       <button class="col-xs-12 btn btn-sm" tabindex="-1" id="clearButton">
 		                                <i class="icon-trash"></i> Цэвэрлэх
 		                              </button>
@@ -598,7 +611,7 @@
                 Тайлан <b class="dark">F8</b>
               </div>
               <div class="col-xs-4 col-sm-2 red center">
-                Үнэ засах <b class="dark">F9</b>
+           <!--      Үнэ засах <b class="dark">F9</b> -->
               </div>
             </div>
           </div>
@@ -610,7 +623,10 @@
       <div class="container">
         <div class="row center">
           <div class="col-xs-12 col-sm-4 text-muted center">
-            <small>1.Барааны хайлт=(Ctrl+F)</small> <small class="hidden">2.Тохиргоо=(Ctrl+N) 3.Талоны загвар=(Ctrl+M)</small>
+            <small>1.Барааны хайлт=(Ctrl+F)</small>
+            <small>2.Нэхэмжлэх=(Ctrl+1)</small>
+            <small>3.Банк=(Ctrl+2)</small>
+             <small class="hidden">3.Тохиргоо=(Ctrl+N) 4.Талоны загвар=(Ctrl+M)</small>
           </div>
           <div class="col-xs-12 col-sm-4 center">
             &copy;2014  Infosystems LLC
@@ -752,10 +768,15 @@
 			</div>
 		</div>
 	</div>
-	
+	<div id = "logoutDialog">
+  		<div class="center">
+  			<b>Итгэлтэй байна уу?</b>
+  		</div>
 	</div>
-	<div class="bh-print-view">
-		<div class="bh-print-body">
+	</div>
+	<div class="bh-print-view"  style="width: 36px">
+		<!-- <div class="bh-print-body"> -->
+		<div>
 			<div class="row">
 				<div class="col-xs-12 center bh-print-header">
 					${company.name} SHOP
@@ -770,7 +791,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-3">Огноо:</div>
-				<div class="col-xs-9" id="print-date"></div>
+				<div class="col-xs-9" id="print-date" style="color: background;"></div>
 			</div>
 			<div class="row">
 				<div class="col-xs-3">Кассчин:</div>
@@ -783,17 +804,18 @@
 				<div class='col-xs-3 text-right'>Нийт Дүн</div>
 			</div>
  -->			<div class="space-6 bh-print-separater"></div>
-			<div id="print-items">
+			<div id="print-items" >
 				<c:forEach items="${itemList}" var="item" varStatus="status">
 					<div class='row'>
-						<div class='col-xs-4'>${item.name}</div>
+						<div class='col-xs-6'>${item.name}</div>
+						
 					<!-- </div>
 					<div class='row'>
 						<div class='col-xs-4'></div> -->
-						<div class='col-xs-2'>
+						<div class='col-xs-1'>
 							<fmt:formatNumber type="number" value="${item.quantity}" pattern="###############.###" />
 						</div>
-						<div class='col-xs-3 text-right'>
+						<div class='col-xs-2 text-right'>
 							<fmt:formatNumber type="number" value="${item.price}" pattern="###############.###" />
 						</div>
 						<div class='col-xs-3 text-right'>
@@ -811,7 +833,7 @@
 				<div class="col-xs-1" id="print-item-count">
 					${fn:length(itemList)}
 				</div>
-				<div class="col-xs-4">Нийт дүн:</div>
+				<div class="col-xs-3">Нийт дүн:</div>
 				<div class="col-xs-4 text-right" id="print-cal-total">
 					<fmt:formatNumber type="number" value="${allTotal}" pattern="###############.###" />
 				</div>

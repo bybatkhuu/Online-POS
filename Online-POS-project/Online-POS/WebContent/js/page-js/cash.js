@@ -48,7 +48,7 @@ function startTime()
     hour = checkTime(hour);
     minute = checkTime(minute);
     second = checkTime(second);
-    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
+    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " "/* + " <b class='blue'>"*/ + day /*+ "</b>"*/;
     $("#time").html(dateTimeStr);
     $("#print-date").html(dateTimeStr);
     setTimeout(function(){ startTime(); }, 500);
@@ -69,6 +69,31 @@ function ajaxSetup()
 		autoOpen: false,
 		modal: true,
 		width: 700
+	});
+	$("#logoutDialog").dialog(
+	{
+		title: "Гарах",
+		title_html: true,
+		autoOpen: false,
+		modal: true,
+		buttons:[ 
+				{
+					html: "<i class='icon-off bigger-110'></i>&nbsp; Гарах",
+					"class" : "btn btn-danger btn-xs ",
+					"id" : "btnok",
+						click: function() {
+							window.location = "logout";
+						}
+					},
+					{
+					html: "<i class='icon-remove bigger-110'></i>&nbsp; Болих",
+					"class" : "btn btn-success btn-xs",
+					"id" : "btnCncl",
+						click: function() {
+							$(this).dialog("close");
+						}
+					}
+		         ]
 	});
 	
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype,
@@ -164,7 +189,7 @@ function initTypes()
 		$("#assetAccounts").select2();
 	}
 	
-	/*$.ajax(
+	$.ajax(
 	{
 		url: "get-customers",
 		success: function(result)
@@ -186,7 +211,7 @@ function initTypes()
 			$("#customers").select2("enable", false);
 			$("#bankCheck").prop("disabled", false);
 		}
-	});*/
+	});
 	
 	$.ajax(
 	{
@@ -500,7 +525,7 @@ function updateFromTableDisCount(element, id, oldDiscount)
 {
 	var newDiscount = parseFloat($("#newQuant1").val());
 	$("#newQuant1").remove();
-	if (oldDiscount != newDiscount && !isNaN(newDiscount) && 0 < newDiscount)
+	if (oldDiscount != newDiscount && !isNaN(newDiscount) && 0 <= newDiscount && newDiscount <=100)
 	{
 		updateDisCount(id, newDiscount);
 	}
@@ -646,26 +671,32 @@ function editPrice()
 	{
 		if (isNumber($("#unitPrice").val()))
 		{
-			$.ajax(
-			{
-				url: "edit-price",
-				data:
+			var priceCheck = $("#tableBody > tr[class='success']").children().eq(thPrice).text();
+				if(priceCheck > $("#unitPrice").val()){
+				$.ajax(
 				{
-					"id" : $("#tableBody > tr[class='success']").attr("id"),
-					"price" : $("#unitPrice").val()
-				},
-				success: function(result)
-				{
-					$("#tableBody").html(result);
-					initTableEvents();
-					checkAll();
-				}
-			});
+					url: "edit-price",
+					data:
+					{
+						"id" : $("#tableBody > tr[class='success']").attr("id"),
+						"price" : $("#unitPrice").val()
+					},
+					success: function(result)
+					{
+						$("#tableBody").html(result);
+						initTableEvents();
+						checkAll();
+					}
+				});
+			}else{
+				alert($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim()+"-с бага тоо оруулна уу");
+				$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
+			}
 		}
 		else
 		{
 			alert("Үнэ засах хэсэгт зөвхөн тоо оруулна уу!");
-			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
 		}
 	}
 	else
@@ -685,18 +716,15 @@ function loadPrintView()
 	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-14'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		/*str = str + "</div>";
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-4'></div>";*/
-			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "<div class='row' >";
+			str = str + "<div class='col-xs-6' style = 'padding-left:5px;margin-left:5px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+			str = str + "<div class='col-xs-1' style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'border-top:1px solid #46464f;padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'border-bottom:1px solid #46464f;padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
-			str = str + "<div class='space-2'></div>";
+			str = str + "<div class='space-2 row'></div>";
 		}
 	}
 	$("#print-items").html(str);
@@ -736,7 +764,36 @@ function initEventHandlers()
 			event.preventDefault();
 			$("#searchItemsDialog").dialog("open");
 		}
+		if(event.keyCode == 49 && event.ctrlKey){
+			event.preventDefault();
+			$("#customerCheck").trigger('click');
+		}
+		if(event.keyCode == 50 && event.ctrlKey){
+			event.preventDefault();
+			$("#bankCheck").trigger('click');
+		}
+		if(event.keyCode == 27){
+			if($("#searchItemsDialog").parents(".ui-dialog").is(":visible"))
+			{
+//				$("#logoutDialog").dialog("open");
+//				$("#btnCncl").focus();
+				alert("open");
+			}else{
+				alert("close");
+			}
+			
+		}
 		
+//		 if(event.which == 121){
+//			 loadPrintView();
+//				window.location = "facture.jsp";
+//				window.print();
+////				print.always_print_silent;
+////				$('#printFacture_page').get(0).contentWindow.print()
+//				window.location = "cash.jsp";
+////				alert(success.);
+//				 }
+		  	else
 		if (event.which == 9)
 	  	{
 			if ($("input:focus").attr("id") == "paid")
@@ -745,17 +802,37 @@ function initEventHandlers()
 				$("#barcode").focus();
 			}
 	  	}
+		//F3
 		else if (event.which == 114)
 	  	{
 			event.preventDefault();
 		  	$("#barcode").focus();
+			
 	  	}
+		//F2
 		 if (event.which == 113)
 		  	{
 				event.preventDefault();
+				if($("#cardNumber").val()!=""){
+					$.ajax(
+							{
+								url: "remove-discount-card",
+								success: function(result)
+								{
+									$("#tableBody").html(result);
+									initTableEvents();
+									$("#cardNumber").val("");
+									$("#cardOwner").text("");
+									$("#discountPercent").val("");
+									$("#discountType").val("");
+									checkAll();
+								}
+							});
+				}
 				$("#discountPercent").prop("disabled", false);
 			  	$("#discountPercent").focus();
 		  	}
+		 //f4
 		else if (event.which == 115)
 	  	{
 			event.preventDefault();
@@ -775,43 +852,52 @@ function initEventHandlers()
 				}
 			});
 	  	}
+		 //f5
 	  	else if (event.which == 116)
 	  	{
 	  		event.preventDefault();
+	  		if(!$("#newQuant").is(":focus")&& !$("#newQuant1").is(":focus")){
 		  	$("#updateButton").trigger('click');
 		  	checkAll();
+	  		}
 	  	}
+		 //f6
 	  	else if (event.which == 117)
 	  	{
 	  		event.preventDefault();
 	  		loadPrintView();
 		  	window.print();
 	  	}
+		 //f7
 	  	else if (event.which == 118)
 	  	{
 	  		event.preventDefault();
 	  		$("#paid").val("");
 		  	$("#paid").focus();
 	  	}
+		 //f8
 	  	else if (event.which == 119)
 	  	{
 	  		event.preventDefault();
 	  		window.location.assign("report.jsp");
 	  	}
+		 //f9
 	  	else if (event.which == 120)
 	  	{
-	  		event.preventDefault();
-	  		if ($("#tableBody > tr[class='success']").size() == 1)
-	  		{
-	  			$("#unitPrice").prop("disabled", false);
-		  		$("#unitPrice").focus();
-	  		}
-	  		else
-	  		{
-	  			$("#unitPrice").prop("disabled", true);
-	  		}
+//	  		event.preventDefault();
+//	  		if ($("#tableBody > tr[class='success']").size() == 1)
+//	  		{
+//	  			$("#unitPrice").prop("disabled", false);
+//		  		$("#unitPrice").focus();
+//	  		}
+//	  		else
+//	  		{
+//	  			$("#unitPrice").prop("disabled", true);
+//	  		}
 	  	}
-	  	else if (event.which == 38)
+		 //Up arrow
+	  	else
+	  		if (event.which == 38)
 	  	{
 	  		if (!$("#barcode").is(":focus"))
 	  		{
@@ -840,6 +926,7 @@ function initEventHandlers()
 			  	checkAll();
 	  		}
 	  	}
+//		 Down arrow
 	  	else if (event.which == 40)
 	  	{
 	  		if (!$("#barcode").is(":focus"))
@@ -869,11 +956,20 @@ function initEventHandlers()
 			  	checkAll();
 	  		}
 	  	}
-	  	else if (event.which == 46)
+		 //delete
+		/* else 
+			 if (event.which == 46)
 	  	{
-		  	$("#deleteButton").trigger("click");
-		  	checkAll();
-	  	}
+	  		if (!$("#barcode").is(":focus") && !$("#discountPercent").is(":focus")
+	  				&& !$("#searchByName").is(":focus")& !$("#searchByBarcode").is(":focus")
+	  				&& !$("#paid").is(":focus")&& !$("#quantity").is(":focus")
+	  				&& !$("#cardNumber").is(":focus")&& !$("#talon").is(":focus")
+	  				&& !$("#newQuant").is(":focus")&& !$("#newQuant1").is(":focus")
+	  		){
+	  			$("#deleteButton").trigger("click");
+	  			checkAll();
+	  		}
+	  	}*/
   	});
 
 	$("#barcode").keyup(function(event)
@@ -907,21 +1003,58 @@ function initEventHandlers()
 				if(event.which == 13)
 				{
 				event.preventDefault();
-				$.ajax(
-				{
-					url: "set-discount-All",
-					data:
-					{
-						"discountPercent": $("#discountPercent").val(),
-					},
-					success: function(result)
-					{
-						$("#tableBody").html(result);
-						initTableEvents();
-						checkAll();
+				if($("#discountPercent").val() != ""){
+					if (!isNaN($(this).val()))
+				  	{
+				  		if ($(this).val() > 0)
+					  	{
+				  			$.ajax(
+									{
+										url: "set-discount-All",
+										data:
+										{
+											"discountPercent": $("#discountPercent").val(),
+										},
+										success: function(result)
+										{
+											$("#tableBody").html(result);
+											initTableEvents();
+											checkAll();
+											
+										}
+									});
+				  			$("#barcode").focus();
+					  	}
+				  		else
+				  		{
+				  			alert("Хөнгөлөлт 0-с их өгнө үү!");
+				  		}
 					}
-				});
-				$("#barcode").focus();
+					else
+					{
+						alert("Хөнгөлөлт дунд үсэг, тэмдэгт байна!");
+					}	
+						
+					}
+					else{
+						$("#discountPercent").prop("disabled", true);
+						$.ajax(
+						{
+							url: "remove-discount-card",
+							success: function(result)
+							{
+								$("#tableBody").html(result);
+								initTableEvents();
+								$("#cardNumber").val("");
+								$("#cardOwner").text("");
+								$("#discountPercent").val("");
+								$("#discountType").val("");
+								checkAll();
+								$("#barcode").focus();
+							}
+						});
+					}
+					
 				}
 			});
 	$("#cardNumber").keypress(function(event)
@@ -1168,7 +1301,6 @@ function initEventHandlers()
   				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
   				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
   			}
-
   			$.ajax(
   			{
   				url: "searchItems",
@@ -1177,7 +1309,8 @@ function initEventHandlers()
   					"itemName": $("#searchByName").val().trim(),
   					"barcode": $("#searchByBarcode").val().trim(),
   					"minPrice": $("#searchByMinPrice").val().trim(),
-  					"maxPrice": $("#searchByMaxPrice").val().trim()
+  					"maxPrice": $("#searchByMaxPrice").val().trim(),
+  					"assetAcc":$("#assetAccounts").val().trim()
   				},
   				success: function(result)
   				{
@@ -1215,14 +1348,11 @@ function checkAll()
 	var str = "";
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-14'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		/*str = str + "</div>";
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-4'></div>";*/
-			str = str + "<div class='col-xs-2'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-			str = str + "<div class='col-xs-3 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "<div class='row' >";
+		str = str + "<div class='col-xs-6' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		str = str + "<div class='col-xs-1'  style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+		str = str + "<div class='col-xs-2'  style = 'border-top:1px solid #46464f;padding-right:0px;margin-right:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+		str = str + "<div class='col-xs-2'  style = 'border-bottom:1px solid #46464f;padding-right:0px;margin-right:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{

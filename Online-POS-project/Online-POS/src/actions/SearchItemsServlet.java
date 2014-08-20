@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Cash;
-
-
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -43,11 +41,15 @@ public class SearchItemsServlet extends HttpServlet
 		if (itemName == null)
 		{
 			itemName = "";
+		}else{
+			itemName = "%"+itemName;
 		}
 	    String barcode = request.getParameter("barcode");
 	    if (barcode == null)
 		{
 	    	barcode = "";
+		}else{
+			barcode = "%"+barcode;
 		}
 	    String minPrice = request.getParameter("minPrice");
 	    if (minPrice == null)
@@ -85,10 +87,16 @@ public class SearchItemsServlet extends HttpServlet
 					}
 					else
 					{
-						String[] params = { itemName, barcode, minPrice, maxPrice };
+//costca
+//						String[] params = { itemName, barcode, minPrice, maxPrice };
+						assetAcc = request.getParameter("assetAcc");
+						String[] params = { itemName, barcode, minPrice, maxPrice, assetAcc };
 						try
 						{
-							rowList = db.getRowList("bh_searchItems2", params);
+//costca
+//							rowList = db.getRowList("bh_searchItems2", params);
+// selverPen
+							rowList = db.getRowList("bh_searchItems1", params);
 						}
 						catch (SQLException e)
 						{
