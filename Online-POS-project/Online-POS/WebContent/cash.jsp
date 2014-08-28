@@ -111,10 +111,10 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a href="logout">
+                  <a href="logout" >
                     <i class="icon-off"></i>
                     Гарах
-                    <small> (Ctrl+F2)</small>
+                    <small> (Ctrl+4)</small>
                   </a>
                 </li>
               </ul>
@@ -123,7 +123,6 @@
         </div><!-- /.navbar-header -->
       </div><!-- /.container -->
     </header>
-    
     <%-- <jsp:useBean id="sessionBean" class="models.Company" scope="session" /> --%>
     <div class="main-container container" id="main-container">
       <div class="main-container-inner">
@@ -245,7 +244,7 @@
                                     <b>Бар код:</b>
                                   </label>
                                   <div class="input-group col-xs-12">
-                                    <input type="text" name="barcode" class="form-control bolder dark bh-input-skin-1" id="barcode" pattern="[A-Za-z0-9]{2,32}" tabindex="1" autocomplete="off" autofocus />
+                                    <input type="text" name="barcode" class="form-control bolder dark bh-input-skin-1" title = "F3" id="barcode" pattern="[A-Za-z0-9]{2,32}" tabindex="1" autocomplete="off" autofocus />
                                     <span class="input-group-addon">
                                       <i class="icon-barcode"></i>
                                     </span>
@@ -340,7 +339,7 @@
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
-			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="customerCheck" />
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "Ctrl+1" tabindex="-1" id="customerCheck" />
 			                                <span class="lbl">
 			                                	<b>&nbsp; Нэхэмжлэх </b>
 			                                </span>
@@ -357,7 +356,7 @@
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
-			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" tabindex="-1" id="bankCheck" />
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "Ctrl+2" tabindex="-1" id="bankCheck" />
 			                                <span class="lbl">
 			                                	<b>&nbsp; Банк </b>
 			                                </span>
@@ -380,7 +379,7 @@
                               							<label for="cardNumber">Карт №: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<input type="text" name="cardNumber" value="${card.cardNumber}" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
+                              							<input type="text" name="cardNumber" title = "Ctrl+3" value="${card.cardNumber}" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
                               						</div>
                               					</div>
                               					<div class="row">
@@ -564,7 +563,7 @@
                                     <b>Төлсөн:</b>
                                   </label>
                                   <div class="col-xs-12 col-sm-7">
-                                      <input type="text" name="paid" value="0" class="form-control input-sm bolder dark text-right bh-font-size-16 bh-input-skin-2" id="paid" tabindex="4" />
+                                      <input type="text" name="paid" value="0" class="form-control input-sm bolder dark text-right bh-font-size-16 bh-input-skin-2" title = "F7" id="paid" tabindex="4" />
                                   </div>
                                 </div>
                                 <div class="form-group has-warning">
@@ -623,9 +622,10 @@
       <div class="container">
         <div class="row center">
           <div class="col-xs-12 col-sm-4 text-muted center">
-            <small>1.Барааны хайлт=(Ctrl+F)</small>
-            <small>2.Нэхэмжлэх=(Ctrl+1)</small>
-            <small>3.Банк=(Ctrl+2)</small>
+            <small>Барааны хайлт=(Ctrl+F)</small>
+            <small class="hidden">Нэхэмжлэх=(Ctrl+1)</small>
+            <small class="hidden">Банк=(Ctrl+2)</small>
+             <small class="hidden">Карт №=(Ctrl+3)</small>
              <small class="hidden">3.Тохиргоо=(Ctrl+N) 4.Талоны загвар=(Ctrl+M)</small>
           </div>
           <div class="col-xs-12 col-sm-4 center">
@@ -711,10 +711,10 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
-							<input type="text" class="form-control input-sm" id="searchByName" />
+							<input type="text" class="form-control input-sm" title = "F1" id="searchByName" />
 						</div>
 						<div class="col-sm-6">
-							<input type="text" class="form-control input-sm" id="searchByBarcode" />
+							<input type="text" class="form-control input-sm" title = "F3" id="searchByBarcode" />
 						</div>
 					</div>
 					<div class="space-8"></div>
@@ -725,16 +725,22 @@
 							</label>
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" title ="Ctrl+1" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
 						</div>
 						<div class="col-sm-1 no-padding">
 							<input type="text" class="form-control text-center green" value="-" style="border: 0px; font-weight:bold;" readonly disabled />
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" title = "Ctrl+2" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
 						</div>
-						<div class="col-sm-6">
-							<button type="submit" class="btn btn-sm btn-success pull-right" id="searchItems">
+						<div class="col-sm-4">
+							<button type="submit" class="btn btn-sm btn-success pull-right" title = "F9" id="selectItems">
+								Сонгох
+								<i class="icon-check"></i>
+							</button>
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-sm btn-success pull-right" title = "Enter" id="searchItems">
 								Хайх
 								<i class="icon-search"></i>
 							</button>
@@ -767,6 +773,79 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div id = "helpDialog">
+		<div class = "row hidden">
+			<div class = "col-xs-3">Товч</div>
+			<div class = "col-xs-4">Энгийн</div>
+			<div class = "col-xs-5">Бараа хайх</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F2:</div>
+			<div class = "col-xs-4">Хөнгөлөлт</div>
+			<div class = "col-xs-5">Нэр</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F3:</div>
+			<div class = "col-xs-4">Баркод</div>
+			<div class = "col-xs-5">Баркод</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F4:</div>
+			<div class = "col-xs-4">Хөнгөлөлт устгах</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F5:</div>
+			<div class = "col-xs-4">Тоо засах</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F6:</div>
+			<div class = "col-xs-4">Хэвлэх </div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F7:</div>
+			<div class = "col-xs-4">Харуилт</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F8:</div>
+			<div class = "col-xs-4">Тайлан</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row hidden">
+			<div class = "col-xs-3">F9:</div>
+			<div class = "col-xs-4">Үнэ засах</div>
+			<div class = "col-xs-5">Бараа сонгох</div>
+		</div>
+		<div class = "row hidden">
+			<div class = "col-xs-3">Delete:</div>
+			<div class = "col-xs-4">Хасах</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">Ctrl+1:</div>
+			<div class = "col-xs-4">Нэхэмжлэх</div>
+			<div class = "col-xs-5">Хамгийн бага үнэ</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">Ctrl+2:</div>
+			<div class = "col-xs-4">Банк</div>
+			<div class = "col-xs-5">Хамгийн их үнэ</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">Ctrl+3:</div>
+			<div class = "col-xs-4">Карт №</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">Ctrl+4:</div>
+			<div class = "col-xs-4">Гарах</div>
+			<div class = "col-xs-5"></div>
+		</div>
+		
 	</div>
 	<div id = "logoutDialog">
   		<div class="center">

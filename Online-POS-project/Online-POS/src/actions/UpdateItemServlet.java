@@ -49,7 +49,7 @@ public class UpdateItemServlet extends HttpServlet
 			newQuantity = 0;
 		}
 		
-		if (id != 0 && newQuantity > 0)
+		if (id != 0 && newQuantity >= 0)
 		{
 			synchronized(session)
 		    {

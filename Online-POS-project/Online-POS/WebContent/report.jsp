@@ -69,167 +69,179 @@
 	    </script>
 	</head>
 	<body>
-		<header class="navbar navbar-default" id="navbar">
-			<div class="navbar-container container" id="navbar-container">
-				<div class="navbar-header pull-left">
-					<a href="index.jsp" class="navbar-brand">
-	            		<small>
-	              			<i class="icon-medkit"></i>
-	              			Инфосистемс POS ${test}
-	            		</small>
-	          		</a><!-- /.brand -->
-	        	</div><!-- /.navbar-header -->
-	        	<div class="navbar-header pull-right">
-	          		<ul class="nav ace-nav">
-	            		<li class="light-blue2">
-	              			<a href="#" data-toggle="dropdown" class="dropdown-toggle">
-	                			<span class="user-info">
-	                  				<small>Тавтай морилно уу,</small>
-	                  				${user.userName}
-	                			</span>
-	                			<i class="icon-caret-down"></i>
-	              			</a>
-	              			<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-	                			<li class="hidden">
-	                  				<a href="#">
-	                    				<i class="icon-cog"></i>
-	                    				Тохиргоо
-	                  				</a>
-	                			</li>
-	                			<li class="hidden">
-	                				<a href="#">
-				                    	<i class="icon-user"></i>
-				                    	Хувийн хэрэг
-				                  	</a>
-				                </li>
-				                <li>
-				                  	<a href="index.jsp">
-				                    	<i class="bhicon bhicon-cash"></i>
-				                    	Касс
-				                  	</a>
-				                </li>
-				                <li class="divider"></li>
-				                <li>
-				                  	<a href="logout">
-				                    	<i class="icon-off"></i>
-				                    	Гарах
-				                  	</a>
-				                </li>
-	              			</ul>
-	            		</li>
-	          		</ul><!-- /.ace-nav -->
-	        	</div><!-- /.navbar-header -->
-	      	</div><!-- /.container -->
-	    </header>
-	    
-	    <div class="main-container container" id="main-container">
-      		<div class="main-container-inner">
-        		<div class="main-content bh-main-content">
-        			<div class="page-content">
-        				<div class="page-header">
-        					<h1>Тайлан</h1>
-        				</div>
-        				<div class="row">
-        					<div class="col-sm-12">
-        						<form action="search-sales" class="form-horizontal" method="POST">
-        							<div class="row">
-        								<div class="col-sm-offset-1 col-sm-3">
-        									<label class="control-label" for="startDate">
-        										ЭХЛЭХ:
-        									</label>
-        								</div>
-        								<div class="col-sm-3">
-        									<label class="control-label" for="endDate">
-        										ДУУСАХ:
-        									</label>
-        								</div>
-        								<div class="col-sm-offset-1 col-sm-2">
-        									<label class="control-label" for="type">
-        										<b>Төлбөр:</b>
-        									</label>
-        								</div>
-        							</div>
-        							<div class="row">
-        								<div class="col-sm-1 text-right">
-        									<label class="control-label" for="startDate">
-        										<b>Огноо:</b>
-        									</label>
-        								</div>
-        								<div class="col-sm-3">
-        									<div class="input-group">
-        										<span class="input-group-addon">
-        											<i class="icon-calendar bigger-110"></i>
-												</span>
-        										<input type="text" name="startDate" value="${param.startDate}" class="form-control" id="startDate" />
-        									</div>
-        								</div>
-        								<div class="col-sm-3">
-        									<div class="input-group">
-        										<span class="input-group-addon">
-        											<i class="icon-calendar bigger-110"></i>
-												</span>
-        										<input type="text" name="endDate" value="${param.endDate}" class="form-control" id="endDate" />
-        									</div>
-        								</div>
-        								<div class="col-sm-offset-1 col-sm-2">
-        									<select name="type" class="form-control" id="type">
-        										<option value="all">Бүгд</option>
-        										<option value="cash">Бэлнээр</option>
-										  		<option value="card">Картаар</option>
-											  	<option value="invoice">Нэхэмжлэлээр</option>
-											</select>
-        								</div>
-        								<div class="col-sm-2">
-        									<button type="submit" class="btn btn-sm btn-success btn-block" id="searchBtn">
-        										<i class="icon-search"></i>&nbsp;
-        										Хайх
-        									</button>
-        								</div>
-        							</div>
-        						</form>
-        					</div>
-        				</div>
-        				<div class="space-8"></div>
-			            <div class="row">
-			              	<div class="col-sm-12">
-			              		<div class="table-responsive">
-			              			<table class="table table-striped table-bordered table-hover" id="mainTable">
-			              				<thead>
-			              					<tr>
-			              						<th>Огноо</th>
-			              						<th>Талон №</th>
-			              						<th>Барааны нэр</th>
-			              						<th>Тоо</th>
-			              						<th>Нэгж үнэ</th>
-			              						<th>Нийт дүн</th>
-			              						<th>Төлбөр</th>
-			              					</tr>
-			              				</thead>
-			              				<tbody>${tableBody}</tbody>
-			              			</table>
-			              			<div class="12 text-center blue">
-			              				<h2>
-			              					<b>${total}</b>
-			              				</h2>
-			              			</div>
-			              		</div>
-			          		</div>
-			          	</div>
-			        </div>
-        		</div>
-        	</div>
-        </div>
-        
-        <footer class="footer">
-        	<div class="container">
-	        	<div class="row center">
-	          		<div class="col-xs-12 col-sm-offset-4 col-sm-4 center">
-	            		&copy;2014  Infosystems LLC
-	          		</div>
-	          		<div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
-	          		</div>
+		<div class="bh-non-print">
+			<header class="navbar navbar-default" id="navbar">
+				<div class="navbar-container container" id="navbar-container">
+					<div class="navbar-header pull-left">
+						<a href="index.jsp" class="navbar-brand">
+		            		<small>
+		              			<i class="icon-medkit"></i>
+		              			Инфосистемс POS ${test}
+		            		</small>
+		          		</a><!-- /.brand -->
+		        	</div><!-- /.navbar-header -->
+		        	<div class="navbar-header pull-right">
+		          		<ul class="nav ace-nav">
+		            		<li class="light-blue2">
+		              			<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+		                			<span class="user-info">
+		                  				<small>Тавтай морилно уу,</small>
+		                  				${user.userName}
+		                			</span>
+		                			<i class="icon-caret-down"></i>
+		              			</a>
+		              			<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+		                			<li class="hidden">
+		                  				<a href="#">
+		                    				<i class="icon-cog"></i>
+		                    				Тохиргоо
+		                  				</a>
+		                			</li>
+		                			<li class="hidden">
+		                				<a href="#">
+					                    	<i class="icon-user"></i>
+					                    	Хувийн хэрэг
+					                  	</a>
+					                </li>
+					                <li>
+					                  	<a href="index.jsp">
+					                    	<i class="bhicon bhicon-cash"></i>
+					                    	Касс
+					                  	</a>
+					                </li>
+					                <li class="divider"></li>
+					                <li>
+					                  	<a href="logout">
+					                    	<i class="icon-off"></i>
+					                    	Гарах
+					                  	</a>
+					                </li>
+		              			</ul>
+		            		</li>
+		          		</ul><!-- /.ace-nav -->
+		        	</div><!-- /.navbar-header -->
+		      	</div><!-- /.container -->
+		    </header>
+		    
+		    <div class="main-container container" id="main-container">
+	      		<div class="main-container-inner">
+	        		<div class="main-content bh-main-content">
+	        			<div class="page-content">
+	        				<div class="page-header">
+	        					<h1>Тайлан</h1>
+	        				</div>
+	        				<div class="row">
+	        					<div class="col-sm-12">
+	        						<form action="search-sales" class="form-horizontal" method="POST">
+	        							<div class="row">
+	        								<div class="col-sm-offset-1 col-sm-3">
+	        									<label class="control-label" for="startDate">
+	        										ЭХЛЭХ:
+	        									</label>
+	        								</div>
+	        								<div class="col-sm-3">
+	        									<label class="control-label" for="endDate">
+	        										ДУУСАХ:
+	        									</label>
+	        								</div>
+	        								<div class="col-sm-offset-1 col-sm-2">
+	        									<label class="control-label" for="type">
+	        										<b>Төлбөр:</b>
+	        									</label>
+	        								</div>
+	        							</div>
+	        							<div class="row">
+	        								<div class="col-sm-1 text-right">
+	        									<label class="control-label" for="startDate">
+	        										<b>Огноо:</b>
+	        									</label>
+	        								</div>
+	        								<div class="col-sm-2">
+	        									<div class="input-group">
+	        										<span class="input-group-addon">
+	        											<i class="icon-calendar bigger-110"></i>
+													</span>
+	        										<input type="text" name="startDate" value="${param.startDate}" tabindex = "1" class="form-control" id="startDate" />
+	        									</div>
+	        								</div>
+	        								<div class="col-sm-3">
+	        									<div class="input-group">
+	        										<span class="input-group-addon">
+	        											<i class="icon-calendar bigger-110"></i>
+													</span>
+	        										<input type="text" name="endDate" value="${param.endDate}" tabindex = "2" class="form-control" id="endDate" />
+	        									</div>
+	        								</div>
+	        								<div class="col-sm-offset-1 col-sm-2">
+	        									<select name="type" class="form-control" id="type" tabindex = "3">
+	        										<option value="all">Бүгд</option>
+	        										<option value="cash">Бэлнээр</option>
+											  		<option value="card">Картаар</option>
+												  	<option value="invoice">Нэхэмжлэлээр</option>
+												</select>
+	        								</div>
+	        								<div class="col-sm-2">
+	        									<button type="submit" class="btn btn-sm btn-success btn-block" tabindex = "4" id="searchBtn">
+	        										<i class="icon-search"></i>&nbsp;
+	        										Хайх
+	        									</button>
+	        								</div>
+	        								<div class="col-sm-1">
+	        									<a href ="cash.jsp" class="btn btn-sm btn-danger btn-block" id="back">
+	        										Буцах
+	        									</a>
+	        								</div>
+	        							</div>
+	        						</form>
+	        					</div>
+	        				</div>
+	        				<div class="space-8"></div>
+				            <div class="row">
+				              	<div class="col-sm-12">
+				              		<div class="table-responsive">
+				              			<table class="table table-striped table-bordered table-hover" id="mainTable">
+				              				<thead>
+				              					<tr>
+				              						<th >Огноо</th>
+				              						<th>Талон №</th>
+				              						<th>Барааны нэр</th>
+				              						<th>Тоо</th>
+				              						<th>Нэгж үнэ</th>
+				              						<th>Нийт дүн</th>
+				              						<th>Төлбөр</th>
+				              					</tr>
+				              				</thead>
+				              				<tbody>${tableBody}</tbody>
+				              			</table>
+				              			<div class="12 text-center blue">
+				              				<h2>
+				              					<b>${total}</b>
+				              				</h2>
+				              			</div>
+				              		</div>
+				          		</div>
+				          	</div>
+				        </div>
+	        		</div>
 	        	</div>
-	      	</div>
-	    </footer>
+	        </div>
+	        <footer class="footer">
+	        	<div class="container">
+		        	<div class="row center">
+		          		<div class="col-xs-12 col-sm-offset-4 col-sm-4 center">
+		            		&copy;2014  Infosystems LLC
+		          		</div>
+		          		<div id="time" class="col-xs-12 col-sm-4 center bigger-120 bolder dark">
+		          		</div>
+		        	</div>
+		      	</div>
+		    </footer>
+		    <div id = "logoutDialog">
+		  		<div class="center">
+		  			<b>Итгэлтэй байна уу?</b>
+		  		</div>
+			</div>
+		 </div>
 	</body>
+	
 </html>

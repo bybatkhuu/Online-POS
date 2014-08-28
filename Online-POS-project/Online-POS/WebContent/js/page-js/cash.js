@@ -12,6 +12,7 @@ $(document).ready(function()
 	startTime();
 	ajaxSetup();
 	initSearchDialog();
+	initHelpDialog();
 	initOrderNum();
 	initBarcode();
 	initSearchSlider();
@@ -21,7 +22,6 @@ $(document).ready(function()
 	
 	initEventHandlers();
 });
-
 function startTime()
 {
 	var today = new Date();
@@ -250,7 +250,28 @@ function initSearchDialog()
 		height: 550
 	});
 }
-
+function initHelpDialog()
+{
+	$("#helpDialog").dialog(
+	{
+		title: "<div class='widget-header'><h5>Тусламж</h5></div>",
+		title_html: true,
+		autoOpen: false,
+		modal: true,
+		width: 400,
+		height: 250,
+		buttons:[ 
+						{
+						html: "<i class='icon-check bigger-110'></i>&nbsp; Ok",
+						"class" : "btn btn-success btn-xs",
+						"id" : "btnBack",
+							click: function() {
+								$(this).dialog("close");
+							}
+						}
+			         ]
+	});
+}
 function initOrderNum()
 {
 	$.ajax(
@@ -388,6 +409,8 @@ function addItem(barcode, quantity, assetAcc)
 					      	success: function(result)
 					      	{
 					      		$("#tableBody").html(result);
+					      		;
+							  	$("#mainTableSlim").scrollTop($("#tableBody > tr[class='success']").index()*12);
 					      		initTableEvents();
 					    	  	checkAll();
 					      	}
@@ -512,7 +535,7 @@ function updateFromTable(element, id, price, oldQuant)
 {
 	var newQuant = parseFloat($("#newQuant").val());
 	$("#newQuant").remove();
-	if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
+	if (oldQuant != newQuant && !isNaN(newQuant) && 0 <= newQuant)
 	{
 		update(id, newQuant);
 	}
@@ -719,8 +742,8 @@ function loadPrintView()
 		str = str + "<div class='row' >";
 			str = str + "<div class='col-xs-6' style = 'padding-left:5px;margin-left:5px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
 			str = str + "<div class='col-xs-1' style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-			str = str + "<div class='col-xs-2' style = 'border-top:1px solid #46464f;padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-			str = str + "<div class='col-xs-2' style = 'border-bottom:1px solid #46464f;padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
@@ -764,24 +787,51 @@ function initEventHandlers()
 			event.preventDefault();
 			$("#searchItemsDialog").dialog("open");
 		}
+		//ctrl+1
 		if(event.keyCode == 49 && event.ctrlKey){
 			event.preventDefault();
-			$("#customerCheck").trigger('click');
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#customerCheck").trigger('click');
+				if($("#customerCheck").prop("checked")){
+					$("#customers").focus();
+				};
+			}else{
+				$("#searchByMinPrice").focus();
+			}
 		}
+		//ctrl+2
 		if(event.keyCode == 50 && event.ctrlKey){
 			event.preventDefault();
-			$("#bankCheck").trigger('click');
-		}
-		if(event.keyCode == 27){
-			if($("#searchItemsDialog").parents(".ui-dialog").is(":visible"))
-			{
-//				$("#logoutDialog").dialog("open");
-//				$("#btnCncl").focus();
-				alert("open");
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#bankCheck").trigger('click');
+				if($("#bankCheck").prop("checked")){
+					$("#banks").focus();
+				};
 			}else{
-				alert("close");
+				$("#searchByMaxPrice").focus();
+			}
+		}
+//		ctrl+3
+		if(event.keyCode == 51 && event.ctrlKey){
+			event.preventDefault();
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#cardNumber").focus();
+			}
+		}
+		//ctrl+4
+		if(event.keyCode == 52 && event.ctrlKey){
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#logoutDialog").dialog("open");
+				$("#btnCncl").focus();
 			}
 			
+		}
+		//F1
+		if(event.keyCode == 112){
+			event.preventDefault();
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#helpDialog").dialog("open");
+			}
 		}
 		
 //		 if(event.which == 121){
@@ -793,7 +843,7 @@ function initEventHandlers()
 //				window.location = "cash.jsp";
 ////				alert(success.);
 //				 }
-		  	else
+//		  	else
 		if (event.which == 9)
 	  	{
 			if ($("input:focus").attr("id") == "paid")
@@ -805,95 +855,119 @@ function initEventHandlers()
 		//F3
 		else if (event.which == 114)
 	  	{
-			event.preventDefault();
-		  	$("#barcode").focus();
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				event.preventDefault();
+			  	$("#barcode").focus();
+			}else{
+				event.preventDefault();
+			  	$("#searchByBarcode").focus();
+			}
 			
 	  	}
 		//F2
 		 if (event.which == 113)
 		  	{
-				event.preventDefault();
-				if($("#cardNumber").val()!=""){
-					$.ajax(
-							{
-								url: "remove-discount-card",
-								success: function(result)
+					event.preventDefault();
+				if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+					if($("#cardNumber").val()!=""){
+						$.ajax(
 								{
-									$("#tableBody").html(result);
-									initTableEvents();
-									$("#cardNumber").val("");
-									$("#cardOwner").text("");
-									$("#discountPercent").val("");
-									$("#discountType").val("");
-									checkAll();
-								}
-							});
-				}
-				$("#discountPercent").prop("disabled", false);
-			  	$("#discountPercent").focus();
+									url: "remove-discount-card",
+									success: function(result)
+									{
+										$("#tableBody").html(result);
+										initTableEvents();
+										$("#cardNumber").val("");
+										$("#cardOwner").text("");
+										$("#discountPercent").val("");
+										$("#discountType").val("");
+										checkAll();
+									}
+								});
+					}
+					$("#discountPercent").prop("disabled", false);
+				  	$("#discountPercent").focus();
+				 }else{
+					 $("#searchByName").focus();
+				 }
 		  	}
 		 //f4
 		else if (event.which == 115)
 	  	{
 			event.preventDefault();
-			$("#discountPercent").prop("disabled", true);
-			$.ajax(
-			{
-				url: "remove-discount-card",
-				success: function(result)
+			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#discountPercent").prop("disabled", true);
+				$.ajax(
 				{
-					$("#tableBody").html(result);
-					initTableEvents();
-					$("#cardNumber").val("");
-					$("#cardOwner").text("");
-					$("#discountPercent").val("");
-					$("#discountType").val("");
-					checkAll();
-				}
-			});
+					url: "remove-discount-card",
+					success: function(result)
+					{
+						$("#tableBody").html(result);
+						initTableEvents();
+						$("#cardNumber").val("");
+						$("#cardOwner").text("");
+						$("#discountPercent").val("");
+						$("#discountType").val("");
+						checkAll();
+					}
+				});
+			 }
 	  	}
 		 //f5
 	  	else if (event.which == 116)
 	  	{
 	  		event.preventDefault();
-	  		if(!$("#newQuant").is(":focus")&& !$("#newQuant1").is(":focus")){
-		  	$("#updateButton").trigger('click');
-		  	checkAll();
-	  		}
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+		  		if(!$("#newQuant").is(":focus")&& !$("#newQuant1").is(":focus")){
+			  	$("#updateButton").trigger('click');
+			  	checkAll();
+		  		}
+	  		 }
 	  	}
 		 //f6
 	  	else if (event.which == 117)
 	  	{
 	  		event.preventDefault();
-	  		loadPrintView();
-		  	window.print();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+		  		loadPrintView();
+			  	window.print();
+	  		 }
 	  	}
 		 //f7
 	  	else if (event.which == 118)
 	  	{
 	  		event.preventDefault();
-	  		$("#paid").val("");
-		  	$("#paid").focus();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+		  		$("#paid").val("");
+			  	$("#paid").focus();
+	  		 }
 	  	}
 		 //f8
 	  	else if (event.which == 119)
 	  	{
 	  		event.preventDefault();
-	  		window.location.assign("report.jsp");
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			 window.location.assign("report.jsp");
+	  		 }
 	  	}
 		 //f9
 	  	else if (event.which == 120)
 	  	{
-//	  		event.preventDefault();
-//	  		if ($("#tableBody > tr[class='success']").size() == 1)
-//	  		{
-//	  			$("#unitPrice").prop("disabled", false);
-//		  		$("#unitPrice").focus();
-//	  		}
-//	  		else
-//	  		{
-//	  			$("#unitPrice").prop("disabled", true);
-//	  		}
+	  		event.preventDefault();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+//		  		if ($("#tableBody > tr[class='success']").size() == 1)
+//		  		{
+//		  			$("#unitPrice").prop("disabled", false);
+//			  		$("#unitPrice").focus();
+//		  		}
+//		  		else
+//		  		{
+//		  			$("#unitPrice").prop("disabled", true);
+//		  		}
+	  		}else{
+	  			$("#selectItems").focus();
+	  			$("#selectItems").trigger("click");
+	  		}
 	  	}
 		 //Up arrow
 	  	else
@@ -901,29 +975,53 @@ function initEventHandlers()
 	  	{
 	  		if (!$("#barcode").is(":focus"))
 	  		{
-		  		var i = $("#tableBody > tr[class='success']").index();
-			  	var s = $("#tableBody > tr").size();
-			  	if (s > 0)
-			  	{
-			  		if (i <= s - 1)
+	  			event.preventDefault();
+	  			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+			  		var i = $("#tableBody > tr[class='success']").index();
+				  	var s = $("#tableBody > tr").size();
+				  	if (s > 0)
 				  	{
-				  		if (i > 0)
+				  		if (i <= s - 1)
 					  	{
-					  		i--;
+					  		if (i > 0)
+						  	{
+						  		i--;
+						  	}
+						  	else
+						  	{
+						  		i = $("#tableBody > tr").size() - 1;
+						  	}
+						  	$("#tableBody > tr[class='success']").removeClass();
+						  	$("#tableBody > tr").eq(i).addClass("success");
+						  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+						  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+						  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+						  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 					  	}
-					  	else
+				  		$("#mainTableSlim").scrollTop(i*12);
+					}
+				  	checkAll();
+	  			}else{
+	  				var i = $("#searchResultBody > tr[class='success']").index();
+				  	var s = $("#searchResultBody > tr").size();
+				  	if (s > 0)
+				  	{
+				  		if (i <= s - 1)
 					  	{
-					  		i = $("#tableBody > tr").size() - 1;
+					  		if (i > 0)
+						  	{
+						  		i--;
+						  	}
+						  	else
+						  	{
+						  		i = $("#searchResultBody > tr").size() - 1;
+						  	}
+						  	$("#searchResultBody > tr[class='success']").removeClass();
+						  	$("#searchResultBody > tr").eq(i).addClass("success");
 					  	}
-					  	$("#tableBody > tr[class='success']").removeClass();
-					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
-				  	}
-				}
-			  	checkAll();
+				  		$("#searchItemsDialog").scrollTop(i*12);
+					}
+	  			}
 	  		}
 	  	}
 //		 Down arrow
@@ -931,29 +1029,59 @@ function initEventHandlers()
 	  	{
 	  		if (!$("#barcode").is(":focus"))
 	  		{
-			  	var i = $("#tableBody > tr[class='success']").index();
-			  	var s = $("#tableBody > tr").size();
-			  	if (s > 0)
-			  	{
-				  	if (i <= s - 1)
+	  			event.preventDefault();
+	  			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				  	var i = $("#tableBody > tr[class='success']").index();
+				  	var s = $("#tableBody > tr").size();
+				  	if (s > 0)
 				  	{
-					  	if (i != s - 1)
+					  	if (i <= s - 1)
 					  	{
-						  	i++;
+						  	if (i != s - 1)
+						  	{
+							  	i++;
+						  	}
+						  	else
+						  	{
+							  	i = 0;
+						  	}
+						  	$("#tableBody > tr[class='success']").removeClass();
+						  	$("#tableBody > tr").eq(i).addClass("success");
+						  	$("#tableBody > tr[class='success']").focus();
+						  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+						  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+						  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+						  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 					  	}
-					  	else
-					  	{
-						  	i = 0;
-					  	}
-					  	$("#tableBody > tr[class='success']").removeClass();
-					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
+					  	$("#mainTableSlim").scrollTop(i*12);
 				  	}
-			  	}
-			  	checkAll();
+				  	checkAll();
+	  			}
+		  		else{
+		  			if(!$("#selectItems").is(":focus")){
+		  				event.preventDefault();
+		  			}
+		  			var i = $("#searchResultBody > tr[class='success']").index();
+				  	var s = $("#searchResultBody > tr").size();
+				  	if (s > 0)
+				  	{
+					  	if (i <= s - 1)
+					  	{
+						  	if (i != s - 1)
+						  	{
+							  	i++;
+						  	}
+						  	else
+						  	{
+							  	i = 0;
+						  	}
+						  	$("#searchResultBody > tr[class='success']").removeClass();
+						  	$("#searchResultBody > tr").eq(i).addClass("success");
+					  	}
+					  	
+				  	}
+				  	$("#searchItemsDialog").scrollTop(i*12);
+	  			}
 	  		}
 	  	}
 		 //delete
@@ -1284,58 +1412,95 @@ function initEventHandlers()
   		}
   		checkAll();
   	});
-  	
+  	$("#selectItems").click(function(event){
+  		event.preventDefault();
+  		if($("#selectItems").is(':focus')){
+	  		if($("#searchResultBody > tr").size() > 0){
+	  			var i = $("#searchResultBody > tr[class='success']").index();
+	  			addItem($("#searchResultBody > tr").eq(i).children().eq(1).text().trim(), 1, $("#searchResultBody > tr").eq(i).children().eq(3).text().trim());
+				$("#searchItemsDialog").dialog("close");
+	  		}else
+	  		{
+	  			alert("Бараа сонгоно уу!");
+	  		}
+  		}
+  	});
   	$("#searchItems").click(function(event)
   	{
   		event.preventDefault();
-  		if ($("#searchByName").val().trim() != "" || $("#searchByBarcode").val().trim() != "")
-  		{
-  			if (!isNumber($("#searchByMinPrice").val()))
-  			{
-  				$("#searchByMinPrice").val($("#slider-range").slider("option", "min"));
-  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
-  			}
-  			
-  			if (!isNumber($("#searchByMaxPrice").val()))
-  			{
-  				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
-  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
-  			}
-  			$.ajax(
-  			{
-  				url: "searchItems",
-  				data:
-  				{
-  					"itemName": $("#searchByName").val().trim(),
-  					"barcode": $("#searchByBarcode").val().trim(),
-  					"minPrice": $("#searchByMinPrice").val().trim(),
-  					"maxPrice": $("#searchByMaxPrice").val().trim(),
-  					"assetAcc":$("#assetAccounts").val().trim()
-  				},
-  				success: function(result)
-  				{
-  					$("#searchResultBody").html(result);
-	  				$("#searchResultBody > tr").click(function(event)
-  					{
-  						event.preventDefault();
-  						$("#searchResultBody > tr[class='success']").removeClass();
-  						$(this).addClass("success");
-  					});
-  					
-	  				$("#searchResultBody > tr").dblclick(function(event)
+	  		if ($("#searchByName").val().trim() != "" || $("#searchByBarcode").val().trim() != "")
+	  		{
+	  			if (!isNumber($("#searchByMinPrice").val()))
+	  			{
+	  				$("#searchByMinPrice").val($("#slider-range").slider("option", "min"));
+	  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+	  			}
+	  			
+	  			if (!isNumber($("#searchByMaxPrice").val()))
+	  			{
+	  				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
+	  				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
+	  			}
+	  			$.ajax(
+	  			{
+	  				url: "searchItems",
+	  				data:
 	  				{
-	  					event.preventDefault();
-	  					addItem($(this).children().eq(1).text().trim(), 1, $(this).children().eq(3).text().trim());
-	  					$("#searchResultBody > tr[class='success']").removeClass();
-	  					$("#searchItemsDialog").dialog("close");
-	  				});
-  				}
-  			});
+	  					"itemName": $("#searchByName").val().trim(),
+	  					"barcode": $("#searchByBarcode").val().trim(),
+	  					"minPrice": $("#searchByMinPrice").val().trim(),
+	  					"maxPrice": $("#searchByMaxPrice").val().trim(),
+	  					"assetAcc":$("#assetAccounts").val().trim()
+	  				},
+	  				success: function(result)
+	  				{
+	  					$("#searchResultBody").html(result);
+		  				$("#searchResultBody > tr").click(function(event)
+	  					{
+	  						event.preventDefault();
+	  						$("#searchResultBody > tr[class='success']").removeClass();
+	  						$(this).addClass("success");
+	  					});
+	  					
+		  				$("#searchResultBody > tr").dblclick(function(event)
+		  				{
+		  					event.preventDefault();
+		  					addItem($(this).children().eq(1).text().trim(), 1, $(this).children().eq(3).text().trim());
+		  					$("#searchResultBody > tr[class='success']").removeClass();
+		  					$("#searchItemsDialog").dialog("close");
+		  				});
+	  				}
+	  			});
+	  		}
+	  		else
+	  		{
+	  			alert("Хайх утгаа оруулна уу!");
+	  		}
+	  		
+  	});
+  	$("#searchByBarcode").keydown(function(event)
+  	{
+  		if(event.which == 13){
+  			$("#searchItems").trigger('click');
   		}
-  		else
-  		{
-  			alert("Хайх утгаа оруулна уу!");
-  		}
+  	});
+  	$("#searchByName").keydown(function(event)
+  	{
+  		if(event.which == 13){
+	  		$("#searchItems").trigger('click');
+	  	}
+  	});
+	$("#searchByMinPrice").keydown(function(event)
+  	{
+  		if(event.which == 13){
+	  		$("#searchItems").trigger('click');
+	  	}
+  	});
+	$("#searchByMaxPrice").keydown(function(event)
+  	{
+  		if(event.which == 13){
+	  		$("#searchItems").trigger('click');
+	  	}
   	});
 }
 
@@ -1349,10 +1514,10 @@ function checkAll()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<div class='row' >";
-		str = str + "<div class='col-xs-6' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		str = str + "<div class='col-xs-1'  style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-		str = str + "<div class='col-xs-2'  style = 'border-top:1px solid #46464f;padding-right:0px;margin-right:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-		str = str + "<div class='col-xs-2'  style = 'border-bottom:1px solid #46464f;padding-right:0px;margin-right:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "<div class='col-xs-6' style = 'padding-left:5px;margin-left:5px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+		str = str + "<div class='col-xs-1' style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+		str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+		str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
 		if (i < ($("#tableBody > tr").size() - 1))
 		{
@@ -1418,7 +1583,7 @@ function checkAll()
   		{
   			$("#payButton").prop("disabled", false);
   		}
-  		else if (ret == 0 && $("#paid").val() > 0)
+  		else if (ret == 0 && $("#paid").val() >= 0)
   		{
   			$("#payButton").prop("disabled", false);
   		}

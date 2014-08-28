@@ -42,14 +42,14 @@ public class SearchItemsServlet extends HttpServlet
 		{
 			itemName = "";
 		}else{
-			itemName = "%"+itemName;
+			itemName = itemName;
 		}
 	    String barcode = request.getParameter("barcode");
 	    if (barcode == null)
 		{
 	    	barcode = "";
 		}else{
-			barcode = "%"+barcode;
+			barcode = barcode;
 		}
 	    String minPrice = request.getParameter("minPrice");
 	    if (minPrice == null)
@@ -74,7 +74,7 @@ public class SearchItemsServlet extends HttpServlet
 					String assetAcc = "";
 					if (cash.getAssetType().equalsIgnoreCase("Set"))
 					{
-						assetAcc = cash.getAssetAcc();
+						assetAcc = cash.getAssetAcc().trim();
 						String[] params = { itemName, barcode, minPrice, maxPrice, assetAcc };
 						try
 						{
@@ -111,11 +111,16 @@ public class SearchItemsServlet extends HttpServlet
 	    PrintWriter out = response.getWriter();
 	    if (rowList != null && rowList.size() > 0)
 	    {
+	    	int i = 0 ;
 	    	for (Row row : rowList)
 	    	{
 	    		if (row.getCellList() != null && row.getCellList().size() > 0)
 	    		{
-	    			out.println("<tr>");
+	    			if(i ==0){
+	    				out.println("<tr class='success'>");
+	    			}else{
+	    				out.println("<tr>");
+	    			}
 		    		for (Cell cell : row.getCellList())
 		    		{
 		    			switch (cell.getColumn())
@@ -155,6 +160,7 @@ public class SearchItemsServlet extends HttpServlet
 		    			}
 		    		}
 		    		out.println("</tr>");
+		    		i++;
 	    		}
 	    	}
 	    }

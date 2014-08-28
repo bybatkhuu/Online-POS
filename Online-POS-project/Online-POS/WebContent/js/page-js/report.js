@@ -67,4 +67,43 @@ $(document).ready(function()
     		event.preventDefault();
     	}
     });
+$(document).keydown(function(event)
+{	
+		if(event.keyCode == 52 && event.ctrlKey){
+			event.preventDefault();
+			$("#logoutDialog").dialog("open");
+			$("#btnCncl").focus();
+			
+		}
+//		F2
+		if(event.keyCode == 113){
+			event.preventDefault();
+			window.location = "cash.jsp";
+		}
+});
+	$("#logoutDialog").dialog(
+			{
+				title: "Гарах",
+				title_html: true,
+				autoOpen: false,
+				modal: true,
+				buttons:[ 
+						{
+							html: "<i class='icon-off bigger-110'></i>&nbsp; Гарах",
+							"class" : "btn btn-danger btn-xs ",
+							"id" : "btnok",
+								click: function() {
+									window.location = "logout";
+								}
+							},
+							{
+							html: "<i class='icon-remove bigger-110'></i>&nbsp; Болих",
+							"class" : "btn btn-success btn-xs",
+							"id" : "btnCncl",
+								click: function() {
+									$(this).dialog("close");
+								}
+							}
+				         ]
+			});
 });
