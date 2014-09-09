@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
 
 import models.Card;
 import models.Item;
@@ -201,6 +200,12 @@ public class AddItemServlet extends HttpServlet
 							break;
 						case "item_unit_id":
 							item.setUnitID(Integer.parseInt(cell.getValue()));
+							break;
+						case "facturename":
+							item.setFactureName(cell.getValue());
+							break;
+						case "facturecode":
+							item.setFactureCode(cell.getValue());
 							break;
 						default:
 							break;

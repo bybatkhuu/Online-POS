@@ -17,13 +17,24 @@ public class Item implements Serializable
 	private double total;
 	private double discountTotal;
 	private String description;
+	private String factureCode;
+	private String factureName;
 	/*private double salePrice;
 	private double saleQuantity;*/
 	
 	public Item()
 	{
 	}
-	
+	public Item(Item item){
+		this.discountPrice = 0;
+		this.discountPercent = 0;
+		this.price = item.getPrice();
+		this.quantity = item.getQuantity();
+		this.total = item.getTotal();
+		this.unit = item.getUnit();
+		this.factureCode = item.getFactureCode();
+		this.factureName = item.getFactureName();
+	}
 	public int getId()
 	{
 		return id;
@@ -186,4 +197,18 @@ public class Item implements Serializable
 	{
 		return price;
 	}
+	
+	public String getFactureCode() {
+		return factureCode;
+	}
+	public void setFactureCode(String factureCode) {
+		this.factureCode = factureCode;
+	}
+	public String getFactureName() {
+		return factureName;
+	}
+	public void setFactureName(String factureName) {
+		this.factureName = factureName;
+	}
+	
 }

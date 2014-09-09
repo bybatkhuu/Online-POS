@@ -604,7 +604,6 @@ function updateDisCount(id, newDisCount)
 		}
 	});
 }
-
 function purchase()
 {
 	var type = "Cash";
@@ -790,11 +789,13 @@ function initEventHandlers()
 		//ctrl+1
 		if(event.keyCode == 49 && event.ctrlKey){
 			event.preventDefault();
+			//silverPen start
 			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 				$("#customerCheck").trigger('click');
 				if($("#customerCheck").prop("checked")){
 					$("#customers").focus();
 				};
+				//silverPen end
 			}else{
 				$("#searchByMinPrice").focus();
 			}
@@ -833,17 +834,40 @@ function initEventHandlers()
 				$("#helpDialog").dialog("open");
 			}
 		}
-		
-//		 if(event.which == 121){
-//			 loadPrintView();
-//				window.location = "facture.jsp";
-//				window.print();
-////				print.always_print_silent;
-////				$('#printFacture_page').get(0).contentWindow.print()
-//				window.location = "cash.jsp";
-////				alert(success.);
-//				 }
-//		  	else
+//		F10
+		 if(event.which == 121)
+		 {
+			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible"))
+			 {
+//				 if($("#tableBody > tr").size() !=0){
+//					 loadPrintView();
+				 if($("#discountPercent").val().trim() == ""){
+					 if($("#return").val() >= 0 && $("#payOff").val() != 0){
+						 localStorage.removeItem("talon");
+						 localStorage.setItem("talon",$("#talon").val().trim());
+						 localStorage.setItem("customerCheck",$("#customerCheck").prop("checked").toString());
+						 localStorage.setItem("customers",$("#customers").val().trim());
+						 localStorage.setItem("bankCheck",$("#bankCheck").prop("checked").toString());
+						 localStorage.setItem("banks",$("#banks").val().trim());
+						 $.ajax({
+								url: "item-group",
+								success: function(result)
+								{
+								}
+							});
+						window.location = "facture.jsp";
+					 }else{
+						 alert("Төлбөр Хийгээгүй байна");
+					 }
+				 }
+				 else{
+					 alert("Хөнгөлөлт оруулах боломжгүй");
+				 }
+			}else{
+				
+			}
+		 }
+		 else
 		if (event.which == 9)
 	  	{
 			if ($("input:focus").attr("id") == "paid")
@@ -929,8 +953,12 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
-		  		loadPrintView();
-			  	window.print();
+	  			 if($("#tableBody > tr").size() !=0){
+			  		loadPrintView();
+				  	window.print();
+	  			 }else{
+	  				 alert("Хоосон хэвлэж болохгүй");
+	  			 }
 	  		 }
 	  	}
 		 //f7
@@ -955,15 +983,18 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
-//		  		if ($("#tableBody > tr[class='success']").size() == 1)
-//		  		{
-//		  			$("#unitPrice").prop("disabled", false);
-//			  		$("#unitPrice").focus();
-//		  		}
-//		  		else
-//		  		{
-//		  			$("#unitPrice").prop("disabled", true);
-//		  		}
+	  			//costca start 
+		  		/*if ($("#tableBody > tr[class='success']").size() == 1)
+		  		{
+		  			$("#unitPrice").prop("disabled", false);
+			  		$("#unitPrice").focus();
+		  		}
+		  		else
+		  		{
+		  			$("#unitPrice").prop("disabled", true);
+		  		}
+		  		*/
+	  			 //costca end
 	  		}else{
 	  			$("#selectItems").focus();
 	  			$("#selectItems").trigger("click");
@@ -1085,7 +1116,9 @@ function initEventHandlers()
 	  		}
 	  	}
 		 //delete
-		/* else 
+		//costca start
+		 /*
+		 else 
 			 if (event.which == 46)
 	  	{
 	  		if (!$("#barcode").is(":focus") && !$("#discountPercent").is(":focus")
@@ -1097,7 +1130,9 @@ function initEventHandlers()
 	  			$("#deleteButton").trigger("click");
 	  			checkAll();
 	  		}
-	  	}*/
+	  	}
+	  	*/
+		 //costca end
   	});
 
 	$("#barcode").keyup(function(event)

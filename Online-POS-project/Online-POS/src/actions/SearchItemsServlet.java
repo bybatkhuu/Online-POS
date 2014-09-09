@@ -89,13 +89,14 @@ public class SearchItemsServlet extends HttpServlet
 					{
 //costca
 //						String[] params = { itemName, barcode, minPrice, maxPrice };
+// silverPen
 						assetAcc = request.getParameter("assetAcc");
 						String[] params = { itemName, barcode, minPrice, maxPrice, assetAcc };
 						try
 						{
 //costca
 //							rowList = db.getRowList("bh_searchItems2", params);
-// selverPen
+// silverPen
 							rowList = db.getRowList("bh_searchItems1", params);
 						}
 						catch (SQLException e)

@@ -69,14 +69,15 @@ $(document).ready(function()
     });
 $(document).keydown(function(event)
 {	
+//	Ctrl+4
 		if(event.keyCode == 52 && event.ctrlKey){
 			event.preventDefault();
 			$("#logoutDialog").dialog("open");
 			$("#btnCncl").focus();
 			
 		}
-//		F2
-		if(event.keyCode == 113){
+//		F4		
+		if(event.keyCode == 115){
 			event.preventDefault();
 			window.location = "cash.jsp";
 		}

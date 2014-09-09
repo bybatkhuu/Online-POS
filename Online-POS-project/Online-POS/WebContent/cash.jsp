@@ -335,7 +335,7 @@
                              
                              <div class="space-2"></div> -->
                              
-                             <div class="row ">
+                             <div class="row">
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
@@ -609,8 +609,8 @@
               <div class="col-xs-4 col-sm-1 blue center">
                 Тайлан <b class="dark">F8</b>
               </div>
-              <div class="col-xs-4 col-sm-2 red center">
-           <!--      Үнэ засах <b class="dark">F9</b> -->
+              <div class="col-xs-4 col-sm-2 red center hidden">
+               Үнэ засах <b class="dark">F9</b> 
               </div>
             </div>
           </div>
@@ -819,6 +819,11 @@
 			<div class = "col-xs-3">F9:</div>
 			<div class = "col-xs-4">Үнэ засах</div>
 			<div class = "col-xs-5">Бараа сонгох</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-3">F10:</div>
+			<div class = "col-xs-4">Падан</div>
+			<div class = "col-xs-5"></div>
 		</div>
 		<div class = "row hidden">
 			<div class = "col-xs-3">Delete:</div>

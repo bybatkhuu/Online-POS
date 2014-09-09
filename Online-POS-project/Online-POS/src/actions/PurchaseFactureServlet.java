@@ -20,12 +20,12 @@ import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 
-@WebServlet("/purchase-items")
-public class PurchaseServlet extends HttpServlet
+@WebServlet("/purchase-itemsFacture")
+public class PurchaseFactureServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
-    public PurchaseServlet()
+    public PurchaseFactureServlet()
     {
         super();
     }
@@ -46,6 +46,8 @@ public class PurchaseServlet extends HttpServlet
 		User user = (User) session.getAttribute("user");
 		String orderNum = request.getParameter("orderNum");
 		String type = request.getParameter("type");
+		String corporationName = request.getParameter("nameShow");
+		String corporationReg = request.getParameter("numberShow");
 		if (type != null && !type.trim().equalsIgnoreCase(""))
 		{
 			String otherId = request.getParameter("otherId");
@@ -72,8 +74,8 @@ public class PurchaseServlet extends HttpServlet
 					    		{
 					    			cardId = String.valueOf(card.getId());
 					    		}
-			    				String[] parameters = { Integer.toString(user.getId()), orderNum, type, otherId, cardId,"false" };
-			    				Cell orderId = db.getCell("bh_purchase", parameters);
+			    				String[] parameters = { Integer.toString(user.getId()), orderNum, type, otherId, cardId ,"true",corporationName,corporationReg};
+			    				Cell orderId = db.getCell("bh_purchase_facture", parameters);
 			    				Cell cell = null;
 			    				for (Item item : itemList)
 			    				{
@@ -109,7 +111,6 @@ public class PurchaseServlet extends HttpServlet
 								System.out.println("Error: Can't insert transaction in purchase!\nMessage: " + e.toString());
 							}
 			    			isPurchased = true;
-			    			session.removeAttribute("itemList");
 			    			session.removeAttribute("card");
 			    			session.removeAttribute("discountPercent");
 			    		}
