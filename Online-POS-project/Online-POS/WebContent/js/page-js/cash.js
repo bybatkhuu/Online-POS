@@ -142,7 +142,7 @@ function ajaxSetup()
 	
 	$.ajaxSetup(
 	{
-		async: false
+		async: false,
 	});
 	
 	$(document).ajaxStart(function()
@@ -781,10 +781,12 @@ function initEventHandlers()
 {
 	$(document).keydown(function(event)
 	{
+		//ctrl+f
 		if (event.keyCode == 70 && event.ctrlKey)
 		{
 			event.preventDefault();
 			$("#searchItemsDialog").dialog("open");
+			
 		}
 		//ctrl+1
 		if(event.keyCode == 49 && event.ctrlKey){
@@ -799,7 +801,7 @@ function initEventHandlers()
 			}else{
 				$("#searchByMinPrice").focus();
 			}
-		}
+		}else
 		//ctrl+2
 		if(event.keyCode == 50 && event.ctrlKey){
 			event.preventDefault();
@@ -811,29 +813,31 @@ function initEventHandlers()
 			}else{
 				$("#searchByMaxPrice").focus();
 			}
-		}
+		}else
 //		ctrl+3
 		if(event.keyCode == 51 && event.ctrlKey){
 			event.preventDefault();
 			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 				$("#cardNumber").focus();
 			}
-		}
-		//ctrl+4
-		if(event.keyCode == 52 && event.ctrlKey){
+		}else
+		//alt+4
+		if(event.keyCode == 115 && event.altKey){
 			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				event.preventDefault();
 				$("#logoutDialog").dialog("open");
 				$("#btnCncl").focus();
 			}
 			
-		}
+		}else
 		//F1
 		if(event.keyCode == 112){
+			alert(event.keyCode);
 			event.preventDefault();
 			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 				$("#helpDialog").dialog("open");
 			}
-		}
+		}else
 //		F10
 		 if(event.which == 121)
 		 {
@@ -842,7 +846,8 @@ function initEventHandlers()
 //				 if($("#tableBody > tr").size() !=0){
 //					 loadPrintView();
 				 if($("#discountPercent").val().trim() == ""){
-					 if($("#return").val() >= 0 && $("#payOff").val() != 0){
+					 if($("#tableBody > tr").size() !=0){
+					/* if($("#return").val() >= 0 && $("#payOff").val() != 0){*/
 						 localStorage.removeItem("talon");
 						 localStorage.setItem("talon",$("#talon").val().trim());
 						 localStorage.setItem("customerCheck",$("#customerCheck").prop("checked").toString());
@@ -857,8 +862,11 @@ function initEventHandlers()
 							});
 						window.location = "facture.jsp";
 					 }else{
+		  				 alert("Хоосон падан өгөхгүй");
+		  			 }
+					 /*}else{
 						 alert("Төлбөр Хийгээгүй байна");
-					 }
+					 }*/
 				 }
 				 else{
 					 alert("Хөнгөлөлт оруулах боломжгүй");
@@ -916,7 +924,7 @@ function initEventHandlers()
 				 }
 		  	}
 		 //f4
-		else if (event.which == 115)
+		else if (event.which == 115 &&! event.altKey)
 	  	{
 			event.preventDefault();
 			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
@@ -1161,63 +1169,26 @@ function initEventHandlers()
 			$("#addItem").prop("disabled", true);
 		}
 	});
+	$("#discountPercent").focusout(function()
+  	{
+		var bool = setDiscountPercentFocusOut();
+		if(!bool){
+			$("#discountPercent").focus();
+		}
+  	});
+	$("#quantity").focusout(function()
+  	{
+		this.value = this.value.replace(/[^0-9\.]/g, '');	
+		if(this.value == ''){
+			this.value = 1;
+		}
+  	});
 	$("#discountPercent").keypress(function(event)
 			{
 				if(event.which == 13)
 				{
 				event.preventDefault();
-				if($("#discountPercent").val() != ""){
-					if (!isNaN($(this).val()))
-				  	{
-				  		if ($(this).val() > 0)
-					  	{
-				  			$.ajax(
-									{
-										url: "set-discount-All",
-										data:
-										{
-											"discountPercent": $("#discountPercent").val(),
-										},
-										success: function(result)
-										{
-											$("#tableBody").html(result);
-											initTableEvents();
-											checkAll();
-											
-										}
-									});
-				  			$("#barcode").focus();
-					  	}
-				  		else
-				  		{
-				  			alert("Хөнгөлөлт 0-с их өгнө үү!");
-				  		}
-					}
-					else
-					{
-						alert("Хөнгөлөлт дунд үсэг, тэмдэгт байна!");
-					}	
-						
-					}
-					else{
-						$("#discountPercent").prop("disabled", true);
-						$.ajax(
-						{
-							url: "remove-discount-card",
-							success: function(result)
-							{
-								$("#tableBody").html(result);
-								initTableEvents();
-								$("#cardNumber").val("");
-								$("#cardOwner").text("");
-								$("#discountPercent").val("");
-								$("#discountType").val("");
-								checkAll();
-								$("#barcode").focus();
-							}
-						});
-					}
-					
+				$("#barcode").focus();
 				}
 			});
 	$("#cardNumber").keypress(function(event)
@@ -1538,7 +1509,65 @@ function initEventHandlers()
 	  	}
   	});
 }
-
+function setDiscountPercentFocusOut(){
+	if($("#discountPercent").val() != ""){
+		if (!isNaN($("#discountPercent").val()))
+	  	{
+	  		if ($("#discountPercent").val() > 0)
+		  	{
+	  			if($("#discountPercent").val() <=100){
+		  			$.ajax(
+							{
+								url: "set-discount-All",
+								data:
+								{
+									"discountPercent": $("#discountPercent").val()
+								},
+								success: function(result)
+								{
+									$("#tableBody").html(result);
+									initTableEvents();
+									checkAll();
+									
+								}
+							});
+		  			return true;
+	  			}
+	  			else{
+	  				alert("Хөнгөлөлт 100-с бага өгнө үү!");
+	  			}
+		  	}
+	  		else
+	  		{
+	  			alert("Хөнгөлөлт 0-с их өгнө үү!");
+	  		}
+		}
+		else
+		{
+			alert("Хөнгөлөлт дунд үсэг, тэмдэгт байна!");
+		}	
+		return false;
+		}
+		else{
+			$("#discountPercent").prop("disabled", true);
+			$.ajax(
+			{
+				url: "remove-discount-card",
+				success: function(result)
+				{
+					$("#tableBody").html(result);
+					initTableEvents();
+					$("#cardNumber").val("");
+					$("#cardOwner").text("");
+					$("#discountPercent").val("");
+					$("#discountType").val("");
+					checkAll();
+				}
+			});
+		}
+	return true;
+	
+}
 function checkAll()
 {
 	$("#print-talon").html($("#talon").val());

@@ -7,14 +7,7 @@
 	int status = LoggedUser.checkLogin(session);
 	if (status != 1)
 	{
-		if (status == 0)
-		{
-			response.sendRedirect("login.jsp");
-		}
-		else
-		{
-			response.sendRedirect("login.jsp?message=" + status);
-		}
+		response.sendRedirect("login.jsp");
 	}
 %>
 <!DOCTYPE html>
@@ -179,7 +172,7 @@
 			<div class = "row">
 	          	<div class = "col-xs-12 col-sm-offset-7 col-sm-1">
 					<button type="submit" tabindex="6" class="btn btn-sm btn-success btn-block" id="select">
-						Сонгох
+						Хэвлэх
 						<i class="icon-ok"></i>
 					</button>
 				</div>
@@ -257,12 +250,12 @@
 		      </footer>
         </div>
 	<div class="bh-print-view" id = "printFacture_page" style="font-size: 14px">
-			<div style="">
+			<div style="margin-top:2.2cm;margin-left: 2.2cm">
 				<div style="margin-top:0cm;margin-left: 11.3cm;width: 20px;" id = "year"></div>
 				<div style="margin-top:-0.25cm;margin-left: 12.5cm;width: 20px;" id = "month"></div>
 				<div style="margin-top:-0.25cm;margin-left: 13.7cm;width: 30px;" id = "day"></div>
 			</div>
-			<div style="height: 1.5cm">
+			<div style="height: 1.5cm;margin-left: 2.2cm">
 				<div style="margin-top:0.7cm">
 					<div style="margin-top:0px;margin-left: 2cm;width: 5cm;">${company.name}</div>
 					<div style="margin-top:-0.1cm;margin-left: 12.5cm;width: 5cm;" id = "saleNameShow"></div>
@@ -272,7 +265,7 @@
 					<div style="margin-top:-0.2cm;margin-left: 14.5cm;width: 3cm;" id = "saleNumberShow"></div>
 				</div>
 			</div>
-			<div id="print-items" style="margin-top:0.6cm;height: 4.3cm;" >
+			<div id="print-items" style="margin-top:0.4cm;height: 4.3cm;margin-left: 2.2cm" >
 				<c:forEach items="${itemGroupList}" var="item" varStatus="status">
 					<div style="margin-left: 1cm;width: 0.7cm;height: 0.5cm">${status.index+1}</div>
 					<div style="margin-top:-0.5cm;margin-left: 1.7cm;width: 5cm;height: 0.5cm">${item.factureName}</div>
@@ -293,7 +286,7 @@
 					</div>
                 </c:forEach>
 			</div>
-			<div>
+			<div style=";margin-left: 2.2cm">
 				<div style="margin-top:0.8cm;">
 					<div id="print-cal-total" style="margin-left: 14.2cm;width: 2.5cm;">
 						<fmt:formatNumber type="number" value="${allTotal}" pattern="###############.###" />

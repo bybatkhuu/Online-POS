@@ -756,7 +756,7 @@
 	
 	</div>
 
-	<div class="bh-print-view">
+	<div class="bh-print-view" style="">
     <div class="bh-print-body">
       <div class="row">
         <div class="col-xs-12 center bh-print-header">
@@ -790,7 +790,7 @@
               for (int i = 0; i < itemList.size(); i++)
               {
                 out.println("<div class='row'>");
-                          out.println("<div class='col-xs-6'>" + itemList.get(i).getName() + "</div>");
+                          out.println("<div class='col-xs-7'>" + itemList.get(i).getName() + "</div>");
                        /*  out.println("</div>");
                         out.println("<div class='row'>");
                         out.println("<div class='col-xs-4'></div>"); */
@@ -803,12 +803,12 @@
                                 {
                                   out.println("<div class='col-xs-1'>" + (int)itemList.get(i).getQuantity() + "</div>");
                                 }
-                                out.println("<div class='col-xs-2 text-right'>" + format.format(itemList.get(i).getPrice()) + "</div>");
-                                out.println("<div class='col-xs-3 text-right'>" + format.format(itemList.get(i).getTotal()) + "</div>");
+                                out.println("<div class='col-xs-1 text-right'>" + format.format(itemList.get(i).getPrice()) + "</div>");
+                                out.println("<div class='col-xs-2 text-right'>" + format.format(itemList.get(i).getTotal()) + "</div>");
                         out.println("</div>");
                         if (i < (itemList.size() - 1))
                         {
-                          out.println("<div class='space-4'></div>");
+                          out.println("<div class='space-2'></div>");
                         }
                       }
             }

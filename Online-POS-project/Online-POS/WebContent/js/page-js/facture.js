@@ -56,24 +56,32 @@ function initEventHandlers()
 {
 	
 	$(document).keydown(function(event){
-//		Ctrl+4
-		if(event.keyCode == 52 && event.ctrlKey){
+//		alt+F4
+		if(event.keyCode == 115 && event.altKey){
 			event.preventDefault();
 			$("#logoutDialog").dialog("open");
 			$("#btnCncl").focus();
 			
 		}
-//		F4
-		if(event.keyCode == 115){
+//		F2
+		if(event.keyCode == 113){
 			event.preventDefault();
 			window.location = "cash.jsp";
 		}
+//		F6
+		else
+		 if (event.which == 117)
+		  	{
+			 event.preventDefault();
+			 $("#select").trigger("click");
+		  	}
 		if ($("a:focus").attr("id") == "back")
 		{
 			event.preventDefault();
 			$("#saleName").focus();
 		}
 	});
+
 	
 	$("#buyNumber").keyup(function(event)
 	{

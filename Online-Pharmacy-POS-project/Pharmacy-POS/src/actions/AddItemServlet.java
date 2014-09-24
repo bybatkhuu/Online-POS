@@ -67,7 +67,7 @@ public class AddItemServlet extends HttpServlet
 		    {
 		    	try
 		    	{
-		    		item = findItem(barcode, itemList);
+		    		item = findItem(barcode , serial, itemList);
 				}
 		    	catch (SQLException e)
 		    	{
@@ -148,7 +148,7 @@ public class AddItemServlet extends HttpServlet
 		doGet(request, response);
 	}
 	
-	private Item findItem(String barcode, List<Item> itemList) throws SQLException
+	private Item findItem(String barcode, String serial, List<Item> itemList) throws SQLException
 	{
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
 		String[] parameter = { barcode };
@@ -158,7 +158,7 @@ public class AddItemServlet extends HttpServlet
 			int id = Integer.parseInt(cell.getValue());
 			for (Item item : itemList)
 			{
-				if (item.getId() == id)
+				if (item.getId() == id && item.getSerial().equals(serial))
 				{
 					return(item);
 				}
@@ -222,7 +222,7 @@ public class AddItemServlet extends HttpServlet
 				}
 				else
 				{
-					String[] params = { serial, String.valueOf(branchID) };
+					String[] params = { serial, String.valueOf(branchID), String.valueOf(item.getId()) };
 					tmpCell = db.getCell("bh_getSerialId", params);
 					item.setSerialID(Integer.parseInt(tmpCell.getValue()));
 					item.setSerial(serial);

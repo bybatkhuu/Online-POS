@@ -46,7 +46,7 @@ function startTime()
     hour = checkTime(hour);
     minute = checkTime(minute);
     second = checkTime(second);
-    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " <b class='blue'>" + day + "</b>";
+    var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " " + day ;
     $("#time").html(dateTimeStr);
     $("#print-date").html(dateTimeStr);
     setTimeout(function(){ startTime(); }, 500);
@@ -508,9 +508,9 @@ function calculate()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<tr>";
-			str = str + "<td class='col-xs-6'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
+			str = str + "<td class='col-xs-7'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
 			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
+			str = str + "<td class='col-xs-1 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
 			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
 		str = str + "</tr>";
 	}
@@ -907,12 +907,12 @@ function checkAll()
 	for (var i = 0; i < $("#tableBody > tr").size(); i++)
 	{
 		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-6'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+			str = str + "<div class='col-xs-7'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
 //		str = str + "</div>";
 //		str = str + "<div class='row'>";
 //			str = str + "<div class='col-xs-4'></div>";
 			str = str + "<div class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-			str = str + "<div class='col-xs-2 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-1 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
 			str = str + "<div class='col-xs-2 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
 		str = str + "</div>";
 		
