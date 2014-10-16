@@ -339,7 +339,7 @@
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
-			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "F11" tabindex="-1" id="customerCheck" />
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "Ctrl+1" tabindex="-1" id="customerCheck" />
 			                                <span class="lbl">
 			                                	<b>&nbsp; Нэхэмжлэх </b>
 			                                </span>
@@ -356,7 +356,7 @@
                              	<div class="col-sm-6">
                              		<div class="checkbox no-padding">
 			                        	<label>
-			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "F12" tabindex="-1" id="bankCheck" />
+			                            	<input type="checkbox" class="ace ace-switch ace-switch-6" title = "Ctrl+2" tabindex="-1" id="bankCheck" />
 			                                <span class="lbl">
 			                                	<b>&nbsp; Банк </b>
 			                                </span>
@@ -476,22 +476,22 @@
                                     <div class="col-xs-12 col-sm-4 col-md-3">
                                       <input type="text" name="itemCount" value="Нийт: ${fn:length(itemList)}" class="form-control input-sm bh-input-skin-1" id="itemCount" disabled />
                                     </div>
-                                    <div class="col-xs-6 col-sm-4 col-md-4">
+                                    <div class="col-xs-6 col-sm-4 col-md-3">
                                       <button class="col-xs-12 btn btn-sm btn-warning" tabindex="-1" id="updateButton">
 		                                <i class="icon-edit"></i> Засах
 		                              </button>
                                     </div>
-                                    <div class="col-xs-6 col-sm-4 col-md-2">
-                                      <button class="col-xs-12 btn btn-sm btn-danger hidden" tabindex="-1" id="deleteButton">
+                                    <div class="col-xs-6 col-sm-4 col-md-2 hidden">
+                                      <button class="col-xs-12 btn btn-sm btn-danger" tabindex="-1" id="deleteButton">
 		                                <i class="icon-minus"></i> Хасах
 		                              </button>
                                     </div>
                                     <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-offset-0 col-md-3">
-                                      <button class="col-xs-12 btn btn-sm hidden" tabindex="-1" id="clearButton">
+                                      <button class="col-xs-12 btn btn-sm" tabindex="-1" id="clearButton">
 		                                <i class="icon-trash"></i> Цэвэрлэх
 		                              </button>
                                     </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-5">
+                                    <div class="col-xs-12 col-sm-4 col-md-3">
 		                              <button class="col-xs-12 btn btn-sm btn-success" tabindex="5" id="payButton">
 		                                <i class="icon-money"></i> Төлбөр төлөх
 		                              </button>
@@ -612,8 +612,8 @@
               <div class="col-xs-4 col-sm-2 red center hidden">
                Үнэ засах <b class="dark">F9</b> 
               </div>
-              <div class="col-xs-4 col-sm-2 blue center">
-               Падан <b class="dark">F10</b> 
+              <div class="col-xs-4 col-sm-2 blue center ">
+               Үнэ засах <b class="dark">F10</b> 
               </div>
             </div>
           </div>
@@ -626,8 +626,8 @@
         <div class="row center">
           <div class="col-xs-12 col-sm-4 text-muted center">
             <small>Барааны хайлт=(Ctrl+F)</small>
-            <small class="hidden">Нэхэмжлэх=(F11)</small>
-            <small class="hidden">Банк=(F12)</small>
+            <small class="hidden">Нэхэмжлэх=(Ctrl+1)</small>
+            <small class="hidden">Банк=(Ctrl+2)</small>
              <small class="hidden">Карт №=(Ctrl+3)</small>
              <small class="hidden">3.Тохиргоо=(Ctrl+N) 4.Талоны загвар=(Ctrl+M)</small>
           </div>
@@ -728,13 +728,13 @@
 							</label>
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" title ="F11" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" title ="Ctrl+1" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
 						</div>
 						<div class="col-sm-1 no-padding">
 							<input type="text" class="form-control text-center green" value="-" style="border: 0px; font-weight:bold;" readonly disabled />
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" title = "F12" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" title = "Ctrl+2" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
 						</div>
 						<div class="col-sm-4">
 							<button type="submit" class="btn btn-sm btn-success pull-right" title = "F9" id="selectItems">
@@ -834,12 +834,12 @@
 			<div class = "col-xs-5"></div>
 		</div>
 		<div class = "row">
-			<div class = "col-xs-3">F11:</div>
+			<div class = "col-xs-3">Ctrl+1:</div>
 			<div class = "col-xs-4">Нэхэмжлэх</div>
 			<div class = "col-xs-5">Хамгийн бага үнэ</div>
 		</div>
 		<div class = "row">
-			<div class = "col-xs-3">F12:</div>
+			<div class = "col-xs-3">Ctrl+2:</div>
 			<div class = "col-xs-4">Банк</div>
 			<div class = "col-xs-5">Хамгийн их үнэ</div>
 		</div>

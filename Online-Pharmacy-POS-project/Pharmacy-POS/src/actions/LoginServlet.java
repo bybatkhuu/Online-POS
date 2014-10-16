@@ -70,9 +70,9 @@ public class LoginServlet extends HttpServlet
 										if (db.execute("bh_isLogout", parameters))
 										{
 											String ip = LoggedUser.getIpAddress(request);
+											parameters.add(ip);
 											if (db.execute("bh_checkBranchUsers", parameters))
 											{
-												parameters.add(ip);
 												if (db.execute("bh_login", parameters))
 												{
 													User user = new User();
