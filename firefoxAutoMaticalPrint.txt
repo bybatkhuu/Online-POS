@@ -1,0 +1,15 @@
+firefox:
+In the address bar type about:config then enter
+
+Right click in the white space and select New > Boolean
+
+Create a new string called print.always_print_silent and set it to True
+chrome:
+about:flags
+--kiosk --kiosk-printing
+
+print preview(disable)
+relaunch now(click)
+
+
+--disable-print-preview

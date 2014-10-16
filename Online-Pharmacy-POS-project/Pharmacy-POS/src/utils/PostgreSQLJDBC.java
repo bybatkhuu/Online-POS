@@ -30,6 +30,7 @@ public class PostgreSQLJDBC
         server = "localhost";
         port = "5432";
         database = "PharmacyPOS";
+//        database = "Test100nast";
         user = "postgres";
         password = "123asd90@";
     }

@@ -187,7 +187,7 @@
 	        									</button>
 	        								</div>
 	        								<div class="col-sm-1">
-	        									<a href ="cash.jsp" class="btn btn-sm btn-danger btn-block" id="back">
+	        									<a href ="cash.jsp" class="btn btn-sm btn-danger btn-block" title="F4" id="back">
 	        										Буцах
 	        									</a>
 	        								</div>
