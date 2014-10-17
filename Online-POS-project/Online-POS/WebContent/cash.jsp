@@ -49,7 +49,7 @@
     
     </style>
     
-    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
@@ -476,7 +476,7 @@
                                     <div class="col-xs-12 col-sm-4 col-md-3">
                                       <input type="text" name="itemCount" value="Нийт: ${fn:length(itemList)}" class="form-control input-sm bh-input-skin-1" id="itemCount" disabled />
                                     </div>
-                                    <div class="col-xs-6 col-sm-4 col-md-3">
+                                    <div class="col-xs-6 col-sm-4 col-md-4">
                                       <button class="col-xs-12 btn btn-sm btn-warning" tabindex="-1" id="updateButton">
 		                                <i class="icon-edit"></i> Засах
 		                              </button>
@@ -486,12 +486,12 @@
 		                                <i class="icon-minus"></i> Хасах
 		                              </button>
                                     </div>
-                                    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-offset-0 col-md-3">
+                                    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-offset-0 col-md-3 hidden">
                                       <button class="col-xs-12 btn btn-sm" tabindex="-1" id="clearButton">
 		                                <i class="icon-trash"></i> Цэвэрлэх
 		                              </button>
                                     </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <div class="col-xs-12 col-sm-4 col-md-5">
 		                              <button class="col-xs-12 btn btn-sm btn-success" tabindex="5" id="payButton">
 		                                <i class="icon-money"></i> Төлбөр төлөх
 		                              </button>
@@ -612,8 +612,8 @@
               <div class="col-xs-4 col-sm-2 red center hidden">
                Үнэ засах <b class="dark">F9</b> 
               </div>
-              <div class="col-xs-4 col-sm-2 blue center ">
-               Үнэ засах <b class="dark">F10</b> 
+              <div class="col-xs-4 col-sm-2 blue center hidden">
+               Падан <b class="dark">F10</b> 
               </div>
             </div>
           </div>

@@ -234,6 +234,7 @@ function initTypes()
 		{
 			$("#banks").select2("enable", false);
 			$("#customerCheck").prop("disabled", false);
+			
 		}
 	});
 }
@@ -613,6 +614,7 @@ function purchase()
 	{
 		type = "Invoice";
 		otherId = $("#customers").val().trim();
+		$("#customerCheck").trigger('click');
 	}
 	else
 	{
@@ -621,6 +623,7 @@ function purchase()
 		{
 			type = "Card";
 			otherId = $("#banks").val().trim();
+			$("#bankCheck").trigger('click');
 		}
 		else
 		{
@@ -660,7 +663,7 @@ function purchase()
 		
 		if (isPurchased == true)
 		{
-			window.print();
+//			window.print();
 			$("#talon").val(talon);
 	  		$("#print-talon").val(talon);
 	  		$("#tableBody").html("");
@@ -782,7 +785,7 @@ function initEventHandlers()
 	$(document).keydown(function(event)
 	{
 		//ctrl+f
-		if (event.keyCode == 70 && event.ctrlKey)
+		if (event.which== 70 && event.ctrlKey)
 		{
 			event.preventDefault();
 			$("#searchItemsDialog").dialog("open");
@@ -800,6 +803,7 @@ function initEventHandlers()
 				//silverPen end
 			}else{
 				$("#searchByMinPrice").focus();
+				$("#searchByMinPrice").val("");
 			}
 		}else
 		//ctrl+2
@@ -812,6 +816,7 @@ function initEventHandlers()
 				};
 			}else{
 				$("#searchByMaxPrice").focus();
+				$("#searchByMaxPrice").val("")
 			}
 		}else
 //		ctrl+3
@@ -831,15 +836,14 @@ function initEventHandlers()
 			
 		}else
 		//F1
-		if(event.keyCode == 112){
-			alert(event.keyCode);
+		if(event.which == 112){
 			event.preventDefault();
 			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 				$("#helpDialog").dialog("open");
 			}
 		}else
 //		F10
-		 if(event.which == 121)
+		 /*if(event.which == 121)
 		 {
 			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible"))
 			 {
@@ -847,7 +851,7 @@ function initEventHandlers()
 //					 loadPrintView();
 				 if($("#discountPercent").val().trim() == ""){
 					 if($("#tableBody > tr").size() !=0){
-					/* if($("#return").val() >= 0 && $("#payOff").val() != 0){*/
+					 if($("#return").val() >= 0 && $("#payOff").val() != 0){
 						 localStorage.removeItem("talon");
 						 localStorage.setItem("talon",$("#talon").val().trim());
 						 localStorage.setItem("customerCheck",$("#customerCheck").prop("checked").toString());
@@ -864,9 +868,9 @@ function initEventHandlers()
 					 }else{
 		  				 alert("Хоосон падан өгөхгүй");
 		  			 }
-					 /*}else{
+					 }else{
 						 alert("Төлбөр Хийгээгүй байна");
-					 }*/
+					 }
 				 }
 				 else{
 					 alert("Хөнгөлөлт оруулах боломжгүй");
@@ -875,7 +879,7 @@ function initEventHandlers()
 				
 			}
 		 }
-		 else
+		 else*/
 		if (event.which == 9)
 	  	{
 			if ($("input:focus").attr("id") == "paid")
@@ -961,12 +965,7 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
-	  			 if($("#tableBody > tr").size() !=0){
-			  		loadPrintView();
-				  	window.print();
-	  			 }else{
-	  				 alert("Хоосон хэвлэж болохгүй");
-	  			 }
+			  	window.print();
 	  		 }
 	  	}
 		 //f7
@@ -1413,6 +1412,7 @@ function initEventHandlers()
 	  		if (event.which == 13 && $("#return").val() >= 0)
 	  		{
 	  			event.preventDefault();
+	  			loadPrintView();
 	  			purchase();
 	  		}
   		}
@@ -1570,27 +1570,6 @@ function setDiscountPercentFocusOut(){
 }
 function checkAll()
 {
-	$("#print-talon").html($("#talon").val());
-	$("#print-pos").html($("#pos").val());
-	$("#print-date").html($("#time").html());
-	$("#print-cashier").html($("#cashier").val());
-	var str = "";
-	for (var i = 0; i < $("#tableBody > tr").size(); i++)
-	{
-		str = str + "<div class='row' >";
-		str = str + "<div class='col-xs-6' style = 'padding-left:5px;margin-left:5px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-		str = str + "<div class='col-xs-1' style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-		str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-		str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
-		str = str + "</div>";
-		if (i < ($("#tableBody > tr").size() - 1))
-		{
-			str = str + "<div class='space-2'></div>";
-		}
-	}
-	$("#print-items").html(str);
-	$("#print-item-count").html($("#tableBody > tr").size());
-	
 	var barcode = $("#barcode").val();
 	var quantity = $("#quantity").val();
 	if (barcode.length > 0 && quantity.length > 0)
@@ -1663,9 +1642,4 @@ function checkAll()
 			$("#updateButton").prop("disabled", false);
 	  	}
 	}
-	$("#print-cal-total").html($("#calTotal").val());
-	$("#print-discount").html($("#discountTotal").val());
-	$("#print-total").html($("#payOff").val());
-	$("#print-paid").html($("#paid").val());
-	$("#print-return").html($("#return").val());
 }
