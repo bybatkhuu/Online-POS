@@ -82,7 +82,7 @@
 		        	</div><!-- /.navbar-header -->
 		        	<div class="navbar-header pull-right">
 		          		<ul class="nav ace-nav">
-		            		<li class="light-blue2">
+		            		<li class="light-blue2 "  >
 		              			<a href="#" data-toggle="dropdown" class="dropdown-toggle">
 		                			<span class="user-info">
 		                  				<small>Тавтай морилно уу,</small>
@@ -187,7 +187,7 @@
 	        									</button>
 	        								</div>
 	        								<div class="col-sm-1">
-	        									<a href ="cash.jsp" class="btn btn-sm btn-danger btn-block" id="back">
+	        									<a href ="cash.jsp" class="btn btn-sm btn-danger btn-block" tabindex = "5"  id="back">
 	        										Буцах
 	        									</a>
 	        								</div>

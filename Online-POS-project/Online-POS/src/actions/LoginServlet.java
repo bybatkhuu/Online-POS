@@ -126,9 +126,6 @@ public class LoginServlet extends HttpServlet
 															case "ip_address":
 																cash.setIp(cell.getValue());
 																break;
-															case "barnch_id":
-																cash.setBranchId(Integer.parseInt(cell.getValue()));
-																break;
 															case "pos_num":
 																cash.setPosNum(Integer.parseInt(cell.getValue()));
 																break;

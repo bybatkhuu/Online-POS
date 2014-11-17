@@ -9,9 +9,10 @@ public class User implements Serializable
 	private String userName;
 	private String password;
 	private String status;
-	private int branchID;
-	private String ipAddress;
 	private int roleID;
+	private String cashName;
+	private String assetType;
+	private String assetAcc;
 	
 	public User()
 	{
@@ -22,18 +23,23 @@ public class User implements Serializable
 		this.userName = user.getUserName();
 		this.password = user.getPassword();
 		this.status = user.getStatus();
-		this.branchID = user.getBranchID();
-		this.ipAddress = user.getIpAddress();
 		this.roleID = user.getRoleID();
+		this.cashName = user.getCashName();
+		this.assetAcc = user.getAssetAcc();
+		this.assetType = user.getAssetType();
 	}
-	public User(int id, String userName, String password, String status, int branchID, int roleID)
+	
+	public User(int id, String userName, String password, String status, int roleID,String cashName,
+			String assetType , String assetAcc)
 	{
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
 		this.status = status;
-		this.branchID = branchID;
 		this.roleID = roleID;
+		this.cashName = cashName;
+		this.assetAcc = assetAcc;
+		this.assetType = assetType;
 	}
 	
 	public int getId()
@@ -72,23 +78,6 @@ public class User implements Serializable
 		this.status = status;
 	}
 	
-	public int getBranchID()
-	{
-		return branchID;
-	}
-	public void setBranchID(int branchID)
-	{
-		this.branchID = branchID;
-	}
-	
-	public String getIpAddress()
-	{
-		return ipAddress;
-	}
-	public void setIpAddress(String ipAddress)
-	{
-		this.ipAddress = ipAddress;
-	}
 	
 	public int getRoleID()
 	{
@@ -97,5 +86,23 @@ public class User implements Serializable
 	public void setRoleID(int roleID)
 	{
 		this.roleID = roleID;
+	}
+	public String getCashName() {
+		return cashName;
+	}
+	public void setCashName(String cashName) {
+		this.cashName = cashName;
+	}
+	public String getAssetType() {
+		return assetType;
+	}
+	public void setAssetType(String assetType) {
+		this.assetType = assetType;
+	}
+	public String getAssetAcc() {
+		return assetAcc;
+	}
+	public void setAssetAcc(String assetAcc) {
+		this.assetAcc = assetAcc;
 	}
 }

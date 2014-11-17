@@ -7,22 +7,41 @@ public class Item implements Serializable
 {
 	private int id;
 	private String name;
-	private double price;
-	private double calPrice;
-	private String description;
 	private int unitID;
 	private String unit;
+	private String assetAcc;
+	private double quantity;
+	private double price;
+	private double discountPrice;
+	private float discountPercent;
+	private double total;
+	private double discountTotal;
+	private String description;
+	private String factureCode;
+	private String factureName;
 	private int serialID;
 	private String serial;
 	private double insDiscountPrice;
-	private double quantity;
-	private double total;
 	private double calTotal;
+	private double changePrice;
+//	private boolean hasInsDiscountPrice = false;
+	/*private double salePrice;
+	private double saleQuantity;*/
+	
 	
 	public Item()
 	{
 	}
-	
+	public Item(Item item){
+		this.discountPrice = 0;
+		this.discountPercent = 0;
+		this.price = item.getPrice();
+		this.quantity = item.getQuantity();
+		this.total = item.getTotal();
+		this.unit = item.getUnit();
+		this.factureCode = item.getFactureCode();
+		this.factureName = item.getFactureName();
+	}
 	public int getId()
 	{
 		return id;
@@ -39,18 +58,6 @@ public class Item implements Serializable
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-	
-	public double getPrice()
-	{
-		return price;
-	}
-	public void setPrice(double price)
-	{
-		this.price = price;
-		this.total = this.quantity * this.price;
-		this.calPrice = this.price - this.insDiscountPrice;
-		this.calTotal = this.quantity * this.calPrice;
 	}
 	
 	public String getDescription()
@@ -80,38 +87,24 @@ public class Item implements Serializable
 		this.unit = unit;
 	}
 	
-	public int getSerialID()
+	public double getPrice()
 	{
-		return serialID;
+		if (discountPrice > 0)
+		{	
+			return discountPrice;
+		}
+		return price;
 	}
-	public void setSerialID(int serialID)
+	public void setPrice(double price)
 	{
-		this.serialID = serialID;
-	}
-	
-	public String getSerial()
-	{
-		return serial;
-	}
-	public void setSerial(String serial)
-	{
-		this.serial = serial;
-	}
-
-	public double getInsDiscountPrice()
-	{
-		return insDiscountPrice;
-	}
-	public void setInsDiscountPrice(double insDiscountPrice)
-	{
-		this.insDiscountPrice = insDiscountPrice;
-		this.calPrice = this.price - this.insDiscountPrice;
-		this.calTotal = this.quantity * this.calPrice;
-	}
-	
-	public double getCalPrice()
-	{
-		return calPrice;
+		this.price =price;
+		this.total = this.quantity * this.price;
+		this.calTotal = this.quantity * this.insDiscountPrice;
+		if (this.discountPrice <= 0)
+		{
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		
 	}
 
 	public double getQuantity()
@@ -121,15 +114,76 @@ public class Item implements Serializable
 	public void setQuantity(double quantity)
 	{
 		this.quantity = quantity;
-		this.total = this.quantity * this.price;
-		this.calTotal = this.quantity * this.calPrice;
+		this.calTotal = this.quantity * this.insDiscountPrice;
+		if (this.discountPrice <= 0)
+		{
+			this.total = this.quantity * this.price;
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		else
+		{
+			this.total = this.quantity * this.discountPrice;
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		
 	}
-	
 	public void addQuantity(double quantity)
 	{
 		this.quantity = this.quantity + quantity;
-		this.total = this.quantity * this.price;
-		this.calTotal = this.quantity * this.calPrice;
+		this.calTotal = this.quantity * this.insDiscountPrice;
+		if (this.discountPrice <= 0)
+		{
+			this.total = this.quantity * this.price;
+			this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+		else
+		{
+			this.total = this.quantity * this.discountPrice;
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+	}
+
+	public String getAssetAcc()
+	{
+		return assetAcc;
+	}
+	public void setAssetAcc(String assetAcc)
+	{
+		this.assetAcc = assetAcc;
+	}
+
+	public double getDiscountPrice()
+	{
+		return discountPrice;
+	}
+	public void setDiscountPrice(double discountPrice)
+	{
+		if( discountPrice > 0){
+			this.discountPrice = discountPrice;
+			this.total = this.quantity * this.discountPrice;
+			this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+		}
+	}
+	
+	public float getDiscountPercent()
+	{
+		return discountPercent;
+	}
+	public void setDiscountPercent(float discountPercent)
+	{
+		if (0 <= discountPercent && discountPercent <= 100)
+		{
+			this.discountPercent = discountPercent;
+			if (this.discountPrice <= 0)
+			{
+				this.discountTotal = this.total - (((this.price * (100 - this.discountPercent)) / 100) * this.quantity);
+			}
+			else
+			{
+				this.discountTotal = this.total - (((this.discountPrice * (100 - this.discountPercent)) / 100) * this.quantity);
+			}
+			
+		}
 	}
 
 	public double getTotal()
@@ -137,8 +191,67 @@ public class Item implements Serializable
 		return total;
 	}
 	
+	public double getDiscountTotal()
+	{
+		return discountTotal;
+	}
+	
+	public boolean hasDiscountPrice()
+	{
+		if (discountPrice > 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public double getFirstPrice()
+	{
+		return price;
+	}
+	
+	public String getFactureCode() {
+		return factureCode;
+	}
+	public void setFactureCode(String factureCode) {
+		this.factureCode = factureCode;
+	}
+	public String getFactureName() {
+		return factureName;
+	}
+	public void setFactureName(String factureName) {
+		this.factureName = factureName;
+	}
+	public int getSerialID() {
+		return serialID;
+	}
+	public void setSerialID(int serialID) {
+		this.serialID = serialID;
+	}
+	public String getSerial() {
+		return serial;
+	}
+	public void setSerial(String serial) {
+		this.serial = serial;
+	}
+	public double getInsDiscountPrice()
+	{
+		return insDiscountPrice;
+	}
+	public void setInsDiscountPrice(double insDiscountPrice)
+	{
+		this.insDiscountPrice = insDiscountPrice;
+		this.calTotal = this.quantity *this.insDiscountPrice;
+	}
 	public double getCalTotal()
 	{
 		return calTotal;
 	}
+	public double getChangePrice() {
+		return changePrice;
+	}
+	public void setChangePrice(double changePrice) {
+		this.changePrice = changePrice;
+	}
+	
 }

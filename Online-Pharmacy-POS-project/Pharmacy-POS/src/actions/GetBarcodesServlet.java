@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import models.User;
-
+import models.Cash;
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -39,23 +38,31 @@ public class GetBarcodesServlet extends HttpServlet
 		}
 		
 		List<Row> rowList = null;
-		User user = (User) session.getAttribute("user");
-		if (user != null)
+		PostgreSQLJDBC db = new PostgreSQLJDBC();
+		Cash cash = (Cash) session.getAttribute("cash");
+		String assetAccounts = (String) request.getParameter("assetAccounts");
+		if (db.createConnection())
 		{
-			String branchID = Integer.toString(user.getBranchID());
-			PostgreSQLJDBC db = new PostgreSQLJDBC();
-			if (db.createConnection())
+			try
 			{
-				String[] parameter = { branchID };
-				try
-				{
-					rowList = db.getRowList("bh_getBarcodes", parameter);
+				String assetAcc = cash.getAssetAcc();
+				if(assetAcc!=null && !assetAcc.trim().equals("")){
+					String[] parameter = { assetAcc.trim() };
+					rowList = db.getRowList("bh_getBarcodes",parameter);
+				}else{
+					if(assetAccounts == null || assetAccounts.trim().equals("")){
+						rowList = db.getRowList("bh_getBarcodes");
+					}
+					else{
+						String[] parameter = { assetAccounts.trim() };
+						rowList = db.getRowList("bh_getBarcodes",parameter);
+					}
 				}
-				catch (SQLException e)
-				{
-					rowList = null;
-					System.out.println("Error: can't execute bh_getBarcodes()!\nMessage: " + e.toString());
-				}
+			}
+			catch (SQLException e)
+			{
+				rowList = null;
+				System.out.println("Error: can't execute bh_getBarcodes()!\nMessage: " + e.toString());
 			}
 		}
 		

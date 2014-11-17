@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Cash;
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
@@ -38,11 +39,25 @@ public class GetBarcodesServlet extends HttpServlet
 		
 		List<Row> rowList = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
+		Cash cash = (Cash) session.getAttribute("cash");
+		String assetAccounts = (String) request.getParameter("assetAccounts");
 		if (db.createConnection())
 		{
 			try
 			{
-				rowList = db.getRowList("bh_getBarcodes");
+				String assetAcc = cash.getAssetAcc();
+				if(assetAcc!=null && !assetAcc.trim().equals("")){
+					String[] parameter = { assetAcc.trim() };
+					rowList = db.getRowList("bh_getBarcodes",parameter);
+				}else{
+					if(assetAccounts == null || assetAccounts.trim().equals("")){
+						rowList = db.getRowList("bh_getBarcodes");
+					}
+					else{
+						String[] parameter = { assetAccounts.trim() };
+						rowList = db.getRowList("bh_getBarcodes",parameter);
+					}
+				}
 			}
 			catch (SQLException e)
 			{

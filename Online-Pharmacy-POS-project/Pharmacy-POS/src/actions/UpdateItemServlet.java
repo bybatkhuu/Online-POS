@@ -91,6 +91,8 @@ public class UpdateItemServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
+	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
 	    	}
 	    }

@@ -79,7 +79,7 @@ public class SearchSalesServlet extends HttpServlet
 				String[] params = { Integer.toString(user.getId()), startDateStr + " 00:00:00", endDateStr + " 23:59:59" };
 				try
 				{
-					rowList = db.getRowList("bh_searchSales", params);
+					rowList = db.getRowList("bb_searchSales", params);
 				}
 				catch (SQLException e)
 				{

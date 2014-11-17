@@ -3,23 +3,172 @@ var thQuant = 1;
 var thUnit = 2;
 var thPrice = 3;
 var thTotal = 4;
-var thSale = 5;
+var thDisCountPercent = 5;
+var thDiscount = 6;
+var leftKey = 1;
 
 $(document).ready(function()
 {
 	startTime();
 	ajaxSetup();
 	initSearchDialog();
+	initHelpDialog();
+	initInsDisCountPriceDialog();
 	initOrderNum();
 	initBarcode();
 	initSearchSlider();
 	initTableSlim();
-	
+	initTypes();
 	checkAll();
-	
+	initValidator();
 	initEventHandlers();
 });
+function initValidator(){
+	$('#attributeForm').bootstrapValidator({
+		feedbackIcons: {
+            valid: 'icon-ok',
+            invalid: 'icon-remove',
+            validating: 'icon-refresh'
+        },
+        live: 'enabled',
+        fields: {
+        	prescription:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Жор № хоосон байна'
+                    }
+                }
+        	},
+        	firstName:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Овог хоосон байна'
+                    }
+                }
+        	},
+        	name:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Нэр хоосон байна'
+                    }
+                }
+        	},
+        	regNumber:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Регистр № хоосон байна'
+                    }
+                }
+        	},
+        	emdNumber:{
+        		validators: {
+                    notEmpty: {
+                        message: 'ЭМД-ийн № хоосон байна'
+                    }
+                }
+        	},
+        	addressOrNumber:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Хаяг/Утас хоосон байна'
+                    }
+                }
+        	},
+        	cipher:{
+        		validators: {
+                    notEmpty: {
+                        message: 'Эмч шифр хоосон байна'
+                    }
+                }
+        	}
+        }
+	}).on('success.form.bv', function(e) {
+        // Prevent form submission
+        e.preventDefault();
 
+        // Get the form instance
+//        var $form = $(e.target);
+
+        // Get the BootstrapValidator instance
+//        var bv = $form.data('bootstrapValidator');
+        // Use Ajax to submit form data
+      
+        $("#insDisCountPriceDialog").dialog('close');
+     /*   alert('succes.form');*/
+        $.post('add-customerData', $('#attributeForm').serialize(), function(result) {
+				/*$("#calSaleEMDSdiv").removeClass("hidden");
+				$("#calSaleEMDS").val(result);
+				checkAll();
+				initValidator();*/
+        });
+    });
+}
+function initHelpDialog()
+{
+	$("#helpDialog").dialog(
+	{
+		title: "<div class='widget-header'><h5>Тусламж</h5></div>",
+		title_html: true,
+		autoOpen: false,
+		modal: true,
+		width: 400,
+		height: 250,
+		buttons:[ 
+						{
+						html: "<i class='icon-check bigger-110'></i>&nbsp; Болих",
+						"class" : "btn btn-success btn-xs",
+						"id" : "btnBack",
+							click: function() {
+								$(this).dialog("close");
+							}
+						}
+			         ]
+	});
+}
+function initInsDisCountPriceDialog()
+{
+	$("#insDisCountPriceDialog").dialog(
+	{
+		title: "<div class='widget-header'><h5>Худалдан авагчийн мэдээлэл</h5></div>",
+		title_html: true,
+		autoOpen: false,
+		modal: true,
+		width: 400,
+		height: 400,
+		closeOnEscape: false,
+		   open: function(event, ui) {  
+			   $(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+			   $('#attributeForm').bootstrapValidator('resetForm', true);
+			   $("input[name='prescription']").val("");
+			   $("input[name='firstName']").val("");
+			   $("input[name='name']").val("");
+			   $("input[name='regNubner']").val("");
+			   $("input[name='eMDnumber']").val("");
+			   $("input[name='addressOrNumber']").val("");
+			   $("input[name='cipher']").val("");
+			   },
+		   buttons:[ 
+						{
+							html: "<i class='icon-check bigger-110'></i>&nbsp; Хадгалах",
+							"class" : "btn btn-success btn-xs",
+							"id" : "btnIDCPok",
+								click: function() {
+									$('#validateSubmit').trigger('click');
+								}
+						}
+						,
+						{
+							html: "<i class='icon-remove bigger-110'></i>&nbsp; Болих",
+							"class" : "btn btn-danger btn-xs",
+							"id" : "btnIDCPclose",
+								click: function() {
+									$(this).dialog("close");
+									$("#insuranceCheck").trigger("click");
+								}
+						}
+			         ]
+	});
+}
 function startTime()
 {
 	var today = new Date();
@@ -62,6 +211,37 @@ function checkTime(i)
 
 function ajaxSetup()
 {
+	$("#cardUsersDialog").dialog(
+			{
+				autoOpen: false,
+				modal: true,
+				width: 700
+			});
+	$("#logoutDialog").dialog(
+			{
+				title: "Гарах",
+				title_html: true,
+				autoOpen: false,
+				modal: true,
+				buttons:[ 
+						{
+							html: "<i class='icon-off bigger-110'></i>&nbsp; Гарах",
+							"class" : "btn btn-danger btn-xs ",
+							"id" : "btnok",
+								click: function() {
+									window.location = "logout";
+								}
+							},
+							{
+							html: "<i class='icon-remove bigger-110'></i>&nbsp; Болих",
+							"class" : "btn btn-success btn-xs",
+							"id" : "btnCncl",
+								click: function() {
+									$(this).dialog("close");
+								}
+							}
+				         ]
+			});
 	$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype,
 	{
 		_title: function(title)
@@ -77,7 +257,7 @@ function ajaxSetup()
 	$("#loadingDialog").dialog(
 	{
 		autoOpen: false,
-		modal: true
+//		modal: true
 	});
 	
 	$("#errorDialog").dialog(
@@ -144,10 +324,12 @@ function initSearchDialog()
 {
 	$("#searchItemsDialog").dialog(
 	{
+		title: "<div class='widget-header'><h5>Бараа хайх</h5></div>",
+		title_html: true,
 		autoOpen: false,
 		modal: true,
-		width: 550,
-		height: 500
+		width: 700,
+		height: 550
 	});
 }
 
@@ -176,6 +358,10 @@ function initBarcode()
 	$.ajax(
 	{
 		url: "get-barcodes",
+		data:
+		{
+			"assetAccounts": $("#assetAccounts").val()
+		},
 		success: function(result)
 		{
 			var barcodes = result.split(",");
@@ -201,7 +387,7 @@ function initTableSlim()
 {
 	$('#mainTableSlim').slimScroll(
     {
-      	height: '356px',
+      	height: '396px',
       	railVisible: true,
       	size: '12px'
     });
@@ -250,7 +436,7 @@ function initSearchSlider()
 	});
 }
 
-function addItem(barcode, quantity, serial)
+function addItem(barcode, quantity, serial,assetAcc)
 {
 	if (barcode != "")
   	{
@@ -264,7 +450,9 @@ function addItem(barcode, quantity, serial)
 				  	$.ajax(
 				  	{
 				  		url: "check-barcode",
-					  	data: { "barcode" : barcode },
+					  	data: { "barcode" : barcode,
+					  		"assetAcc": assetAcc
+					  	},
 					  	success: function(result)
 					  	{
 					  		isBarcode = result;
@@ -293,36 +481,24 @@ function addItem(barcode, quantity, serial)
 								}
 							});
 			  			}
-			  			
 			  			$.ajax(
-					  	{
-					  		url: "add-item",
-						  	data:
-						  	{
-						  		"barcode" : barcode,
-							  	"quantity" : quantity,
-							  	"serial" : serial
-					      	},
-					      	success: function(result)
-					      	{
-					      		$("#tableBody").html(result);
-					      		$("#tableBody > tr").bind("click", function()
-						    	{
-					      			clickedRow($(this));
-						    	});
-					      		$("#tableBody > tr").bind("dblclick", function()
-						    	{
-					      			bindForm($(this));
-								});
-					    	  	$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
-					    	  	$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text());
-					    	  	$("#unit").text($("#tableBody > tr[class='success']").children().eq(thUnit).text());
-					    	  	$("#quantity").val("1");
-					    	  	$("#barcode").val("");
-					    	  	$("#serial").val("");
-					    	  	checkAll();
-					      	}
-					  	});
+							  	{
+							  		url: "add-item",
+								  	data:
+								  	{
+								  		"barcode" : barcode,
+									  	"quantity" : quantity,
+									  	"serial" : serial,
+									  	"assetAcc": assetAcc
+							      	},
+							      	success: function(result)
+							      	{
+							      		$("#tableBody").html(result);
+							      		$("#mainTableSlim").scrollTop($("#tableBody > tr[class='success']").index()*12);
+							      		initTableEvents();
+							    	  	checkAll();
+							      	}
+							  	});
     			  	}
 				  	else
 				  	{
@@ -350,35 +526,128 @@ function addItem(barcode, quantity, serial)
   	}
 }
 
-function bindForm(element)
+function bindChangePrice(element)
 {
-	var oldQuant = parseFloat($(element).children().eq(thQuant).text());
-	var price = parseFloat($(element).children().eq(thPrice).text());
+	var oldPrice = parseFloat($(element).children().eq(thPrice).text().trim());
 	var id = $(element).attr("id");
-	$(element).children().first().next().html
+	$(element).children().first().next().next().next().html
 	(
-		"<input type='text' value='' size='1' class='input-sm' id='newQuant' />"
+		"<input type='text' value='' class='input-sm' id='newPrice' />"
 	);
 	
-	$("#newQuant").focus();
-	
-	$("#newQuant").keypress(function(event)
+	$("#newPrice").focus();
+	$("#newPrice").keydown(function(event)
 	{
+		
 		if (event.which == 13)
 		{
-			updateFromTable(element, id, price, oldQuant);
+			updateFromTablePrice(element, id, oldPrice);
 		}
 	});
-  	$("#newQuant").focusout(function()
+			
+  	$("#newPrice").focusout(function()
   	{
-  		updateFromTable(element, id, price, oldQuant);
+  		updateFromTablePrice(element,id,oldPrice);
   	});
+}
+function bindForm(element)
+{
+	var oldQuant = parseFloat($(element).children().eq(thQuant).text().trim());
+	var oldDisCountPercent = parseFloat($(element).children().eq(thDisCountPercent).text().trim());
+	var price = parseFloat($(element).children().eq(thPrice).text().trim());
+	var id = $(element).attr("id");
+	if(leftKey == 1){
+		$(element).children().first().next().html
+		(
+			"<input type='text' value='' size='1' class='input-sm' id='newQuant' />"
+		);
+		
+		$("#newQuant").focus();
+		$("#newQuant").keydown(function(event)
+		{
+			
+			if (event.which == 13)
+			{
+				updateFromTable(element, id, price, oldQuant);
+			}
+			 if(event.which == 37 || event.which == 39)
+			{
+				 event.preventDefault();
+				if($("#newQuant").is(":focus")){
+					leftKey = 2;
+					$("#newQuant").remove();
+					$(element).children().eq(thQuant).text(oldQuant);
+					 bindForm(element);
+				}else
+				if($("#newQuant1").is(":focus"))
+				{
+					$("#newQuant1").remove();
+					leftKey = 1;
+					$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
+					 bindForm(element);
+				}
+				
+			}
+			
+		});
+				
+	  	$("#newQuant").focusout(function()
+	  	{
+	  		updateFromTable(element, id, price, oldQuant);
+	  	});
+	  	
+	}else{
+		 var check = $("#insuranceCheck").prop("checked");
+		if($("#cardNumber").val() == "" && !check){
+			$(element).children().eq(thDisCountPercent).html
+			(
+				"<input type='text' value='' size='1' class='input-sm' id='newQuant1' />"
+			);
+			
+			$("#newQuant1").focus();
+			
+			$("#newQuant1").keydown(function(event)
+					{
+						
+						if (event.which == 13)
+						{
+							updateFromTableDisCount(element, id, oldDisCountPercent);
+						}
+						 if(event.which == 37 || event.which == 39)
+						{
+							 event.preventDefault();
+							if($("#newQuant").is(":focus")){
+								leftKey = 2;
+								$("#newQuant").remove();
+								$(element).children().eq(thQuant).text(oldQuant);
+								 bindForm(element);
+							}else
+							if($("#newQuant1").is(":focus"))
+							{
+								$("#newQuant1").remove();
+								leftKey = 1;
+								$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
+								 bindForm(element);
+							}
+							
+						}
+						
+					});			
+		  	$("#newQuant1").focusout(function()
+		  	{
+		  		updateFromTableDisCount(element, id, oldDisCountPercent);
+		  	});
+		}else{
+			leftKey = 1;
+			alert("Давхар хөнгалөлт авч болохгүй");
+		}
+	}
 }
 function updateFromTable(element, id, price, oldQuant)
 {
 	var newQuant = parseFloat($("#newQuant").val());
 	$("#newQuant").remove();
-	if (oldQuant != newQuant && !isNaN(newQuant) && 0 < newQuant)
+	if (oldQuant != newQuant && !isNaN(newQuant) && 0 <= newQuant)
 	{
 		update(id, newQuant);
 	}
@@ -387,11 +656,55 @@ function updateFromTable(element, id, price, oldQuant)
 		$(element).children().eq(thQuant).text(oldQuant);
 	}
 }
+function updateFromTablePrice(element,id,oldPrice)
+{
+	var newPrice= parseFloat($("#newPrice").val());
+	$("#newPrice").remove();
+	if (oldPrice != newPrice&& !isNaN(newPrice) && 0 <= newPrice)
+	{
+		updatePrice(id, newPrice);
+	}
+	else
+	{
+		$(element).children().eq(thPrice).text(oldPrice);
+	}
+}
+function updateFromTableDisCount(element, id, oldDiscount)
+{
+	var newDiscount = parseFloat($("#newQuant1").val());
+	$("#newQuant1").remove();
+	if (oldDiscount != newDiscount && !isNaN(newDiscount) && 0 <= newDiscount && newDiscount <=100)
+	{
+		updateDisCount(id, newDiscount);
+	}
+	else
+	{
+		$(element).children().eq(thDisCountPercent).text(oldDiscount);
+	}
+}
 function clickedRow(element)
 {
 	$("#tableBody > tr[class='success']").removeClass();
 	$(element).addClass("success");
 	checkAll();
+}
+function updatePrice(id, newPrice)
+{
+	$.ajax(
+	{
+		url: "update-Price",
+		data:
+		{
+			"id": id,
+			"newPrice": newPrice
+		},
+		success: function(result)
+		{
+			$("#tableBody").html(result);
+			initTableEvents();
+			checkAll();
+		}
+	});
 }
 function update(id, newQuant)
 {
@@ -406,55 +719,114 @@ function update(id, newQuant)
 		success: function(result)
 		{
 			$("#tableBody").html(result);
-			$("#tableBody > tr").bind("click", function()
-			{
-				clickedRow($(this));
-			});
-		    $("#tableBody > tr").bind("dblclick", function()
-			{
-		    	bindForm($(this));
-			});
+			initTableEvents();
 			checkAll();
 		}
 	});
 }
-
-function purchase()
+function updateDisCount(id, newDisCount)
 {
-	var talon = 0;
-	var isPurchased = false;
 	$.ajax(
 	{
-		url: "purchase-items",
-		data: { "orderNum" : $("#talon").val() },
-	  	success: function(result)
-	  	{
-	  		var jsonData = eval("(" + result + ")");
-	  		if (jsonData.isPurchased != "true")
-	  		{
-	  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cash").val().trim());
-	  			//location.reload(true);
-	  		}
-	  		else
-	  		{
-	  			isPurchased = true;
-	  			talon = jsonData.talon;
-	  		}
-	  	}
+		url: "updateDisCount-item",
+		data:
+		{
+			"id": id,
+			"newDisCount": newDisCount
+		},
+		success: function(result)
+		{
+			$("#tableBody").html(result);
+			initTableEvents();
+			checkAll();
+		}
 	});
-
-	if (isPurchased)
+}
+function purchase()
+{
+	var type = "Cash";
+	var otherId = "0";
+	var check = $("#customerCheck").prop("checked");
+	if (check.toString() == "true")
 	{
-		window.print();
-		$("#talon").val(talon);
-  		$("#print-talon").val(talon);
-  		$("#tableBody").html("");
-  		$("#quantity").val("1");
-  		$("#unit").text("ш");
-  		$("#unitPrice").val("");
-  		$("#itemName").val("");
-  		checkAll();
-  		$("#barcode").focus();
+		type = "Invoice";
+		otherId = $("#customers").val().trim();
+		$("#customerCheck").trigger('click');
+	}
+	else
+	{
+		check = $("#bankCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			type = "Card";
+			otherId = $("#banks").val().trim();
+			$("#bankCheck").trigger('click');
+		}
+		else
+		{
+			type = "Cash";
+			otherId = "0";
+		}
+	}
+	var talon = 0;
+	var isPurchased = false;
+	if ($("#talon").val().trim() != "")
+	{
+		$.ajax(
+		{
+			url: "purchase-items",
+			data: { 
+				"orderNum" : $("#talon").val(),
+				"type": type,
+				"otherId": otherId
+				},
+		  	success: function(result)
+		  	{
+		  		var jsonData = eval("(" + result + ")");
+		  		if (jsonData.isPurchased != "true")
+		  		{
+		  			errorDialog("Гүйлгээ амжилтгүй боллоо. Та веб програмаа дахин дуудаж гүйлгээгээ дахин хийнэ үү!\nАлдааны мэдээлэл: Талон - " + $("#talon").val().trim() + ", Кассчин - " + $("#cash").val().trim());
+		  			//location.reload(true);
+		  		}
+		  		else
+		  		{
+		  			isPurchased = true;
+		  			talon = jsonData.talon;
+		  		}
+		  	}
+		});
+	
+		if (isPurchased)
+		{
+			check = $("#insuranceCheck").prop("checked");
+			if(check == true){
+				$("#printCalSaleEMDS").removeClass("hidden");
+			}else{
+				$("#printCalSaleEMDS").addClass("hidden");
+			}
+			window.print();
+			$("#talon").val(talon);
+	  		$("#print-talon").val(talon);
+	  		$("#tableBody").html("");
+	  		$("#quantity").val("1");
+	  		$("#unit").text("ш");
+	  		$("#unitPrice").val("");
+	  		$("#itemName").val("");
+	  		$("#cardNumber").val("");
+	  		$("#cardOwner").text("");
+	  		$("#discountPercent").val("");
+	  		$("#discountType").val("");
+	  		checkAll();
+	  		$("#barcode").focus();
+	  		var check = $("#insuranceCheck").prop("checked");
+	  		if(check){
+	  			$("#insuranceCheck").trigger('click');
+	  		}
+		}
+	}
+	else
+	{
+		alert("Талоны дугаараа оруулна уу!");
 	}
 }
 
@@ -469,29 +841,36 @@ function editPrice()
 	{
 		if (isNumber($("#unitPrice").val()))
 		{
-			$.ajax(
-			{
-				url: "edit-price",
-				data:
+			var priceCheck = $("#tableBody > tr[class='success']").children().eq(thPrice).text();
+				if(priceCheck >= $("#unitPrice").val()){
+				$.ajax(
 				{
-					"id" : $("#tableBody > tr[class='success']").attr("id"),
-					"price" : $("#unitPrice").val()
-				},
-				success: function(result)
-				{
-					$("#tableBody > tr[class='success']").children().eq(thPrice).text($("#unitPrice").val());
-					var price = parseFloat($("#unitPrice").val());
-					var quantity = parseFloat($("#tableBody > tr[class='success']").children().eq(thQuant).text());
-					var total = price * quantity;
-					$("#tableBody > tr[class='success']").children().eq(thTotal).text(total);
-					checkAll();
-				}
-			});
+					url: "edit-price",
+					data:
+					{
+						"id" : $("#tableBody > tr[class='success']").attr("id"),
+						"price" : $("#unitPrice").val()
+					},
+					success: function(result)
+					{
+						$("#tableBody").html(result);
+						initTableEvents();
+						checkAll();
+						$("#unitPrice").prop("disabled", true);
+						$("#barcode").focus();
+						$("#editPriceDiv").addClass('hidden');
+						$("#cardDiv").removeClass('hidden');
+					}
+				});
+			}else{
+				alert($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim()+"-с бага тоо оруулна уу");
+				$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
+			}
 		}
 		else
 		{
 			alert("Үнэ засах хэсэгт зөвхөн тоо оруулна уу!");
-			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
+			$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
 		}
 	}
 	else
@@ -499,160 +878,465 @@ function editPrice()
 		alert("Засах үнээ оруулна уу!");
 		$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text());
 	}
-	$("#unitPrice").prop("disabled", true);
+	
 }
 
-function calculate()
-{
-	var str = "<table>";
-	for (var i = 0; i < $("#tableBody > tr").size(); i++)
-	{
-		str = str + "<tr>";
-			str = str + "<td class='col-xs-7'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</td>";
-			str = str + "<td class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</td>";
-			str = str + "<td class='col-xs-1 align-left'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</td>";
-			str = str + "<td class='col-xs-2 align-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</td>";
-		str = str + "</tr>";
-	}
-	str = str + "</table>";
-	$("#print-items").html(str);
-	$("#print-s").html($("#tableBody > tr").size());
-	
-	$("#tableTotal").val("Нийт: " + $("#tableBody > tr").size());
-	$("#clearButton").prop("disabled", false);
-	
-}
 
 function initEventHandlers()
 {
 	$(document).keydown(function(event)
 	{
+		//ctrl+f
 		if (event.keyCode == 70 && event.ctrlKey)
 		{
-			event.preventDefault();
-			$("#searchItemsDialog").dialog("open");
-		}
-		
-		if (event.which == 9)
-		{
-			if ($("input:focus").attr("id") == "paid")
-			{
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 				event.preventDefault();
-				$("#barcode").focus();
+				$("#searchItemsDialog").dialog("open");
 			}
 		}
-		else if (event.which == 113)
+		//tab
+		if (event.which == 9)
+		{
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				if($("#payOff").val()>0){
+					if ($("input:focus").attr("id") == "paid")
+					{
+						event.preventDefault();
+						$("#barcode").focus();
+					}
+				}else{
+					if ($("input:focus").attr("id") == "cardNumber")
+					{
+						event.preventDefault();
+						$("#barcode").focus();
+					}
+				}
+			}
+		}
+		
+		 //F1
+		if(event.which == 112){
+			event.preventDefault();
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#helpDialog").dialog("open");
+			}
+		}else
+		//F2
+		 if (event.which == 113)
+		  	{
+					event.preventDefault();
+				if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+					if($("#cardNumber").val()==""){
+						var check = $("#insuranceCheck").prop("checked");
+						if(!check){
+							$("#editPriceDiv").addClass('hidden');
+							$("#cardDiv").removeClass('hidden');
+							$("#discountPercent").prop("disabled", false);
+						  	$("#discountPercent").focus();
+						}else{
+							alert("Давхар хөнгалөлт авч болохгүй");
+						}
+					}else{
+						alert("Давхар хөнгалөлт авч болохгүй");
+					}
+				 }else{
+					 $("#searchByName").focus();
+				 }
+		  	}
+	  	//ctrl+1
+		if(event.keyCode == 49 && event.ctrlKey){
+			event.preventDefault();
+			//silverPen start
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#customerCheck").trigger('click');
+				if($("#customerCheck").prop("checked")){
+					$("#customers").focus();
+				};
+				//silverPen end
+			}else{
+				$("#searchByMinPrice").focus();
+				$("#searchByMinPrice").val("");
+			}
+		}
+		else
+			//ctrl+2
+			if(event.keyCode == 50 && event.ctrlKey){
+				event.preventDefault();
+				if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+					$("#bankCheck").trigger('click');
+					if($("#bankCheck").prop("checked")){
+						$("#banks").focus();
+					};
+				}else{
+					$("#searchByMaxPrice").focus();
+					$("#searchByMaxPrice").val("");
+				}
+			}else
+//			ctrl+3
+			if(event.keyCode == 51 && event.ctrlKey){
+				event.preventDefault();
+				if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+					$("#editPriceDiv").addClass('hidden');
+					$("#cardDiv").removeClass('hidden');
+					$("#cardNumber").focus();
+				}
+			}
+//		Ctrl+4
+			if(event.keyCode == 52 && event.ctrlKey){
+				event.preventDefault();
+				$("#logoutDialog").dialog("open");
+				$("#btnCncl").focus();
+				
+			}
+//			F10
+		 if(event.which == 121)
+		 {
+			 event.preventDefault();
+			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				$("#discountPercent").prop("disabled", true);
+				$.ajax(
+				{
+					url: "remove-discount-card",
+					success: function(result)
+					{
+						$("#tableBody").html(result);
+						initTableEvents();
+						$("#cardNumber").val("");
+						$("#cardOwner").text("");
+						$("#discountPercent").val("");
+						$("#discountType").val("");
+						checkAll();
+					}
+				});
+			 }
+		 }
+		 //F11
+		else if (event.which == 122)
 	  	{
 	  		event.preventDefault();
 		  	$("#insuranceCheck").trigger('click');
-		  	var check = $("#insuranceCheck").prop("checked");
-	  		$.ajax(
-	  		{
-	  			url: "check-insurance",
-	  			data: { "hasInsurance" : check },
-	  			success: function(result)
-	  			{
-	  			}
-	  		});
 	  	}
+		//f3
 		else if (event.which == 114)
 	  	{
-			event.preventDefault();
-		  	$("#barcode").focus();
+			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				event.preventDefault();
+			  	$("#barcode").focus();
+			}else{
+				event.preventDefault();
+			  	$("#searchByBarcode").focus();
+			}
 	  	}
-	  	else if (event.which == 115)
+		//f4
+	  	else if (event.which == 115  &&! event.altKey)
 	  	{
 	  		event.preventDefault();
-		  	$("#serial").focus();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			 $("#serial").focus();
+	  		 }
 	  	}
+		//f5
 	  	else if (event.which == 116)
 	  	{
 	  		event.preventDefault();
-		  	$("#updateButton").trigger('click');
-		  	checkAll();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+			  	$("#updateButton").trigger('click');
+	  		 }
 	  	}
+		//f6
 	  	else if (event.which == 117)
 	  	{
 	  		event.preventDefault();
-		  	window.print();
+	  		if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			window.print();
+	  		}
 	  	}
+		//f7
 	  	else if (event.which == 118)
 	  	{
 	  		event.preventDefault();
-	  		$("#paid").val("");
-		  	$("#paid").focus();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			 if($("#payOff").val()>0){
+	  				$("#paid").val("");
+				  	$("#paid").focus();
+	  			 }else{
+	  				 alert("Бараа байхгүй байна");
+	  			 }
+			  		
+	  		 }
 	  	}
+		 //f8
+	  	else if (event.which == 119)
+	  	{
+	  		event.preventDefault();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			 window.location.assign("report.jsp");
+	  		 }
+	  	}
+		//f9
 	  	else if (event.which == 120)
 	  	{
 	  		event.preventDefault();
-	  		$("#unitPrice").prop("disabled", false);
-	  		$("#unitPrice").focus();
+	  		if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			//costca start 
+		  		if ($("#tableBody > tr[class='success']").size() == 1)
+		  		{
+		  			var check = $("#insuranceCheck").prop("checked");
+					if(check){
+			  			
+				  		alert("Үнэ засах боломжгүй. Хөнгөлөлт авсан байна.");
+					}else{
+						$("#editPriceDiv").removeClass('hidden');
+						$("#cardDiv").addClass('hidden');
+			  			$("#unitPrice").prop("disabled", false);
+				  		$("#unitPrice").focus();
+					}
+		  		}
+		  		else
+		  		{
+		  			$("#unitPrice").prop("disabled", true);
+		  		}
+		  		
+	  			 //costca end
+	  		}else{
+	  			$("#selectItems").focus();
+	  			$("#selectItems").trigger("click");
+	  		}
 	  	}
+		 //F12
+	  	else if (event.which == 123)
+	  	{
+	  		event.preventDefault();
+	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+	  			bindChangePrice($("#tableBody > tr[class='success']"));
+	  		 }
+	  	}
+		//Up arrow
 	  	else if (event.which == 38)
 	  	{
 	  		if (!$("#barcode").is(":focus"))
 	  		{
-		  		var i = $("#tableBody > tr[class='success']").index();
-			  	var s = $("#tableBody > tr").size();
-			  	if (s > 0)
-			  	{
-			  		if (i <= s - 1)
+	  			event.preventDefault();
+	  			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+			  		var i = $("#tableBody > tr[class='success']").index();
+				  	var s = $("#tableBody > tr").size();
+				  	if (s > 0)
 				  	{
-				  		if (i > 0)
+				  		if (i <= s - 1)
 					  	{
-					  		i--;
+					  		if (i > 0)
+						  	{
+						  		i--;
+						  	}
+						  	else
+						  	{
+						  		i = $("#tableBody > tr").size() - 1;
+						  	}
+						  	$("#tableBody > tr[class='success']").removeClass();
+						  	$("#tableBody > tr").eq(i).addClass("success");
+						  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+						  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+						  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+						  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 					  	}
-					  	else
+				  		$("#mainTableSlim").scrollTop(i*12);
+					}
+				  	checkAll();
+	  			}else{
+	  				var i = $("#searchResultBody > tr[class='success']").index();
+				  	var s = $("#searchResultBody > tr").size();
+				  	if (s > 0)
+				  	{
+				  		if (i <= s - 1)
 					  	{
-					  		i = $("#tableBody > tr").size() - 1;
+					  		if (i > 0)
+						  	{
+						  		i--;
+						  	}
+						  	else
+						  	{
+						  		i = $("#searchResultBody > tr").size() - 1;
+						  	}
+						  	$("#searchResultBody > tr[class='success']").removeClass();
+						  	$("#searchResultBody > tr").eq(i).addClass("success");
 					  	}
-					  	$("#tableBody > tr[class='success']").removeClass();
-					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text());
-				  	}
-				}
-			  	checkAll();
+				  		$("#searchItemsDialog").scrollTop(i*12);
+					}
+	  			}
 	  		}
 	  	}
+		//Down arrow
 	  	else if (event.which == 40)
 	  	{
 	  		if (!$("#barcode").is(":focus"))
 	  		{
-			  	var i = $("#tableBody > tr[class='success']").index();
-			  	var s = $("#tableBody > tr").size();
-			  	if (s > 0)
-			  	{
-				  	if (i <= s - 1)
+	  			event.preventDefault();
+	  			if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+				  	var i = $("#tableBody > tr[class='success']").index();
+				  	var s = $("#tableBody > tr").size();
+				  	if (s > 0)
 				  	{
-					  	if (i != s - 1)
+					  	if (i <= s - 1)
 					  	{
-						  	i++;
+						  	if (i != s - 1)
+						  	{
+							  	i++;
+						  	}
+						  	else
+						  	{
+							  	i = 0;
+						  	}
+						  	$("#tableBody > tr[class='success']").removeClass();
+						  	$("#tableBody > tr").eq(i).addClass("success");
+						  	$("#tableBody > tr[class='success']").focus();
+						  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text().trim());
+						  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text().trim());
+						  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text().trim());
+						  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text().trim());
 					  	}
-					  	else
-					  	{
-						  	i = 0;
-					  	}
-					  	$("#tableBody > tr[class='success']").removeClass();
-					  	$("#tableBody > tr").eq(i).addClass("success");
-					  	$("#itemName").val($("#tableBody > tr").eq(i).children().eq(thName).text());
-					  	$("#unitPrice").val($("#tableBody > tr").eq(i).children().eq(thPrice).text());
-					  	$("#unit").text($("#tableBody > tr").eq(i).children().eq(thUnit).text());
-					  	$("#quantity").val($("#tableBody > tr").eq(i).children().eq(thQuant).text());
+					  	$("#mainTableSlim").scrollTop(i*12);
 				  	}
-			  	}
+				  	checkAll();
+	  			}
+		  		else{
+		  			if(!$("#selectItems").is(":focus")){
+		  				event.preventDefault();
+		  			}
+		  			var i = $("#searchResultBody > tr[class='success']").index();
+				  	var s = $("#searchResultBody > tr").size();
+				  	if (s > 0)
+				  	{
+					  	if (i <= s - 1)
+					  	{
+						  	if (i != s - 1)
+						  	{
+							  	i++;
+						  	}
+						  	else
+						  	{
+							  	i = 0;
+						  	}
+						  	$("#searchResultBody > tr[class='success']").removeClass();
+						  	$("#searchResultBody > tr").eq(i).addClass("success");
+					  	}
+					  	
+				  	}
+				  	$("#searchItemsDialog").scrollTop(i*12);
+	  			}
+	  		}
+	  	}
+		//delete
+	  	else if (event.which == 46)
+	  	{
+	  		if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
+			  	$("#deleteButton").trigger("click");
 			  	checkAll();
 	  		}
 	  	}
-	  	else if (event.which == 46)
-	  	{
-		  	$("#deleteButton").trigger("click");
-		  	checkAll();
-	  	}
   	});
-	
+	$("#cardNumber").keypress(function(event)
+			{
+				if(event.which == 13)
+				{
+					var hasCardNumber = 0;
+					event.preventDefault();
+					var check = $("#insuranceCheck").prop("checked");
+					if(!check){
+						if($("#cardNumber").val().trim()!="" && $("#discountPercent").val().trim()==""){
+							$.ajax(
+							{
+								url: "check-card-number",
+								data:
+								{
+									"cardNumber": $("#cardNumber").val()
+								},
+								success: function(result)
+								{
+									hasCardNumber = result;
+								}
+							});
+							
+							if (hasCardNumber == 1)
+							{
+								$.ajax(
+								{
+									url: "get-card-users",
+									data:
+									{
+										"cardNumber": $("#cardNumber").val()
+									},
+									success: function(result)
+									{
+										$("#cardUsersBody").html(result);
+										$("#cardUsersBody tr").click(function(event)
+										{
+											$("#cardOwner").text($(this).children().eq(0).text().trim());
+											$("#discountPercent").val($(this).children().eq(3).text().trim());
+											$("#discountType").val($(this).children().eq(2).text().trim());
+											$("#cardUsersDialog").dialog("close");
+											var tmpStr = $(this).attr("id").split("-");
+											var cardId = tmpStr[1];
+											tmpStr = $(this).children().eq(0).attr("id").split("-");
+											var customerId = tmpStr[1];
+											$.ajax(
+											{
+												url: "set-discount-card",
+												data:
+												{
+													"cardId": cardId,
+													"customerId": customerId,
+													"customerName": $(this).children().eq(0).text().trim(),
+													"cardNumber": $(this).children().eq(1).text().trim(),
+													"type": $(this).children().eq(2).text().trim(),
+													"discountPercent": $(this).children().eq(3).text().trim(),
+													"partOwner": $(this).children().eq(4).text().trim()
+												},
+												success: function(result)
+												{
+													$("#tableBody").html(result);
+													initTableEvents();
+													checkAll();
+												}
+											});
+										});
+										$("#cardUsersDialog").dialog("open");
+									}
+								});
+							}
+							else
+							{
+								alert("Таны оруулсан картын дугаар бүртгэлгүй байна!");
+							}
+						}else{
+							alert("Давхар хөнгалөлт авч болохгүй");
+						}
+					}else{
+						alert("Давхар хөнгалөлт авч болохгүй");
+					}
+				}
+			});
+	$("#discountPercent").focusout(function()
+		  	{
+				var bool = setDiscountPercentFocusOut();
+				if(!bool){
+					$("#discountPercent").focus();
+				}
+		  	});
+			$("#quantity").focusout(function()
+		  	{
+				this.value = this.value.replace(/[^0-9\.]/g, '');	
+				if(this.value == ''){
+					this.value = 1;
+				}
+		  	});
+			$("#discountPercent").keypress(function(event)
+					{
+						if(event.which == 13)
+						{
+						event.preventDefault();
+						$("#barcode").focus();
+						}
+					});
 	$("#unitPrice").keypress(function(event)
 	{
 		if (event.which == 13)
@@ -661,40 +1345,18 @@ function initEventHandlers()
 			editPrice();
 	  	}
 	});
-
-	$("#barcode").keyup(function(event)
-	{
-		var barcode = $("#barcode").val().trim();
-		var quantity = $("#quantity").val().trim();
-		if (barcode != "" && quantity != "")
-		{
-			$("#addItem").prop("disabled", false);
-		}
-		else
-		{
-			$("#addItem").prop("disabled", true);
-		}
+	$("#unitPrice").focusout(function(){
+		/*$("#editPriceDiv").addClass('hidden');
+		$("#cardDiv").removeClass('hidden');*/
+		$("#unitPrice").prop("disabled", true);
 	});
-	$("#quantity").keyup(function(event)
-	{
-		var barcode = $("#barcode").val().trim();
-		var quantity = $("#quantity").val().trim();
-		if (barcode != "" && quantity != "")
-		{
-			$("#addItem").prop("disabled", false);
-		}
-		else
-		{
-			$("#addItem").prop("disabled", true);
-		}
-	});	
 	
 	$("#barcode").keypress(function(event)
 	{
 		if(event.which == 13)
 		{
 			event.preventDefault();
-			addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+			addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val(), $("#assetAccounts").val().trim());
 		}
 	});
 	$("#quantity").keypress(function(event)
@@ -704,7 +1366,7 @@ function initEventHandlers()
   			event.preventDefault();
   			if ($("#barcode").val() != "")
   			{
-  				addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val());
+  				addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val(), $("#assetAccounts").val().trim());
   			}
   			else
   			{
@@ -732,11 +1394,6 @@ function initEventHandlers()
   				}
   			}
 	  	}
-  	});
-  	$("#addItem").click(function(event)
-  	{
-  		event.preventDefault();
-  		addItem($("#barcode").val().trim(), $("#quantity").val().trim(), $("#serial").val().trim());
   	});
 
   	$("#serial").keypress(function(event)
@@ -768,11 +1425,57 @@ function initEventHandlers()
   			}
   		}
   	});*/
-  	
+  	$("#insuranceCheck").click(function(event){
+  		var check = $("#insuranceCheck").prop("checked");
+	  	if(check){
+	  		if($("#discountPercent").val().trim()==""){
+	  		 $.ajax(
+	  				{
+	  					url: "check-insurance",
+	  					data: { "hasInsurance" : check },
+	  					success: function(result)
+	  					{
+	  						if(check == true){
+	  							$("#calSaleEMDSdiv").removeClass("hidden");
+	  							$("#printCalSaleEMDS").removeClass("hidden");
+	  							
+	  						}else{
+	  							$("#printCalSaleEMDS").addClass("hidden");
+	  							$("#calSaleEMDSdiv").addClass("hidden");
+	  						}
+	  						$("#calSaleEMDS").val(result);
+	  						checkAll();
+	  						$("#insDisCountPriceDialog").dialog('open');
+	  					}
+	  				});
+	  		}else{
+	  			alert("Давхар хөнгалөлт авч болохгүй");
+	  			$("#insuranceCheck").prop("checked",false);
+	  		}
+	  	}else{
+  			$.ajax(
+					{
+						url: "check-insurance",
+						data: { "hasInsurance" : check },
+						success: function(result)
+						{
+							if(check == true){
+								$("#calSaleEMDSdiv").removeClass("hidden");
+							}else{
+								$("#calSaleEMDSdiv").addClass("hidden");
+							}
+							$("#calSaleEMDS").val(result);
+							checkAll();
+						}
+					});
+  		}
+  	});
   	$("#updateButton").click(function(event)
   	{
-  		bindForm($("#tableBody > tr[class='success']"));
   		event.preventDefault();
+  		if(!$("#newQuant").is(":focus") &&!$("#newQuant1").is(":focus")){
+  			bindForm($("#tableBody > tr[class='success']"));
+  		}
   	});
   	
   	$("#deleteButton").click(function(event)
@@ -805,7 +1508,6 @@ function initEventHandlers()
 	  	}
   		checkAll();
   	});
-  	
   	$("#clearButton").click(function(event)
   	{
   		$.ajax(
@@ -837,12 +1539,25 @@ function initEventHandlers()
 	  		if (event.which == 13 && $("#return").val() >= 0)
 	  		{
 	  			event.preventDefault();
+	  			loadPrintView();
 	  			purchase();
 	  		}
   		}
   		checkAll();
   	});
-  	
+	$("#selectItems").click(function(event){
+  		event.preventDefault();
+  		if($("#selectItems").is(':focus')){
+	  		if($("#searchResultBody > tr").size() > 0){
+	  			var i = $("#searchResultBody > tr[class='success']").index();
+	  			addItem($("#searchResultBody > tr").eq(i).children().eq(1).text().trim(), 1, $("#searchResultBody > tr").eq(i).children().eq(2).text().trim(),$("#searchResultBody > tr").eq(i).children().eq(5).text().trim());
+				$("#searchItemsDialog").dialog("close");
+	  		}else
+	  		{
+	  			alert("Бараа сонгоно уу!");
+	  		}
+  		}
+  	});
   	$("#searchItems").click(function(event)
   	{
   		event.preventDefault();
@@ -868,25 +1583,30 @@ function initEventHandlers()
   					"itemName": $("#searchByName").val().trim(),
   					"barcode": $("#searchByBarcode").val().trim(),
   					"minPrice": $("#searchByMinPrice").val().trim(),
-  					"maxPrice": $("#searchByMaxPrice").val().trim()
+  					"maxPrice": $("#searchByMaxPrice").val().trim(),
+  					"assetAcc":$("#assetAccounts").val().trim()
   				},
   				success: function(result)
   				{
   					$("#searchResultBody").html(result);
-  					$("#searchResultBody > tr").click(function(event)
-  					{
-  						event.preventDefault();
-  						$("#searchResultBody > tr[class='success']").removeClass();
-  						$(this).addClass("success");
-  					});
-  					
-	  				$("#searchResultBody > tr").dblclick(function(event)
-	  				{
-	  					event.preventDefault();
-	  					addItem($(this).children().eq(1).text(), 1, $(this).children().eq(2).text());
-	  					$("#searchResultBody > tr[class='success']").removeClass();
-	  					$("#searchItemsDialog").dialog("close");
-	  				});
+  					if(result != ""){
+	  					$("#searchResultBody > tr").click(function(event)
+	  					{
+	  						event.preventDefault();
+	  						$("#searchResultBody > tr[class='success']").removeClass();
+	  						$(this).addClass("success");
+	  					});
+	  					
+		  				$("#searchResultBody > tr").dblclick(function(event)
+		  				{
+		  					event.preventDefault();
+		  					addItem($(this).children().eq(1).text(), 1, $(this).children().eq(2).text(), $(this).children().eq(5).text().trim());
+		  					$("#searchResultBody > tr[class='success']").removeClass();
+		  					$("#searchItemsDialog").dialog("close");
+		  				});
+  					}else{
+  						alert("Өгөгдөл олдсонгүй");
+  					}
   				}
   			});
   		}
@@ -895,35 +1615,136 @@ function initEventHandlers()
   			alert("Хайх утгаа оруулна уу!");
   		}
   	});
+$("#searchByBarcode").keydown(function(event)
+{
+	if(event.which == 13){
+		$("#searchItems").trigger('click');
+	}
+});
+$("#searchByName").keydown(function(event)
+{
+	if(event.which == 13){
+  		$("#searchItems").trigger('click');
+  	}
+});
+$("#searchByMinPrice").keydown(function(event)
+{
+	if(event.which == 13){
+  		$("#searchItems").trigger('click');
+  	}
+});
+$("#searchByMaxPrice").keydown(function(event)
+{
+	if(event.which == 13){
+  		$("#searchItems").trigger('click');
+  	}
+});
+$("#assetAccounts").change(function(){
+		$.ajax(
+				{
+					url: "get-barcodes",
+					data:
+					{
+						"assetAccounts": $("#assetAccounts").val()
+					},
+					success: function(result)
+					{
+						var barcodes = result.split(",");
+						$("#barcode").autocomplete(
+						{
+							source: function(request, response)
+							{
+								var matches = $.map(barcodes, function(tag)
+								{
+									if (tag.toUpperCase().indexOf(request.term.toUpperCase()) === 0)
+									{
+										return tag;
+									}
+								});
+								response(matches);
+							}
+						});
+					}
+				});
+	});
 }
 
+function setDiscountPercentFocusOut(){
+	if($("#discountPercent").val() != ""){
+		if (!isNaN($("#discountPercent").val()))
+	  	{
+	  		if ($("#discountPercent").val() > 0)
+		  	{
+	  			if($("#discountPercent").val() <=100){
+		  			$.ajax(
+							{
+								url: "set-discount-All",
+								data:
+								{
+									"discountPercent": $("#discountPercent").val()
+								},
+								success: function(result)
+								{
+									$("#tableBody").html(result);
+									initTableEvents();
+									checkAll();
+									
+								}
+							});
+		  			return true;
+	  			}
+	  			else{
+	  				alert("Хөнгөлөлт 100-с бага өгнө үү!");
+	  			}
+		  	}
+	  		else
+	  		{
+	  			alert("Хөнгөлөлт 0-с их өгнө үү!");
+	  		}
+		}
+		else
+		{
+			alert("Хөнгөлөлт дунд үсэг, тэмдэгт байна!");
+		}	
+		return false;
+		}
+		else{
+			$("#discountPercent").prop("disabled", true);
+			$.ajax(
+			{
+				url: "remove-discount-card",
+				success: function(result)
+				{
+					$("#tableBody").html(result);
+					initTableEvents();
+					$("#cardNumber").val("");
+					$("#cardOwner").text("");
+					$("#discountPercent").val("");
+					$("#discountType").val("");
+					checkAll();
+				}
+			});
+		}
+	return true;
+	
+}
 function checkAll()
 {
-	$("#print-talon").html($("#talon").val());
-	$("#print-pos").html($("#pos").val());
-	$("#print-date").html($("#time").html());
-	$("#print-cash").html($("#cash").val());
-	var str = "";
-	for (var i = 0; i < $("#tableBody > tr").size(); i++)
+	var check = $("#insuranceCheck").prop("checked");
+	$.ajax(
 	{
-		str = str + "<div class='row'>";
-			str = str + "<div class='col-xs-7'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
-//		str = str + "</div>";
-//		str = str + "<div class='row'>";
-//			str = str + "<div class='col-xs-4'></div>";
-			str = str + "<div class='col-xs-1'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
-			str = str + "<div class='col-xs-1 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
-			str = str + "<div class='col-xs-2 text-right'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
-		str = str + "</div>";
-		
-		if (i < ($("#tableBody > tr").size() - 1))
+		url: "check-insurance",
+		data: { "hasInsurance" : check },
+		success: function(result)
 		{
-			str = str + "<div class='space-4'></div>";
+			if(check == true){
+				$("#calSaleEMDSdiv").removeClass("hidden");
+			}else{
+				$("#calSaleEMDSdiv").addClass("hidden");
+			}
+			$("#calSaleEMDS").val(result);
 		}
-	}
-	$("#print-items").html(str);
-	$("#print-s").html($("#tableBody > tr").size());
-	
+	});
 	var barcode = $("#barcode").val();
 	var quantity = $("#quantity").val();
 	if (barcode.length > 0 && quantity.length > 0)
@@ -940,9 +1761,11 @@ function checkAll()
 	$("#updateButton").prop("disabled", true);
 	$("#payButton").prop("disabled", true);
 	
+	
 	if ($("#tableBody > tr").size() <= 0)
 	{
 		$("#calTotal").val("0");
+		$("#discountTotal").val("0");
 	  	$("#payOff").val("0");
 	  	$("#paid").prop("disabled", true);
 	  	$("#paid").val("0");
@@ -958,10 +1781,21 @@ function checkAll()
 	  	var rowSize = $("#tableBody > tr").size();
 	  	for (var i = 0; rowSize > i; i++)
 	  	{
+	  		
 	  		total = total + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).text());
 	  	}
+	  	
 	  	$("#calTotal").val(total);
-	  	var payOff = total;
+	  	var discountTotal = 0;
+	  	for (var i = 0; rowSize > i; i++)
+	  	{
+	  		discountTotal = discountTotal + parseFloat($("#tableBody > tr:eq(" + i + ")").children().eq(thDiscount).text().trim());
+	  	}
+	  	$("#discountTotal").val(discountTotal);
+	  	var payOff = total - discountTotal;
+	  	if(check == true){
+	  		payOff -= $("#calSaleEMDS").val();
+	  	}
 	  	if (payOff > 0)
 	  	{
 	  		$("#paid").prop("disabled", false);
@@ -989,9 +1823,116 @@ function checkAll()
 			$("#updateButton").prop("disabled", false);
 	  	}
 	}
+}
+function initTypes()
+{
+	if ($("#assetType").val() == "Select")
+	{
+		$.ajax(
+		{
+			url: "get-asset-accounts",
+			success: function(result)
+			{
+				$("#assetAccounts").html(result);
+			}
+		});
+		$("#assetAccounts").select2();
+	}
+	
+	$.ajax(
+	{
+		url: "get-customers",
+		success: function(result)
+		{
+			$("#customers").html(result);
+		}
+	});
+	$("#customers").select2();
+	$("#customerCheck").click(function()
+	{
+		var check = $("#customerCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			$("#customers").select2("enable", true);
+			$("#bankCheck").prop("disabled", true);
+		}
+		else
+		{
+			$("#customers").select2("enable", false);
+			$("#bankCheck").prop("disabled", false);
+		}
+	});
+	
+	$.ajax(
+	{
+		url: "get-banks",
+		success: function(result)
+		{
+			$("#banks").html(result);
+		}
+	});
+	$("#banks").select2();
+	$("#bankCheck").click(function()
+	{
+		var check = $("#bankCheck").prop("checked");
+		if (check.toString() == "true")
+		{
+			$("#banks").select2("enable", true);
+			$("#customerCheck").prop("disabled", true);
+		}
+		else
+		{
+			$("#banks").select2("enable", false);
+			$("#customerCheck").prop("disabled", false);
+			
+		}
+	});
+}
+function loadPrintView()
+{
+	$("#print-talon").html($("#talon").val());
+	$("#print-pos").html($("#pos").val());
+	$("#print-date").html($("#time").html());
+	$("#print-cashier").html($("#cashier").val());
+	var str = "";
+	for (var i = 0; i < $("#tableBody > tr").size(); i++)
+	{
+		str = str + "<div class='row' >";
+			str = str + "<div class='col-xs-6' style = 'padding-left:5px;margin-left:5px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thName).html() + "</div>";
+			str = str + "<div class='col-xs-1' style = 'padding-left:0px;margin-left:0px' >" + $("#tableBody > tr:eq(" + i + ")").children().eq(thQuant).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thPrice).html() + "</div>";
+			str = str + "<div class='col-xs-2' style = 'padding-left:0px;margin-left:0px'>" + $("#tableBody > tr:eq(" + i + ")").children().eq(thTotal).html() + "</div>";
+		str = str + "</div>";
+		if (i < ($("#tableBody > tr").size() - 1))
+		{
+			str = str + "<div class='space-2 row'></div>";
+		}
+	}
+	$("#print-items").html(str);
+	$("#print-item-count").html($("#tableBody > tr").size());
+	
 	$("#print-cal-total").html($("#calTotal").val());
-	$("#print-sale").html($("#calSale").val());
+	$("#print-discount").html($("#discountTotal").val());
+	$("#print-calSaleEMDS").html($("#calSaleEMDS").val());
 	$("#print-total").html($("#payOff").val());
 	$("#print-paid").html($("#paid").val());
 	$("#print-return").html($("#return").val());
+	
+}
+function initTableEvents()
+{
+	$("#tableBody > tr").bind("click", function()
+	{
+		clickedRow($(this));
+	});
+	$("#tableBody > tr").bind("dblclick", function()
+	{
+		bindForm($(this));
+	});
+	$("#unitPrice").val($("#tableBody > tr[class='success']").children().eq(thPrice).text().trim());
+	$("#itemName").val($("#tableBody > tr[class='success']").children().eq(thName).text().trim());
+	$("#unit").text($("#tableBody > tr[class='success']").children().eq(thUnit).text().trim());
+	$("#quantity").val("1");
+    $("#barcode").val("");
+    $("#serial").val("");
 }

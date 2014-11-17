@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Cash;
 import models.User;
 
 import utils.Cell;
@@ -92,19 +93,59 @@ public class LoginServlet extends HttpServlet
 															case "status":
 																user.setStatus(cell.getValue());
 																break;
-															case "branch_id":
-																user.setBranchID(Integer.parseInt(cell.getValue()));
-																break;
-															case "ip_address":
-																user.setIpAddress(cell.getValue());
-																break;
 															case "role_id":
 																user.setRoleID(Integer.parseInt(cell.getValue()));
+																break;
+															case "cash_name":
+																user.setCashName(cell.getValue());
+																break;
+															case "asset_type":
+																user.setAssetType(cell.getValue());
+																break;
+															case "asset_acc":
+																user.setAssetAcc(cell.getValue());
 																break;
 															default:
 																break;
 														}
 													}
+													
+													parameters = new ArrayList<>();
+													parameters.add(ip);
+													List<Cell> cellList = new ArrayList<Cell>();
+													cellList = db.getCellList("bh_getCash", parameters);
+													Cash cash = new Cash();
+													for (Cell cell : cellList)
+													{
+														switch (cell.getColumn())
+														{
+															case "id":
+																cash.setId(Integer.parseInt(cell.getValue()));
+																break;
+															case "ip_address":
+																cash.setIp(cell.getValue());
+																break;
+															case "pos_num":
+																cash.setPosNum(Integer.parseInt(cell.getValue()));
+																break;
+															case "asset_type":
+																cash.setAssetType(cell.getValue());
+																break;
+															case "asset_acc":
+																cash.setAssetAcc(cell.getValue());
+																break;
+															case "human_type":
+																cash.setHumanType(cell.getValue());
+																break;
+															default:
+																break;
+														}
+													}
+												if(cash.getHumanType() != null && cash.getHumanType().trim().equals("Human")){
+													cash.setAssetAcc(user.getAssetAcc());
+													cash.setAssetType(user.getAssetType());
+												}
+													session.setAttribute("cash", cash);
 													session.setAttribute("user", user);
 													status = 1;
 												}

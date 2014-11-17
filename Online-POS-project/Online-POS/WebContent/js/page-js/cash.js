@@ -409,8 +409,7 @@ function addItem(barcode, quantity, assetAcc)
 					      	},
 					      	success: function(result)
 					      	{
-					      		$("#tableBody").html(result);
-					      		;
+					      		$("#tableBody").html(result);					      		
 							  	$("#mainTableSlim").scrollTop($("#tableBody > tr[class='success']").index()*12);
 					      		initTableEvents();
 					    	  	checkAll();
@@ -490,45 +489,49 @@ function bindForm(element)
 	  		updateFromTable(element, id, price, oldQuant);
 	  	});
 	}else{
-		
-		$(element).children().eq(thDisCountPercent).html
-		(
-			"<input type='text' value='' size='1' class='input-sm' id='newQuant1' />"
-		);
-		
-		$("#newQuant1").focus();
-		
-		$("#newQuant1").keydown(function(event)
-				{
-					
-					if (event.which == 13)
+		if($("#cardNumber").val() == ""){
+			$(element).children().eq(thDisCountPercent).html
+			(
+				"<input type='text' value='' size='1' class='input-sm' id='newQuant1' />"
+			);
+			
+			$("#newQuant1").focus();
+			
+			$("#newQuant1").keydown(function(event)
 					{
-						updateFromTableDisCount(element, id, oldDisCountPercent);
-					}
-					 if(event.which == 37 || event.which == 39)
-					{
-						 event.preventDefault();
-						if($("#newQuant").is(":focus")){
-							leftKey = 2;
-							$("#newQuant").remove();
-							$(element).children().eq(thQuant).text(oldQuant);
-							 bindForm(element);
-						}else
-						if($("#newQuant1").is(":focus"))
+						
+						if (event.which == 13)
 						{
-							$("#newQuant1").remove();
-							leftKey = 1;
-							$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
-							 bindForm(element);
+							updateFromTableDisCount(element, id, oldDisCountPercent);
+						}
+						 if(event.which == 37 || event.which == 39)
+						{
+							 event.preventDefault();
+							if($("#newQuant").is(":focus")){
+								leftKey = 2;
+								$("#newQuant").remove();
+								$(element).children().eq(thQuant).text(oldQuant);
+								 bindForm(element);
+							}else
+							if($("#newQuant1").is(":focus"))
+							{
+								$("#newQuant1").remove();
+								leftKey = 1;
+								$(element).children().eq(thDisCountPercent).text(oldDisCountPercent);
+								 bindForm(element);
+							}
+							
 						}
 						
-					}
-					
-				});			
-	  	$("#newQuant1").focusout(function()
-	  	{
-	  		updateFromTableDisCount(element, id, oldDisCountPercent);
-	  	});
+					});			
+		  	$("#newQuant1").focusout(function()
+		  	{
+		  		updateFromTableDisCount(element, id, oldDisCountPercent);
+		  	});
+		}else{
+			leftKey = 1;
+			alert("Давхар хөнгалөлт авч болохгүй");
+		}
 	}
 	
 }
@@ -663,7 +666,7 @@ function purchase()
 		
 		if (isPurchased == true)
 		{
-//			window.print();
+			window.print();
 			$("#talon").val(talon);
 	  		$("#print-talon").val(talon);
 	  		$("#tableBody").html("");
@@ -731,7 +734,6 @@ function editPrice()
 	}
 	$("#unitPrice").prop("disabled", true);
 }
-
 function loadPrintView()
 {
 	$("#print-talon").html($("#talon").val());
@@ -816,7 +818,7 @@ function initEventHandlers()
 				};
 			}else{
 				$("#searchByMaxPrice").focus();
-				$("#searchByMaxPrice").val("")
+				$("#searchByMaxPrice").val("");
 			}
 		}else
 //		ctrl+3
@@ -843,7 +845,7 @@ function initEventHandlers()
 			}
 		}else
 //		F10
-		 /*if(event.which == 121)
+		 if(event.which == 121)
 		 {
 			 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible"))
 			 {
@@ -851,26 +853,26 @@ function initEventHandlers()
 //					 loadPrintView();
 				 if($("#discountPercent").val().trim() == ""){
 					 if($("#tableBody > tr").size() !=0){
-					 if($("#return").val() >= 0 && $("#payOff").val() != 0){
-						 localStorage.removeItem("talon");
-						 localStorage.setItem("talon",$("#talon").val().trim());
-						 localStorage.setItem("customerCheck",$("#customerCheck").prop("checked").toString());
-						 localStorage.setItem("customers",$("#customers").val().trim());
-						 localStorage.setItem("bankCheck",$("#bankCheck").prop("checked").toString());
-						 localStorage.setItem("banks",$("#banks").val().trim());
-						 $.ajax({
-								url: "item-group",
-								success: function(result)
-								{
-								}
-							});
-						window.location = "facture.jsp";
+						 /*if($("#return").val() >= 0 && $("#payOff").val() != 0){*/
+							 localStorage.removeItem("talon");
+							 localStorage.setItem("talon",$("#talon").val().trim());
+							 localStorage.setItem("customerCheck",$("#customerCheck").prop("checked").toString());
+							 localStorage.setItem("customers",$("#customers").val().trim());
+							 localStorage.setItem("bankCheck",$("#bankCheck").prop("checked").toString());
+							 localStorage.setItem("banks",$("#banks").val().trim());
+							 $.ajax({
+									url: "item-group",
+									success: function(result)
+									{
+									}
+								});
+							window.location = "facture.jsp";
+						/* }else{
+							 alert("Төлбөр Хийгээгүй байна");
+						 }*/
 					 }else{
 		  				 alert("Хоосон падан өгөхгүй");
 		  			 }
-					 }else{
-						 alert("Төлбөр Хийгээгүй байна");
-					 }
 				 }
 				 else{
 					 alert("Хөнгөлөлт оруулах боломжгүй");
@@ -879,7 +881,7 @@ function initEventHandlers()
 				
 			}
 		 }
-		 else*/
+		 else
 		if (event.which == 9)
 	  	{
 			if ($("input:focus").attr("id") == "paid")
@@ -905,24 +907,13 @@ function initEventHandlers()
 		  	{
 					event.preventDefault();
 				if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
-					if($("#cardNumber").val()!=""){
-						$.ajax(
-								{
-									url: "remove-discount-card",
-									success: function(result)
-									{
-										$("#tableBody").html(result);
-										initTableEvents();
-										$("#cardNumber").val("");
-										$("#cardOwner").text("");
-										$("#discountPercent").val("");
-										$("#discountType").val("");
-										checkAll();
-									}
-								});
+					if($("#cardNumber").val()==""){
+						$("#discountPercent").prop("disabled", false);
+					  	$("#discountPercent").focus();
+					}else{
+						alert("Давхар хөнгалөлт авч болохгүй");
 					}
-					$("#discountPercent").prop("disabled", false);
-				  	$("#discountPercent").focus();
+				
 				 }else{
 					 $("#searchByName").focus();
 				 }
@@ -973,8 +964,13 @@ function initEventHandlers()
 	  	{
 	  		event.preventDefault();
 	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
-		  		$("#paid").val("");
-			  	$("#paid").focus();
+	  			 if($("#payOff").val()>0){
+	  				$("#paid").val("");
+				  	$("#paid").focus();
+	  			 }else{
+	  				 alert("Бараа байхгүй байна");
+	  			 }
+			  		
 	  		 }
 	  	}
 		 //f8
@@ -991,7 +987,7 @@ function initEventHandlers()
 	  		event.preventDefault();
 	  		 if(!$("#searchItemsDialog").parents(".ui-dialog").is(":visible")){
 	  			//costca start 
-		  		/*if ($("#tableBody > tr[class='success']").size() == 1)
+		  		if ($("#tableBody > tr[class='success']").size() == 1)
 		  		{
 		  			$("#unitPrice").prop("disabled", false);
 			  		$("#unitPrice").focus();
@@ -1000,7 +996,7 @@ function initEventHandlers()
 		  		{
 		  			$("#unitPrice").prop("disabled", true);
 		  		}
-		  		*/
+		  		
 	  			 //costca end
 	  		}else{
 	  			$("#selectItems").focus();
@@ -1142,32 +1138,6 @@ function initEventHandlers()
 		 //costca end
   	});
 
-	$("#barcode").keyup(function(event)
-	{
-		var barcode = $("#barcode").val().trim();
-		var quantity = $("#quantity").val().trim();
-		if (barcode != "" && quantity != "")
-		{
-			$("#addItem").prop("disabled", false);
-		}
-		else
-		{
-			$("#addItem").prop("disabled", true);
-		}
-	});
-	$("#quantity").keyup(function(event)
-	{
-		var barcode = $("#barcode").val().trim();
-		var quantity = $("#quantity").val().trim();
-		if (barcode != "" && quantity != "")
-		{
-			$("#addItem").prop("disabled", false);
-		}
-		else
-		{
-			$("#addItem").prop("disabled", true);
-		}
-	});
 	$("#discountPercent").focusout(function()
   	{
 		var bool = setDiscountPercentFocusOut();
@@ -1346,8 +1316,10 @@ function initEventHandlers()
   	
   	$("#updateButton").click(function(event)
   	{
-  		bindForm($("#tableBody > tr[class='success']"));
   		event.preventDefault();
+  		if(!$("#newQuant").is(":focus") &&!$("#newQuant1").is(":focus")){
+  			bindForm($("#tableBody > tr[class='success']"));
+  		}
   	});
   	
   	$("#deleteButton").click(function(event)
@@ -1417,6 +1389,12 @@ function initEventHandlers()
 	  		}
   		}
   		checkAll();
+  	});
+  	$("#paid").focusout(function()
+  	{
+  		if(this.value == ""){
+  			this.value = 0;
+  		}
   	});
   	$("#selectItems").click(function(event){
   		event.preventDefault();
@@ -1508,6 +1486,36 @@ function initEventHandlers()
 	  		$("#searchItems").trigger('click');
 	  	}
   	});
+	$("#assetAccounts").change(function(){
+		alert("");
+		$.ajax(
+				{
+					url: "get-barcodes",
+					data:
+					{
+						"assetAccounts": $("#assetAccounts").val()
+					},
+					success: function(result)
+					{
+						var barcodes = result.split(",");
+						$("#barcode").autocomplete(
+						{
+							source: function(request, response)
+							{
+								var matches = $.map(barcodes, function(tag)
+								{
+									if (tag.toUpperCase().indexOf(request.term.toUpperCase()) === 0)
+									{
+										return tag;
+									}
+								});
+								response(matches);
+							}
+						});
+					}
+				});
+	});
+	
 }
 function setDiscountPercentFocusOut(){
 	if($("#discountPercent").val() != ""){

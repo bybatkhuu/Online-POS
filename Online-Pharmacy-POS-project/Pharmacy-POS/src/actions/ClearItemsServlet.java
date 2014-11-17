@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import utils.LoggedUser;
 
 @WebServlet("/clear-items")
-public class ClearItemsServlet extends HttpServlet
+public class ClearItemsServlet extends HttpServlet implements PosLogger
 {
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +36,7 @@ public class ClearItemsServlet extends HttpServlet
 			if (session.getAttribute("itemList") != null)
 	  		{
 				session.removeAttribute("itemList");
+				log("clear");
 	  		}
 	    }
 		
@@ -47,5 +48,15 @@ public class ClearItemsServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
+	}
+
+	@Override
+	public void log(String message) {
+		LOG.info("ClearItems : "+message);
+	}
+
+	@Override
+	public void log(Object obj, String message) {
+		
 	}
 }

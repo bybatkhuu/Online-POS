@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import models.User;
-
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 import utils.Utilities;
@@ -39,7 +37,6 @@ public class SerialHasItem extends HttpServlet
 		int hasSerial = 0;
 		String barcode = (String) request.getParameter("barcode");
 		String serial = (String) request.getParameter("serial");
-		User user = (User) session.getAttribute("user");
 		if (barcode != null && serial != null)
 		{
 			if (!Utilities.isEmpty(barcode) && !Utilities.isEmpty(serial))
@@ -47,7 +44,7 @@ public class SerialHasItem extends HttpServlet
 				PostgreSQLJDBC db = new PostgreSQLJDBC();
 				if (db.createConnection())
 				{
-					String[] parameter = { serial, barcode, String.valueOf(user.getBranchID()) };
+					String[] parameter = { serial, barcode, request.getParameter("assetAcc") };
 					try
 					{
 						if (db.execute("bh_serialHasItem", parameter))

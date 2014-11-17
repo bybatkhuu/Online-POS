@@ -81,6 +81,13 @@ $(document).keydown(function(event)
 			event.preventDefault();
 			window.location = "cash.jsp";
 		}
+//		tab
+		if(event.which == 9){
+			if($("#back").is(":focus")){
+				$('#startDate').focus();
+				event.preventDefault();
+			}
+		}
 });
 	$("#logoutDialog").dialog(
 			{

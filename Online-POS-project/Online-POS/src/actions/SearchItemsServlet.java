@@ -41,15 +41,11 @@ public class SearchItemsServlet extends HttpServlet
 		if (itemName == null)
 		{
 			itemName = "";
-		}else{
-			itemName = itemName;
 		}
 	    String barcode = request.getParameter("barcode");
 	    if (barcode == null)
 		{
 	    	barcode = "";
-		}else{
-			barcode = barcode;
 		}
 	    String minPrice = request.getParameter("minPrice");
 	    if (minPrice == null)

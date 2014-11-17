@@ -5,7 +5,7 @@
 		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		id="WebApp_ID"
 		version="3.0">
-	<display-name>Pharmacy-POS</display-name>
+	<display-name>Pharmacy-PosTest</display-name>
 	
   	<filter>
     	<filter-name>CharsetFilter</filter-name>
@@ -36,4 +36,13 @@
   	<welcome-file-list>
     	<welcome-file>index.jsp</welcome-file>
   	</welcome-file-list>
+	<servlet>
+		<servlet-name>Log4JInitServlet</servlet-name>
+		<servlet-class>actions.Log4JInitServlet</servlet-class>
+		<init-param>
+			<param-name>log4j-properties-location</param-name>
+			<param-value>WEB-INF/log4j.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 </web-app>

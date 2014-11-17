@@ -4,7 +4,20 @@ html, body
 	background-color: #ecf0f1 !important;
 	height: 100% !important;
 }
-
+ .form-control-feedback {
+position: absolute;
+	top: 0px;
+	right: 0;
+	z-index: 2;
+	display: block;
+	width: 34px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center
+}
+[class*=" icon-"], [class^="icon-"] {
+text-align: center;
+}
 /* Wrapper for page content to push down footer */
 .wrap
 {

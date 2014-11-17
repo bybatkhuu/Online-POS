@@ -14,17 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Card;
 import models.Item;
-import models.User;
 import utils.Cell;
 import utils.LoggedUser;
 import utils.PostgreSQLJDBC;
 
 @WebServlet("/add-item")
-public class AddItemServlet extends HttpServlet
+public class AddItemServlet extends HttpServlet implements PosLogger
 {
 	private static final long serialVersionUID = 1L;
-    
 	public AddItemServlet()
 	{
         super();
@@ -43,16 +42,20 @@ public class AddItemServlet extends HttpServlet
 		boolean itemIncrement = false;
 		int itemID = 0;
 	    Item item = null;
+	    Float disCount;
 	    synchronized(session)
 	    {
+	    	Card card = (Card) session.getAttribute("card");
+	    	disCount = (Float) session.getAttribute("discountPercent");
+	    	
 	    	List<Item> itemList = (List<Item>) session.getAttribute("itemList");
 		    if (itemList == null)
 		    {
 		    	itemList = new ArrayList<Item>();
 		    }
-		    User user = (User) session.getAttribute("user");
 		    String barcode = request.getParameter("barcode");
 		    String serial = request.getParameter("serial");
+		    String assetAcc = request.getParameter("assetAcc");
 		    double quantity = 0;
 		    try
 		    {
@@ -63,11 +66,11 @@ public class AddItemServlet extends HttpServlet
 		    	quantity = 0;
 		    	System.out.println(e.toString());
 		    }
-		    if ((barcode != null) && (!barcode.trim().equals("")))
+		    if ((barcode != null) && (!barcode.trim().equals("")) && (assetAcc != null) && (!assetAcc.trim().equals("")))
 		    {
 		    	try
 		    	{
-		    		item = findItem(barcode , serial, itemList);
+		    		item = findItem(barcode , serial, itemList, assetAcc);
 				}
 		    	catch (SQLException e)
 		    	{
@@ -88,7 +91,11 @@ public class AddItemServlet extends HttpServlet
 		    			{
 		    				serial = "";
 		    			}
-		    			item = getNewItem(barcode, user.getBranchID(), serial, quantity);
+		    			item = getNewItem(barcode, assetAcc, serial, quantity);
+		    			if (card != null ||disCount !=null)
+			    		{
+			    			item.setDiscountPercent(disCount);
+			    		}
 					}
 		    		catch (SQLException e)
 		    		{
@@ -134,6 +141,8 @@ public class AddItemServlet extends HttpServlet
 	    		str = str + "<td>" + itemList.get(i).getUnit() + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getPrice())  + "</td>";
 	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getTotal())  + "</td>";
+	    		str = str + "<td class='text-right'>" + format.format(itemList.get(i).getDiscountPercent())  + "</td>";
+	    		str = str + "<td class='hidden discountTotal'>" + format.format(itemList.get(i).getDiscountTotal())  + "</td>";
 	    		str = str + "</tr>";
 	    	}
 	    }
@@ -148,7 +157,7 @@ public class AddItemServlet extends HttpServlet
 		doGet(request, response);
 	}
 	
-	private Item findItem(String barcode, String serial, List<Item> itemList) throws SQLException
+	private Item findItem(String barcode, String serial, List<Item> itemList , String assetAcc) throws SQLException
 	{
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
 		String[] parameter = { barcode };
@@ -162,12 +171,25 @@ public class AddItemServlet extends HttpServlet
 				{
 					return(item);
 				}
+				if (item.getId() == id && serial.equals(""))
+				{
+					Cell tmpCell = null;
+					String[] params = { assetAcc, String.valueOf(item.getId()) };
+					tmpCell = db.getCell("bh_getLastSerialId", params);
+					String[] param = { tmpCell.getValue() };
+					tmpCell = db.getCell("bh_getSerial", param);
+					serial = tmpCell.getValue();
+					if (item.getSerial().equals(serial))
+					{
+						return(item);
+					}
+				}
 			}
 		}
 		return(null);
 	}
 	
-	private Item getNewItem(String barcode, int branchID, String serial, double quantity) throws SQLException
+	private Item getNewItem(String barcode, String assetAcc, String serial, double quantity) throws SQLException
 	{
 		Item item = null;
 		PostgreSQLJDBC db = new PostgreSQLJDBC();
@@ -195,6 +217,12 @@ public class AddItemServlet extends HttpServlet
 						case "item_unit_id":
 							item.setUnitID(Integer.parseInt(cell.getValue()));
 							break;
+						case "facturename":
+							item.setFactureName(cell.getValue());
+							break;
+						case "facturecode":
+							item.setFactureCode(cell.getValue());
+							break;
 						case "ins_discount_price":
 							if (cell.getValue() != null && !cell.getValue().trim().equalsIgnoreCase(""))
 							{
@@ -212,7 +240,7 @@ public class AddItemServlet extends HttpServlet
 				
 				if (serial.trim().equalsIgnoreCase(""))
 				{
-					String[] params = { String.valueOf(branchID), String.valueOf(item.getId()) };
+					String[] params = { assetAcc, String.valueOf(item.getId()) };
 					tmpCell = db.getCell("bh_getLastSerialId", params);
 					item.setSerialID(Integer.parseInt(tmpCell.getValue()));
 					
@@ -222,16 +250,17 @@ public class AddItemServlet extends HttpServlet
 				}
 				else
 				{
-					String[] params = { serial, String.valueOf(branchID), String.valueOf(item.getId()) };
+					String[] params = { serial, assetAcc, String.valueOf(item.getId()) };
 					tmpCell = db.getCell("bh_getSerialId", params);
 					item.setSerialID(Integer.parseInt(tmpCell.getValue()));
 					item.setSerial(serial);
 				}
 				
-				String[] params = { String.valueOf(branchID), String.valueOf(item.getId()), String.valueOf(item.getSerialID()) };
+				String[] params = { assetAcc, String.valueOf(item.getId()), String.valueOf(item.getSerialID()) };
 				tmpCell = db.getCell("bh_getPrice", params);
 				item.setPrice(Double.parseDouble(tmpCell.getValue()));
 				item.setQuantity(quantity);
+				item.setAssetAcc(assetAcc);
 			}
 			
 			tmpCell = null;
@@ -246,6 +275,17 @@ public class AddItemServlet extends HttpServlet
 				item.setUnit("ш");
 			}
 		}
+		log(item, serial);
 		return item;
 	}
+
+	@Override
+	public void log(Object obj, String message) {
+		Item item = (Item)obj;
+		LOG.info("AddItem -- "+" ID: "+ item.getId() + sep + " AssetAcc: " +item.getAssetAcc() + sep+
+				" SerialId: " + item.getSerialID() +sep+ " Serial: " + message
+				);
+	}
+
+	
 }

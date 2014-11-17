@@ -49,7 +49,7 @@
     
     </style>
     
-        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
@@ -59,6 +59,7 @@
     <script type="text/javascript" src="js/ace-extra.min.js"></script>
 
     <script type="text/javascript" src="js/page-js/cash.js"></script>
+    
     <script type="text/javascript">
       $(document).ready(function()
       {
@@ -140,7 +141,7 @@
                               <label for="talon" class="control-label col-xs-12 col-sm-5 col-md-3 no-padding-right">Талон №:</label>
                               <div class="col-xs-12 col-sm-7 col-md-9">
                                 <div class="input-group">
-                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" />
+                                  <input type="text" name="talon" value="" class="col-xs-12 col-sm-12 input-sm bolder dark bh-bg-color-yellow bh-input-skin-1 bh-font-size-16" id="talon" tabindex="3"/>
                                   <span class="input-group-addon input-sm">
                                     <i class="bhicon bhicon-receipt"></i>
                                   </span>
@@ -379,7 +380,7 @@
                               							<label for="cardNumber">Карт №: </label>
                               						</div>
                               						<div class="col-sm-8">
-                              							<input type="text" name="cardNumber" title = "Ctrl+3" value="${card.cardNumber}" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" />
+                              							<input type="text" name="cardNumber" title = "Ctrl+3" value="${card.cardNumber}" class="form-control input-sm bolder dark bh-input-skin-1" id="cardNumber" tabindex="4"/>
                               						</div>
                               					</div>
                               					<div class="row">
@@ -563,7 +564,7 @@
                                     <b>Төлсөн:</b>
                                   </label>
                                   <div class="col-xs-12 col-sm-7">
-                                      <input type="text" name="paid" value="0" class="form-control input-sm bolder dark text-right bh-font-size-16 bh-input-skin-2" title = "F7" id="paid" tabindex="4" />
+                                      <input type="text" name="paid" value="0" class="form-control input-sm bolder dark text-right bh-font-size-16 bh-input-skin-2" title = "F7" id="paid" tabindex="5" />
                                   </div>
                                 </div>
                                 <div class="form-group has-warning">
@@ -612,7 +613,7 @@
               <div class="col-xs-4 col-sm-2 red center hidden">
                Үнэ засах <b class="dark">F9</b> 
               </div>
-              <div class="col-xs-4 col-sm-2 blue center hidden">
+              <div class="col-xs-4 col-sm-2 blue center">
                Падан <b class="dark">F10</b> 
               </div>
             </div>
@@ -861,8 +862,7 @@
   		</div>
 	</div>
 	</div>
-	<div class="bh-print-view"  style="width: 36px">
-		<!-- <div class="bh-print-body"> -->
+	<div class="bh-print-view">
 		<div>
 			<div class="row">
 				<div class="col-xs-12 center bh-print-header">

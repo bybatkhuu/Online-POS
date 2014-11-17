@@ -16,7 +16,7 @@ import models.Item;
 import utils.LoggedUser;
 
 @WebServlet("/remove-item")
-public class RemoveItemServlet extends HttpServlet
+public class RemoveItemServlet extends HttpServlet implements PosLogger
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -59,6 +59,7 @@ public class RemoveItemServlet extends HttpServlet
 			    		{
 			    			if (item.getId() == id)
 			    			{
+			    				log(item,"Delete");
 			    				itemList.remove(item);
 			    				break;
 			    			}
@@ -77,6 +78,14 @@ public class RemoveItemServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		doGet(request, response);
+	}
+
+	@Override
+	public void log(Object obj, String message) {
+		Item item = (Item)obj;
+		LOG.info("Remove : "+message+" ID: "+ item.getId() + sep + " AssetAcc: " +item.getAssetAcc() + sep+
+				" SerialId: " + item.getSerialID() +sep+ " Serial: " + item.getSerial() 
+				);
 	}
 
 }
