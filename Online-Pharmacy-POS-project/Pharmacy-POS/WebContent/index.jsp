@@ -40,22 +40,19 @@
     <link rel="apple-touch-icon" href="images/Logo.png">
     <link rel="apple-touch-startup-image" href="images/Logo.png">
     
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.full.min.css" />
     <link rel="stylesheet" type="text/css" href="css/select2.css" />
     <link rel="stylesheet" type="text/css" href="css/ace-fonts.css" />
     <link rel="stylesheet" type="text/css" href="css/ace.min.css" />
     <link rel="stylesheet" type="text/css" href="css/ace-skins.min.css" />
-    
-    <link rel="stylesheet" type="text/css" href="css/custom-icons.css" />
+    <link rel="stylesheet" type="text/css" href="css/ace-skins.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <style type="text/css">
-    
     </style>
-   
-	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-	 <script type="text/javascript" src="js/bootstrapValidator.min.js"></script>
+    
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.10.3.full.min.js"></script>
     <script type="text/javascript" src="js/jquery.slimscroll.min.js"></script>
@@ -63,8 +60,8 @@
     <script type="text/javascript" src="js/ace-elements.min.js"></script>
     <script type="text/javascript" src="js/ace.min.js"></script>
     <script type="text/javascript" src="js/ace-extra.min.js"></script>
-     <script type="text/javascript" src="js/page-js/cash.js"></script>
-     <script type="text/javascript" src="js/jquery.jkey.min.js"></script>
+    <script type="text/javascript" src="js/page-js/cash.js"></script>
+    <script type="text/javascript" src="js/bootstrapValidator.min.js"></script>
 
     
     <script type="text/javascript">
@@ -777,13 +774,13 @@
 							</label>
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" title = "ctrl+1" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" title = "Ctrl+1" id="searchByMinPrice" style="border: 0px; font-weight:bold;" />
 						</div>
 						<div class="col-sm-1 no-padding">
-							<input type="text" class="form-control text-center green" value="-" title = "ctrl+2" style="border: 0px; font-weight:bold;" readonly disabled />
+							<input type="text" class="form-control text-center green" value="-"  style="border: 0px; font-weight:bold;" readonly disabled />
 						</div>
 						<div class="col-sm-2 no-padding">
-							<input type="text" class="form-control text-center green" id="searchByMaxPrice" style="border: 0px; font-weight:bold;" />
+							<input type="text" class="form-control text-center green" id="searchByMaxPrice" title = "Ctrl+2" style="border: 0px; font-weight:bold;" />
 						</div>
 						<div class="col-sm-4">
 							<button type="submit" class="btn btn-sm btn-success pull-right" title = "F9" id="selectItems">
@@ -981,7 +978,7 @@
 		<div>
 			<div class="row">
 				<div class="col-xs-12 center bh-print-header">
-					${company.name} SHOP
+					${company.name} ХХК
 				</div>
 			</div>
 			<div class="space-4"></div>

@@ -36,7 +36,6 @@ public class SearchItemsServlet extends HttpServlet
 		{
 			response.sendRedirect("login.jsp");
 		}
-		
 		String itemName = request.getParameter("itemName");
 		if (itemName == null)
 		{

@@ -744,6 +744,7 @@ function updateDisCount(id, newDisCount)
 }
 function purchase()
 {
+	loadPrintView();
 	var type = "Cash";
 	var otherId = "0";
 	var check = $("#customerCheck").prop("checked");
@@ -1539,7 +1540,6 @@ function initEventHandlers()
 	  		if (event.which == 13 && $("#return").val() >= 0)
 	  		{
 	  			event.preventDefault();
-	  			loadPrintView();
 	  			purchase();
 	  		}
   		}
@@ -1574,7 +1574,7 @@ function initEventHandlers()
   				$("#searchByMaxPrice").val($("#slider-range").slider("option", "max"));
   				$("#slider-range").slider("option", "values", [$("#searchByMinPrice").val(), $("#searchByMaxPrice").val()]);
   			}
-  			
+  			alert($("#searchByName").val().trim());
   			$.ajax(
   			{
   				url: "searchItems",

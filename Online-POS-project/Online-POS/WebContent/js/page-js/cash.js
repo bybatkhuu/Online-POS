@@ -50,6 +50,7 @@ function startTime()
     second = checkTime(second);
     var dateTimeStr = year + "." + month + "." + date + " - " + hour + ":" + minute + ":" + second + " "/* + " <b class='blue'>"*/ + day /*+ "</b>"*/;
     $("#time").html(dateTimeStr);
+    
     $("#print-date").html(dateTimeStr);
     setTimeout(function(){ startTime(); }, 500);
 }
@@ -610,6 +611,7 @@ function updateDisCount(id, newDisCount)
 }
 function purchase()
 {
+	loadPrintView();
 	var type = "Cash";
 	var otherId = "0";
 	var check = $("#customerCheck").prop("checked");
@@ -1384,7 +1386,6 @@ function initEventHandlers()
 	  		if (event.which == 13 && $("#return").val() >= 0)
 	  		{
 	  			event.preventDefault();
-	  			loadPrintView();
 	  			purchase();
 	  		}
   		}
